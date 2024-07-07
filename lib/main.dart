@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learn_py/Screens/DiscoverScreen.dart';
 import 'package:learn_py/Screens/NotesScreen.dart';
 import 'package:learn_py/Screens/PasswordSetupScreen.dart';
+import 'package:learn_py/Screens/QuizCatalogScreen.dart';
 import 'package:learn_py/Screens/QuizScreen.dart';
 import 'package:learn_py/Screens/PlaygroundScreen.dart';
 import 'package:learn_py/Screens/ExternalLibrariesScreen.dart';
@@ -27,7 +28,12 @@ void main() async {
         '/profile': (context) => ProfileScreen(),
         '/discover': (context) => DiscoverScreen(),
         '/notes': (context) => NotesScreen(),
-        '/quiz': (context) => QuizScreen(),
+        '/quiz': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments;
+          final quizId = args as int;
+          return QuizScreen(quizId: quizId);
+        },
+        '/quizCatalog': (context) => QuizCatalogScreen(),
         '/playground': (context) => PlaygroundScreen(),
         '/external': (context) => ExternalLibrariesScreen(),
         '/settings': (context) => SettingsScreen(),

@@ -73,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                     text: 'Quiz',
                     icon: CupertinoIcons.text_badge_star,
                     orientation: 'horizontal',
-                    route: '/quiz'),
+                    route: '/quizCatalog'),
                 HomeScreenButton(
                     flex: 5,
                     color: Color(0xFF80FE94),
