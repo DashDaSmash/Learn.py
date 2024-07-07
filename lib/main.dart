@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:learn_py/Screens/DiscoverScreen.dart';
+import 'package:learn_py/Screens/NotesScreen.dart';
+import 'package:learn_py/Screens/PasswordSetupScreen.dart';
+import 'package:learn_py/Screens/QuizScreen.dart';
+import 'package:learn_py/Screens/PlaygroundScreen.dart';
+import 'package:learn_py/Screens/ExternalLibrariesScreen.dart';
+import 'package:learn_py/Screens/SettingsScreen.dart';
+import 'package:learn_py/Screens/RegistrationScreen.dart';
+
+import 'Screens/HomeScreen.dart';
+import 'Screens/LoginScreen.dart';
+import 'Screens/ProfileScreen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(
+    MaterialApp(
+      initialRoute: '/', // Start with the FirstScreen
+      routes: {
+        '/': (context) => MyApp(),
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => HomeScreen(),
+        '/profile': (context) => ProfileScreen(),
+        '/discover': (context) => DiscoverScreen(),
+        '/notes': (context) => NotesScreen(),
+        '/quiz': (context) => QuizScreen(),
+        '/playground': (context) => PlaygroundScreen(),
+        '/external': (context) => ExternalLibrariesScreen(),
+        '/settings': (context) => SettingsScreen(),
+        '/registration': (context) => RegistrationScreen(),
+        '/password': (context) => PasswordSetupScreen(),
+      },
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My App',
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            final user = snapshot.data;
+            if (user == null) {
+              // User is not logged in. Show the login screen.
+              return LoginScreen();
+            } else {
+              // User is logged in. Navigate to the home page.
+              return HomeScreen();
+            }
+          }
+          // While the connection state is not active, show a loading indicator.
+          return CircularProgressIndicator();
+        },
+      ),
+    );
+  }
+}

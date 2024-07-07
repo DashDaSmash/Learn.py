@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "382176060857",
+    "project_id": "learn-py-app",
+    "storage_bucket": "learn-py-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382176060857:android:e46431ead57be26ea04268",
+        "android_client_info": {
+          "package_name": "com.example.learn_py"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg-dLXZ5dtkDldFtqEmhSlRu2Emh3VW5U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
