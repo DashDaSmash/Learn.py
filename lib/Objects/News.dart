@@ -19,7 +19,8 @@ class _NewsScreenState extends State<NewsScreen> {
 
   Future<void> fetchNews() async {
     final response = await http.get(
-      Uri.parse('https://newsapi.org/v2/everything?q=python&apiKey=$apiKey'),
+      Uri.parse(
+          'https://newsapi.org/v2/everything?q=python&apiKey=$apiKey&sortBy=publishedAt&language=en'),
     );
 
     if (response.statusCode == 200) {
