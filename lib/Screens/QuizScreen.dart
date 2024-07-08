@@ -68,12 +68,22 @@ class _QuizScreenState extends State<QuizScreen> {
                     quizId: widget.quizId,
                     questionId: widget.questionController.questionId,
                     myController: widget.questionController);
-              } else {
-                Navigator.of(context).pop();
-                Navigator.of(context, rootNavigator: true)
-                    .pushNamed('/grading');
-                return SizedBox.shrink();
-              }
+              } else
+                return GenericButton(
+                    label: 'Continue',
+                    function: () {
+                      double score =
+                          (widget.questionController.questionsGotCorrect /
+                                  widget.questionController.totalQuestions) *
+                              100;
+
+                      Navigator.of(context).pop();
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed('/grading', arguments: score.round());
+                    },
+                    labelTextColor: Colors.white,
+                    backgroundColor: Colors.pinkAccent,
+                    strokeColor: Colors.pink);
             }),
           ],
         ),

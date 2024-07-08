@@ -39,7 +39,11 @@ void main() async {
         '/settings': (context) => SettingsScreen(),
         '/registration': (context) => RegistrationScreen(),
         '/password': (context) => PasswordSetupScreen(),
-        '/grading': (context) => QuizGradingScreeen(),
+        '/grading': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments;
+          final score = args as int;
+          return QuizGradingScreeen(score: score);
+        },
       },
     ),
   );

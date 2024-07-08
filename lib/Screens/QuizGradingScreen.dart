@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class QuizGradingScreeen extends StatefulWidget {
-  const QuizGradingScreeen({super.key});
+  final int score;
+
+  QuizGradingScreeen({required this.score});
 
   @override
   State<QuizGradingScreeen> createState() => _QuizGradingScreeenState();
@@ -10,6 +12,10 @@ class QuizGradingScreeen extends StatefulWidget {
 class _QuizGradingScreeenState extends State<QuizGradingScreeen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(
+          //TODO: make sure to make the counting go up
+          child: Text('${widget.score}')),
+    );
   }
 }
