@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/QuizQuestion.dart';
 import 'package:get/get.dart';
@@ -19,7 +19,30 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   RxInt questionId = 1.obs;
-  RxString isAnswerCorrect = ''.obs;
+  RxInt questionsCompleted = 0.obs;
+  RxInt questionsGotCorrect = 0.obs;
+  RxInt totalQuestions = 1.obs;
+  double? Progress;
+
+  Widget ProgressBar() {
+    if (widget.questionController.questionsCompleted == 0) {
+      Progress = 0;
+    } else {
+      Progress = widget.questionController.questionsGotCorrect /
+          widget.questionController.totalQuestions;
+    }
+
+    return new LinearPercentIndicator(
+      width: MediaQuery.of(context).size.width - 50,
+      animation: true,
+      lineHeight: 10.0,
+      animationDuration: 1000,
+      percent: Progress!,
+      // center: Text("90.0%"),
+      linearStrokeCap: LinearStrokeCap.roundAll,
+      progressColor: Colors.green,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +55,26 @@ class _QuizScreenState extends State<QuizScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text('Quiz ${widget.quizId}'),
+            //TODO: when this screen appears, prograss bar expands from middle, when user clicks next, it progresses with animantion
+
+            Divider(),
             GetBuilder<Controller>(
-              builder: (_) => QuizQuestion(
-                quizId: widget.quizId,
-                questionId: widget.questionController.questionId,
-                myController: widget.questionController,
-              ),
+              builder: (_) => ProgressBar(),
             ),
+            GetBuilder<Controller>(builder: (_) {
+              if (widget.questionController.questionId <=
+                  widget.questionController.totalQuestions) {
+                return QuizQuestion(
+                    quizId: widget.quizId,
+                    questionId: widget.questionController.questionId,
+                    myController: widget.questionController);
+              } else {
+                Navigator.of(context).pop();
+                Navigator.of(context, rootNavigator: true)
+                    .pushNamed('/grading');
+                return SizedBox.shrink();
+              }
+            }),
           ],
         ),
       ),
@@ -46,38 +82,24 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 }
 
-//This runs after all the questions are done
-class _QuizScreenENDState extends State<QuizScreen> {
-  RxInt questionId = 1.obs;
-  RxString isAnswerCorrect = ''.obs;
-
-  @override
-  Widget build(BuildContext context) {
-    print('updating screen...');
-    return Scaffold(
-        backgroundColor: Colors.red,
-        body: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.blueAccent));
-  }
-}
-
 class Controller extends GetxController {
   var questionId = 1;
-  void nextQuestion(questionCount, context) {
-    print('there are only $questionCount questions in the firestore');
+  var questionsCompleted = 0;
+  var questionsGotCorrect = 0;
+  var totalQuestions = 1;
 
-    if (questionId < questionCount) {
-      //DONT FUCKING TOUCH THIS INEQUALITY YOU SMART ASS
-      questionId++;
-      print('now questionId is $questionId');
-      update();
-    } else {
-      print('all the questions are done');
-      Navigator.of(context).pop();
-      Navigator.of(context, rootNavigator: true).pushNamed('/grading');
-      // State<QuizScreen> createState() => _QuizScreenENDState();
+  void nextQuestion(questionCount, context, isAnswerCorrect) {
+    print('there are only $questionCount questions in the firestore');
+    questionsCompleted++;
+    questionId++;
+
+    if (isAnswerCorrect) {
+      questionsGotCorrect++;
     }
+    update();
+  }
+
+  void setTotalQuestionCount(count) {
+    totalQuestions = count;
   }
 }

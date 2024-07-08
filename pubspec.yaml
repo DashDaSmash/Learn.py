@@ -40,6 +40,7 @@ dependencies:
   email_validator: ^3.0.0
   google_generative_ai: ^0.4.3
   bottom_sheet: ^4.0.4
+  percent_indicator: ^4.0.1
 
 
 dev_dependencies:

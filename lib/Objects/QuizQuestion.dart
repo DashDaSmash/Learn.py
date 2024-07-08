@@ -69,7 +69,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
                         function: () {
                           Navigator.of(context).pop();
                           widget.myController
-                              .nextQuestion(questionCount, context);
+                              .nextQuestion(questionCount, context, true);
                         },
                         labelTextColor: Colors.white,
                         backgroundColor: Colors.black,
@@ -98,7 +98,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
                         function: () {
                           Navigator.of(context).pop();
                           widget.myController
-                              .nextQuestion(questionCount, context);
+                              .nextQuestion(questionCount, context, false);
                         },
                         labelTextColor: Colors.white,
                         backgroundColor: Colors.black,
@@ -132,12 +132,9 @@ class _QuizQuestionState extends State<QuizQuestion> {
               width: 100,
               child: CircularProgressIndicator()); // Show a loading indicator
         }
-//TODO: remove this when done
-        if (widget.quizId > snapshot.data!['questionCount']) {
-          Navigator.pop(context);
-        }
 
         questionCount = snapshot.data!['questionCount'];
+        widget.myController.setTotalQuestionCount(questionCount);
 
         widget.questionDetails = [
           snapshot.data!['question${widget.questionId}'],
