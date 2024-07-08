@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'GenericButton.dart';
-import 'AnswerCheckSlideUpPanel.dart';
+import 'AnswerCheckBottomSheet.dart';
+import '../Screens/QuizScreen.dart';
 
 class QuizQuestion extends StatefulWidget {
+  final Controller myController;
   final int quizId;
   final int questionId;
   List<String> questionDetails = []; // Initialize as an empty list
 
-  QuizQuestion({required this.quizId, required this.questionId});
+  QuizQuestion({
+    required this.quizId,
+    required this.questionId,
+    required this.myController,
+  });
 
   @override
   State<QuizQuestion> createState() => _QuizQuestionState();
@@ -20,9 +27,13 @@ class _QuizQuestionState extends State<QuizQuestion> {
   void _checkAnswer() {
     if (selectedAnswer == widget.questionDetails[1]) {
       print('answer is correct');
-      AnswerCheckSlideUpPanel();
+      widget.myController.nextQuestion();
+
+      AnswerCheckBottomSheet(isCorrect: true);
     } else {
       print('answer is wrong');
+      widget.myController.nextQuestion();
+      AnswerCheckBottomSheet(isCorrect: false);
     }
   }
 

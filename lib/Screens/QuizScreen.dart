@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/QuizQuestion.dart';
+import 'package:get/get.dart';
 
 class QuizScreen extends StatefulWidget {
+  final controller = Get.put(Controller());
+
   final int quizId;
   List? question1;
   List? options;
@@ -15,7 +18,7 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  int questionId = 1;
+  RxInt questionId = 1.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,11 @@ class _QuizScreenState extends State<QuizScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text('Quiz ${widget.quizId}'),
-            QuizQuestion(quizId: widget.quizId, questionId: questionId),
+            GetBuilder<Controller>(
+                builder: (_) => QuizQuestion(
+                    quizId: widget.quizId,
+                    questionId: widget.controller.questionId,
+                    myController: widget.controller)),
             GenericButton(
                 label: 'Next',
                 function: () {
@@ -41,5 +48,13 @@ class _QuizScreenState extends State<QuizScreen> {
         ),
       ),
     );
+  }
+}
+
+class Controller extends GetxController {
+  var questionId = 1;
+  void nextQuestion() {
+    questionId++;
+    update();
   }
 }

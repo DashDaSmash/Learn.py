@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-
+  get: ^4.6.6
   cupertino_icons: ^1.0.6
   firebase_core: ^3.1.1
   firebase_auth: ^5.1.1
@@ -39,6 +39,8 @@ dependencies:
   google_sign_in: ^6.2.1
   email_validator: ^3.0.0
   google_generative_ai: ^0.4.3
+  bottom_sheet: ^4.0.4
+
 
 dev_dependencies:
   flutter_test:
