@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'GenericButton.dart';
-import 'AnswerCheckBottomSheet.dart';
+
 import '../Screens/QuizScreen.dart';
 
 class QuizQuestion extends StatefulWidget {
@@ -23,18 +23,96 @@ class QuizQuestion extends StatefulWidget {
 
 class _QuizQuestionState extends State<QuizQuestion> {
   String selectedAnswer = '';
+  int? questionCount;
 
   void _checkAnswer() {
     if (selectedAnswer == widget.questionDetails[1]) {
       print('answer is correct');
-      widget.myController.nextQuestion();
+      _showBottomSheet(
+        context,
+        true,
+      );
 
-      AnswerCheckBottomSheet(isCorrect: true);
+      // AnswerCheckBottomSheet(
+      //     isCorrect: true, myController: widget.myController);
+      // widget.myController.nextQuestion();
     } else {
       print('answer is wrong');
-      widget.myController.nextQuestion();
-      AnswerCheckBottomSheet(isCorrect: false);
+      _showBottomSheet(
+        context,
+        false,
+      );
+      // AnswerCheckBottomSheet(
+      //     isCorrect: false, myController: widget.myController);
+      // widget.myController.nextQuestion();
     }
+  }
+
+  void _showBottomSheet(BuildContext context, bool isAnswerCorrect) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        if (isAnswerCorrect == true) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.5,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                Expanded(child: Center(child: Text('Awesome!'))),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text('Hello, this is your bottom sheet!'),
+                      GenericButton(
+                        label: 'Next',
+                        function: () {
+                          Navigator.of(context).pop();
+                          widget.myController
+                              .nextQuestion(questionCount, context);
+                        },
+                        labelTextColor: Colors.white,
+                        backgroundColor: Colors.black,
+                        strokeColor: Colors.purpleAccent,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.5,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                Expanded(child: Center(child: Text('Oops!'))),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text('Hello, this is your bottom sheet!'),
+                      GenericButton(
+                        label: 'Next',
+                        function: () {
+                          Navigator.of(context).pop();
+                          widget.myController
+                              .nextQuestion(questionCount, context);
+                        },
+                        labelTextColor: Colors.white,
+                        backgroundColor: Colors.black,
+                        strokeColor: Colors.purpleAccent,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -54,6 +132,12 @@ class _QuizQuestionState extends State<QuizQuestion> {
               width: 100,
               child: CircularProgressIndicator()); // Show a loading indicator
         }
+//TODO: remove this when done
+        if (widget.quizId > snapshot.data!['questionCount']) {
+          Navigator.pop(context);
+        }
+
+        questionCount = snapshot.data!['questionCount'];
 
         widget.questionDetails = [
           snapshot.data!['question${widget.questionId}'],

@@ -10,7 +10,7 @@ import 'package:learn_py/Screens/PlaygroundScreen.dart';
 import 'package:learn_py/Screens/ExternalLibrariesScreen.dart';
 import 'package:learn_py/Screens/SettingsScreen.dart';
 import 'package:learn_py/Screens/RegistrationScreen.dart';
-
+import 'package:learn_py/Screens/QuizGradingScreen.dart';
 import 'Screens/HomeScreen.dart';
 import 'Screens/LoginScreen.dart';
 import 'Screens/ProfileScreen.dart';
@@ -39,6 +39,7 @@ void main() async {
         '/settings': (context) => SettingsScreen(),
         '/registration': (context) => RegistrationScreen(),
         '/password': (context) => PasswordSetupScreen(),
+        '/grading': (context) => QuizGradingScreeen(),
       },
     ),
   );

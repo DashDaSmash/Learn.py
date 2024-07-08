@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/QuizQuestion.dart';
 import 'package:get/get.dart';
+import 'package:bottom_sheet/bottom_sheet.dart';
 
 class QuizScreen extends StatefulWidget {
-  final controller = Get.put(Controller());
+  final questionController = Get.put(Controller());
 
   final int quizId;
-  List? question1;
-  List? options;
 
   QuizScreen({required this.quizId});
 
@@ -19,9 +19,11 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   RxInt questionId = 1.obs;
+  RxString isAnswerCorrect = ''.obs;
 
   @override
   Widget build(BuildContext context) {
+    print('updating screen...');
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -31,19 +33,12 @@ class _QuizScreenState extends State<QuizScreen> {
           children: [
             Text('Quiz ${widget.quizId}'),
             GetBuilder<Controller>(
-                builder: (_) => QuizQuestion(
-                    quizId: widget.quizId,
-                    questionId: widget.controller.questionId,
-                    myController: widget.controller)),
-            GenericButton(
-                label: 'Next',
-                function: () {
-                  questionId++;
-                  setState(() {});
-                },
-                labelTextColor: Colors.white,
-                backgroundColor: Colors.black,
-                strokeColor: Colors.purpleAccent)
+              builder: (_) => QuizQuestion(
+                quizId: widget.quizId,
+                questionId: widget.questionController.questionId,
+                myController: widget.questionController,
+              ),
+            ),
           ],
         ),
       ),
@@ -51,10 +46,38 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 }
 
+//This runs after all the questions are done
+class _QuizScreenENDState extends State<QuizScreen> {
+  RxInt questionId = 1.obs;
+  RxString isAnswerCorrect = ''.obs;
+
+  @override
+  Widget build(BuildContext context) {
+    print('updating screen...');
+    return Scaffold(
+        backgroundColor: Colors.red,
+        body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.blueAccent));
+  }
+}
+
 class Controller extends GetxController {
   var questionId = 1;
-  void nextQuestion() {
-    questionId++;
-    update();
+  void nextQuestion(questionCount, context) {
+    print('there are only $questionCount questions in the firestore');
+
+    if (questionId < questionCount) {
+      //DONT FUCKING TOUCH THIS INEQUALITY YOU SMART ASS
+      questionId++;
+      print('now questionId is $questionId');
+      update();
+    } else {
+      print('all the questions are done');
+      Navigator.of(context).pop();
+      Navigator.of(context, rootNavigator: true).pushNamed('/grading');
+      // State<QuizScreen> createState() => _QuizScreenENDState();
+    }
   }
 }
