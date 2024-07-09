@@ -41,6 +41,7 @@ dependencies:
   google_generative_ai: ^0.4.3
   bottom_sheet: ^4.0.4
   percent_indicator: ^4.0.1
+  http: ^1.2.1
 
 
 dev_dependencies:

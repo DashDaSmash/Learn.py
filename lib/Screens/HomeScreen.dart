@@ -81,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                     text: "Playground",
                     icon: CupertinoIcons.play,
                     orientation: 'vertical',
-                    route: 'playground'),
+                    route: '/playground'),
                 HomeScreenButton(
                     flex: 4,
                     color: Color(0xFFD9D9D9),
