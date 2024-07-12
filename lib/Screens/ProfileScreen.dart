@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learn_py/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -22,11 +27,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int quizCount = 0;
   int averageScore = 0;
   int lastTestScore = 0;
+  String? FirstName;
+  String? LastName;
+  var imageUrl;
+  bool wantToChangePP = false;
 
   Future<void> _fetchUserData() async {
-    final userRef =
+    final userScore =
         FirebaseFirestore.instance.collection('users').doc(userEmail);
-    final userDoc = await userRef.get();
+    final userDoc = await userScore.get();
     final Map<String, dynamic> quizScores = userDoc.data()?['QuizScores'] ?? {};
     print('quizScores: $quizScores');
     for (final key in quizScores.keys) {
@@ -36,6 +45,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       double average = userTotalScore / quizCount;
       averageScore = average.round();
     }
+
+    final storageRef =
+        FirebaseStorage.instance.ref().child('profile_images/$userEmail.jpg');
+    try {
+      imageUrl = await storageRef.getDownloadURL();
+    } catch (e) {
+      print(e);
+    }
+    print('image URL is: $imageUrl');
+
     setState(() {});
     print('userTotalScore: $userTotalScore');
     print('quizCount: $quizCount');
@@ -55,8 +74,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            GestureDetector(
+              onTap: () {
+                _clickedOnPP();
+              },
+              child: wantToChangePP
+                  ? CircleAvatar(
+                      radius: 50,
+                      child: Icon(Icons.edit),
+                    )
+                  : CircleAvatar(
+                      radius: 50,
+                      child: imageUrl != null
+                          ? Image.network(imageUrl)
+                          : Text(':(')),
+            ),
             Text('Last test score: $lastTestScore'),
             Text('averageScore: $averageScore'),
+            Text('total: $userTotalScore'),
             Text('Email: $userEmail'),
             ElevatedButton(
               onPressed: () {
@@ -80,6 +115,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  void _clickedOnPP() {
+    if (wantToChangePP) {
+      print('user wants to changePP');
+      _changePP();
+    }
+
+    wantToChangePP = !wantToChangePP;
+
+    setState(() {});
+  }
+
+  Future<void> _changePP() async {
+    try {
+      final ImagePicker _picker = ImagePicker();
+      final XFile? selectedImage = await _picker.pickImage(
+        source: ImageSource.gallery,
+      );
+
+      if (selectedImage != null) {
+        File imageFile = File(selectedImage.path);
+        // Now you can use 'imageFile' as a regular File
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('profile_images/$userEmail.jpg');
+        await storageRef.putFile(imageFile);
+      }
+
+      // Use 'imageFile' here
+    } catch (e) {
+      print(e);
+    }
+  }
 }
 
 Future<void> signOut() async {
@@ -87,6 +155,7 @@ Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     // Navigate to the login screen or any other appropriate screen.
   } catch (e) {
+    print(e);
     // Handle sign-out error (show an error message).
   }
 }
