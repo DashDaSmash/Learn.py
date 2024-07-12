@@ -15,6 +15,8 @@ import 'Screens/HomeScreen.dart';
 import 'Screens/LoginScreen.dart';
 import 'Screens/ProfileScreen.dart';
 
+String userEmail = '';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -41,8 +43,14 @@ void main() async {
         '/password': (context) => PasswordSetupScreen(),
         '/grading': (context) {
           final args = ModalRoute.of(context)?.settings.arguments;
-          final score = args as int;
-          return QuizGradingScreeen(score: score);
+          if (args is Map<String, int>) {
+            final score = args['score'];
+            final quizId = args['quizId'];
+            return QuizGradingScreen(score: score!, quizId: quizId!);
+          } else {
+            // Handle invalid arguments
+            return Container(); // Replace with appropriate widget
+          }
         },
       },
     ),
@@ -63,6 +71,8 @@ class MyApp extends StatelessWidget {
               // User is not logged in. Show the login screen.
               return LoginScreen();
             } else {
+              print('User email: ${user.email}');
+              userEmail = user.email!;
               // User is logged in. Navigate to the home page.
               return HomeScreen();
             }

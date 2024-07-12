@@ -79,7 +79,10 @@ class _QuizScreenState extends State<QuizScreen> {
 
                       Navigator.of(context).pop();
                       Navigator.of(context, rootNavigator: true)
-                          .pushNamed('/grading', arguments: score.round());
+                          .pushNamed('/grading', arguments: {
+                        'score': score.round(),
+                        'quizId': widget.quizId
+                      });
                     },
                     labelTextColor: Colors.white,
                     backgroundColor: Colors.pinkAccent,

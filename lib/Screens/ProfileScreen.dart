@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:learn_py/main.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -10,6 +11,7 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('Email: $userEmail'),
             ElevatedButton(
               onPressed: () {
                 signOut();
