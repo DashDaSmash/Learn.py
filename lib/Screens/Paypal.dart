@@ -19,7 +19,7 @@ class _PaypalPaymentState extends State<PaypalPayment> {
   }
 
   void _showPaypalCheckoutView() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => PaypalCheckoutView(
           sandboxMode: true,

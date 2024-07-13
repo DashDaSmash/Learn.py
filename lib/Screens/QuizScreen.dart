@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/QuizQuestion.dart';
 import 'package:get/get.dart';
-import 'package:bottom_sheet/bottom_sheet.dart';
 
 class QuizScreen extends StatefulWidget {
   final questionController = Get.put(Controller());
