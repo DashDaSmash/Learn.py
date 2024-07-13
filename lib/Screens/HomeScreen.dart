@@ -94,10 +94,10 @@ class HomeScreen extends StatelessWidget {
                     flex: 2,
                     color: Color(0xFFFFFFFF),
                     strokeColor: Color(0xFF00CE2D),
-                    text: "Settings",
-                    icon: Icons.settings,
+                    text: "About",
+                    icon: Icons.info_outline_rounded,
                     orientation: 'horizontal',
-                    route: '/settings')
+                    route: '/about')
               ],
             )),
           ],

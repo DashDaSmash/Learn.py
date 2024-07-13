@@ -8,7 +8,7 @@ import 'package:learn_py/Screens/QuizCatalogScreen.dart';
 import 'package:learn_py/Screens/QuizScreen.dart';
 import 'package:learn_py/Screens/PlaygroundScreen.dart';
 import 'package:learn_py/Screens/ExternalLibrariesScreen.dart';
-import 'package:learn_py/Screens/SettingsScreen.dart';
+import 'package:learn_py/Screens/AboutScreen.dart';
 import 'package:learn_py/Screens/RegistrationScreen.dart';
 import 'package:learn_py/Screens/QuizGradingScreen.dart';
 import 'Screens/HomeScreen.dart';
@@ -38,7 +38,7 @@ void main() async {
         '/quizCatalog': (context) => QuizCatalogScreen(),
         '/playground': (context) => PlaygroundScreen(),
         '/external': (context) => ExternalLibrariesScreen(),
-        '/settings': (context) => SettingsScreen(),
+        '/about': (context) => AboutScreen(),
         '/registration': (context) => RegistrationScreen(),
         '/password': (context) => PasswordSetupScreen(),
         '/grading': (context) {

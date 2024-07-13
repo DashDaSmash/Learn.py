@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "stripe": "learn-py-app"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
