@@ -48,6 +48,7 @@ dependencies:
   countup: ^0.1.4
   flutter_paypal_payment: ^1.0.6
   package_info_plus: ^8.0.0
+  loading_animation_widget: ^1.2.1
 
 dev_dependencies:
   flutter_test:
