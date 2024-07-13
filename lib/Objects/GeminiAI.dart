@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'TextFormatting.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class GeminiAI extends StatefulWidget {
   final String prompt;
@@ -51,6 +52,11 @@ class _GeminiAIState extends State<GeminiAI> {
     print(completeResponse);
     Widget FormattedResponse =
         TextFormatting(textWithFormattingSymbols: completeResponse);
-    return FormattedResponse;
+    return completeResponse == ''
+        ? LoadingAnimationWidget.threeRotatingDots(
+            color: Color(0xFF80FE94), // Set your desired color
+            size: 30.0, // Set the size of the animation
+          )
+        : SingleChildScrollView(child: FormattedResponse);
   }
 }

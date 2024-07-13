@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 class TextFormatting extends StatelessWidget {
   final String textWithFormattingSymbols;
+  final Color boldTextColor = Color(0xFF3C3C3C);
+  final Color genericTextColor = Colors.black;
+  final Color headerTextColor = Color(0xFF00FF29);
+  final Color secondaryTextColor = Color(0xFF008615);
 
   TextFormatting({required this.textWithFormattingSymbols});
 
@@ -39,11 +43,16 @@ class TextFormatting extends StatelessWidget {
         if (boldEnd != -1) {
           spans.add(TextSpan(
             text: line.substring(2, boldEnd),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: boldTextColor),
           ));
           line = line.substring(boldEnd + 2);
         } else {
-          spans.add(TextSpan(text: line));
+          spans.add(TextSpan(
+              text: line,
+              style: TextStyle(fontSize: 18, color: secondaryTextColor)));
           line = '';
         }
       } else if (line.startsWith('*')) {
@@ -51,11 +60,16 @@ class TextFormatting extends StatelessWidget {
         if (italicEnd != -1) {
           spans.add(TextSpan(
             text: line.substring(1, italicEnd),
-            style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18),
+            style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: 18,
+                color: genericTextColor),
           ));
           line = line.substring(italicEnd + 1);
         } else {
-          spans.add(TextSpan(text: line));
+          spans.add(TextSpan(
+              text: line,
+              style: TextStyle(fontSize: 18, color: secondaryTextColor)));
           line = '';
         }
       } else if (line.startsWith('`')) {
@@ -63,11 +77,16 @@ class TextFormatting extends StatelessWidget {
         if (codeEnd != -1) {
           spans.add(TextSpan(
             text: line.substring(1, codeEnd),
-            style: TextStyle(fontFamily: 'Courier New', fontSize: 18),
+            style: TextStyle(
+                fontFamily: 'Courier New',
+                fontSize: 18,
+                color: genericTextColor),
           ));
           line = line.substring(codeEnd + 1);
         } else {
-          spans.add(TextSpan(text: line));
+          spans.add(TextSpan(
+              text: line,
+              style: TextStyle(fontSize: 18, color: secondaryTextColor)));
           line = '';
         }
       } else if (line.startsWith('~~')) {
@@ -75,18 +94,25 @@ class TextFormatting extends StatelessWidget {
         if (strikethroughEnd != -1) {
           spans.add(TextSpan(
             text: line.substring(2, strikethroughEnd),
-            style:
-                TextStyle(decoration: TextDecoration.lineThrough, fontSize: 18),
+            style: TextStyle(
+                decoration: TextDecoration.lineThrough,
+                fontSize: 18,
+                color: genericTextColor),
           ));
           line = line.substring(strikethroughEnd + 2);
         } else {
-          spans.add(TextSpan(text: line));
+          spans.add(TextSpan(
+              text: line,
+              style: TextStyle(fontSize: 18, color: secondaryTextColor)));
           line = '';
         }
       } else if (line.startsWith('#')) {
         spans.add(TextSpan(
           text: line.substring(1).trim(),
-          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              color: headerTextColor),
         ));
         line = '';
       } else if (line.contains("'''")) {
@@ -103,11 +129,15 @@ class TextFormatting extends StatelessWidget {
           ));
           line = line.substring(blockQuoteEnd + 3);
         } else {
-          spans.add(TextSpan(text: line, style: TextStyle(fontSize: 18)));
+          spans.add(TextSpan(
+              text: line,
+              style: TextStyle(fontSize: 18, color: secondaryTextColor)));
           line = '';
         }
       } else {
-        spans.add(TextSpan(text: line, style: TextStyle(fontSize: 18)));
+        spans.add(TextSpan(
+            text: line,
+            style: TextStyle(fontSize: 18, color: genericTextColor)));
         line = '';
       }
     }

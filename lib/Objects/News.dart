@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class NewsScreen extends StatefulWidget {
   @override
@@ -35,17 +37,56 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: articles.length,
-        itemBuilder: (context, index) {
-          final article = articles[index];
-          return ListTile(
-            title: Text(article['title']),
-            subtitle: Text(article['description']),
-            onTap: () {
-              // Handle article tap (e.g., open a web view)
-            },
-          );
-        });
+    return articles.isEmpty
+        ? Center(
+            child: LoadingAnimationWidget.threeRotatingDots(
+            color: Color(0xFF80FE94), // Set your desired color
+            size: 30.0, // Set the size of the animation
+          ))
+        : ListView.builder(
+            itemCount: articles.length,
+            itemBuilder: (context, index) {
+              final article = articles[index];
+              return Container(
+                margin: EdgeInsets.all(5.0), // Add vertical spacing
+                decoration: BoxDecoration(
+                  color: Color(0xFFB4FFC0), // Set your desired background color
+                  borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 5,
+                      color: Colors.black26,
+                      offset: Offset(2, 2), // Add a subtle shadow
+                    ),
+                  ],
+                  border: Border.all(
+                    color: Color(0xFF00B71D),
+                    width: 2,
+                  ),
+                ),
+                child: ListTile(
+                  title: Text(
+                    article['title'],
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF00CE2D)),
+                  ),
+                  subtitle: Text(
+                    article['description'],
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  onTap: () async {
+                    final articleUrl =
+                        article['url']; // Assuming the article URL is available
+                    if (await canLaunch(articleUrl)) {
+                      await launch(articleUrl);
+                    } else {
+                      print('Could not launch $articleUrl');
+                    }
+                  },
+                ),
+              );
+            });
   }
 }
