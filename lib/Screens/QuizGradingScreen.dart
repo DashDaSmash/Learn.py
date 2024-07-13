@@ -1,3 +1,4 @@
+import 'package:countup/countup.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learn_py/main.dart';
@@ -48,9 +49,16 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
     updateQuizScore();
     return Scaffold(
       body: Center(
-        // TODO: Make sure to display the updated quiz score
-        child: Text('${widget.score}'),
-      ),
+          // TODO: Make sure to display the updated quiz score
+          child: Countup(
+        begin: 0,
+        end: widget.score.toDouble(),
+        duration: Duration(seconds: 2),
+        separator: ',',
+        style: TextStyle(
+          fontSize: 36,
+        ),
+      )),
     );
   }
 }

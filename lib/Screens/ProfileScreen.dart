@@ -7,6 +7,7 @@ import 'package:learn_py/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:countup/countup.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -89,9 +90,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ? Image.network(imageUrl)
                           : Text(':(')),
             ),
-            Text('Last test score: $lastTestScore'),
-            Text('averageScore: $averageScore'),
-            Text('total: $userTotalScore'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Last test score: '),
+                Countup(
+                  begin: 0,
+                  end: lastTestScore.toDouble(),
+                  duration: Duration(seconds: 1),
+                  separator: ',',
+                  style: TextStyle(
+                    fontSize: 36,
+                  ),
+                ),
+              ],
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text('averageScore: '),
+              Countup(
+                begin: 0,
+                end: averageScore.toDouble(),
+                duration: Duration(seconds: 1),
+                separator: ',',
+                style: TextStyle(
+                  fontSize: 36,
+                ),
+              ),
+            ]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('total: '),
+                Countup(
+                  begin: 0,
+                  end: userTotalScore.toDouble(),
+                  duration: Duration(seconds: 1),
+                  separator: ',',
+                  style: TextStyle(
+                    fontSize: 36,
+                  ),
+                ),
+              ],
+            ),
             Text('Email: $userEmail'),
             ElevatedButton(
               onPressed: () {
