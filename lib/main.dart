@@ -14,6 +14,7 @@ import 'package:learn_py/Screens/QuizGradingScreen.dart';
 import 'Screens/HomeScreen.dart';
 import 'Screens/LoginScreen.dart';
 import 'Screens/ProfileScreen.dart';
+import 'Screens/Paypal.dart';
 
 String userEmail = '';
 
@@ -52,6 +53,7 @@ void main() async {
             return Container(); // Replace with appropriate widget
           }
         },
+        '/donate': (context) => PaypalPayment(),
       },
     ),
   );

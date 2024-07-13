@@ -51,6 +51,13 @@ class _AboutScreenState extends State<AboutScreen> {
                 strokeColor: Colors.black,
                 icon: Icons.add,
               ),
+              GenericButton(
+                label: 'Buy developers a coffee',
+                function: () => Navigator.of(context).pushNamed('/donate'),
+                labelTextColor: Color(0xFF000000),
+                backgroundColor: Color(0xFFD9D9D9),
+                strokeColor: Color(0xFFA3A3A3),
+              )
             ],
           ),
         ],
