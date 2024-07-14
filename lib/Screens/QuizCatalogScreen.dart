@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_py/Screens/LoginScreen.dart';
 import '../Objects/GenericButton.dart';
 
 class QuizCatalogScreen extends StatelessWidget {
@@ -7,16 +8,31 @@ class QuizCatalogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          GenericButton(
-            label: 'Quiz 1',
-            function: () => Navigator.of(context, rootNavigator: true)
-                .pushNamed('/quiz', arguments: 1),
-            labelTextColor: Color(0xFF000000),
-            backgroundColor: Color(0xFFD9D9D9),
-            strokeColor: Color(0xFFA3A3A3),
-          )
+          Column(
+            children: [
+              GenericButton(
+                label: 'Quiz 1',
+                function: () => Navigator.of(context, rootNavigator: true)
+                    .pushNamed('/quiz', arguments: 1),
+                type: GenericButtonType.generic,
+              )
+            ],
+          ),
+          Positioned(
+            //TODO: button customization
+            bottom: 16, // Adjust the position as needed
+            left: 16, // Adjust the position as needed
+            right: 16, // Adjust the position as needed
+            child: //BackButton
+                //BackButton
+                GenericButton(
+              label: 'Back',
+              function: () => Navigator.pop(context),
+              type: GenericButtonType.generic, // Set your desired color
+            ),
+          ),
         ],
       ),
     );

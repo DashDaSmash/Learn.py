@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_py/Objects/HomeScreenButtons.dart';
+import '../ThemeData.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Implement your home page UI here.
     return Scaffold(
-      backgroundColor: Color(0xFFECFFF0),
+      backgroundColor: themeData().backgroundColor,
       appBar: AppBar(
-        backgroundColor: Color(0xFFECFFF0),
+        backgroundColor: themeData().backgroundColor,
         title: Center(
           child: Text(
             'Learn.py',

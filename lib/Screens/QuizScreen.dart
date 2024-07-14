@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_py/Screens/LoginScreen.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/QuizQuestion.dart';
@@ -68,23 +69,22 @@ class _QuizScreenState extends State<QuizScreen> {
                     myController: widget.questionController);
               } else
                 return GenericButton(
-                    label: 'Continue',
-                    function: () {
-                      double score =
-                          (widget.questionController.questionsGotCorrect /
-                                  widget.questionController.totalQuestions) *
-                              100;
+                  label: 'Continue',
+                  function: () {
+                    double score =
+                        (widget.questionController.questionsGotCorrect /
+                                widget.questionController.totalQuestions) *
+                            100;
 
-                      Navigator.of(context).pop();
-                      Navigator.of(context, rootNavigator: true)
-                          .pushNamed('/grading', arguments: {
-                        'score': score.round(),
-                        'quizId': widget.quizId
-                      });
-                    },
-                    labelTextColor: Colors.white,
-                    backgroundColor: Colors.pinkAccent,
-                    strokeColor: Colors.pink);
+                    Navigator.of(context).pop();
+                    Navigator.of(context, rootNavigator: true)
+                        .pushNamed('/grading', arguments: {
+                      'score': score.round(),
+                      'quizId': widget.quizId
+                    });
+                  },
+                  type: GenericButtonType.semiProceed,
+                );
             }),
           ],
         ),

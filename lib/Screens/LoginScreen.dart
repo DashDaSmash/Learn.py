@@ -4,6 +4,8 @@ import 'package:learn_py/Objects/TextInputField.dart';
 import '../Objects/SignInWithGoogle.dart';
 import '../Objects/SignInWithEmail.dart';
 
+enum GenericButtonType { generic, proceed, semiProceed, warning, semiWarning }
+
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -54,30 +56,27 @@ class LoginScreen extends StatelessWidget {
                     controller: passwordController),
                 SizedBox(height: 30),
                 GenericButton(
-                    label: 'Sign in',
-                    function: _handleSignInWithEmail,
-                    labelTextColor: Colors.white,
-                    backgroundColor: Color(0xFF00CE2D),
-                    strokeColor: Color(0xFF767676)),
+                  label: 'Sign in',
+                  function: _handleSignInWithEmail,
+                  type: GenericButtonType.semiProceed,
+                ),
                 SizedBox(height: 10),
                 Divider(
                   color: Color(0xFF80FE94),
                 ),
                 SizedBox(height: 10),
                 GenericButton(
-                    label: 'Sign in with Google',
-                    image: 'assets/google_logo.png',
-                    function: signInWithGoogle,
-                    labelTextColor: Colors.black,
-                    backgroundColor: Color(0xFFFFFFFF),
-                    strokeColor: Color(0xFF80FE94)),
+                  label: 'Sign in with Google',
+                  image: 'assets/google_logo.png',
+                  function: signInWithGoogle,
+                  type: GenericButtonType.generic,
+                ),
                 GenericButton(
-                    label: 'Register',
-                    function: () => Navigator.of(context, rootNavigator: true)
-                        .pushNamed('/registration'),
-                    labelTextColor: Color(0xFF3C3C3C),
-                    backgroundColor: Color(0xFF80FE94),
-                    strokeColor: Color(0xFF14AE5C))
+                  label: 'Register',
+                  function: () => Navigator.of(context, rootNavigator: true)
+                      .pushNamed('/registration'),
+                  type: GenericButtonType.proceed,
+                )
                 // Other form fields...
               ],
             ),

@@ -1,13 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:learn_py/Screens/LoginScreen.dart';
 import 'package:learn_py/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:countup/countup.dart';
+import '../Objects/GenericButton.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -143,13 +144,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Text('Sign Out'),
             ),
             SizedBox(height: 16), // Add some spacing
-            ElevatedButton(
-              onPressed: () {
-                // Navigate back to the previous screen
-                Navigator.pop(context);
-              },
-              child: Text('Go Back'),
-            ),
+            //BackButton
+            GenericButton(
+              label: 'Back',
+              function: () => Navigator.pop(context),
+              type: GenericButtonType.generic, // Set your desired color
+            ), //BackButton
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:learn_py/Screens/LoginScreen.dart';
 import '../Objects/GeminiAI.dart';
 import '../Objects/News.dart';
 import '../Objects/GenericButton.dart';
@@ -92,13 +93,12 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               bottom: 16, // Adjust the position as needed
               left: 16, // Adjust the position as needed
               right: 16, // Adjust the position as needed
-              child: GenericButton(
+              child: //BackButton
+                  //BackButton
+                  GenericButton(
                 label: 'Back',
                 function: () => Navigator.pop(context),
-                labelTextColor: Colors.black,
-                backgroundColor: Colors.white, // Set your desired color
-                strokeColor: Colors.black, // Set your desired color
-                icon: Icons.add, // Replace with your icon
+                type: GenericButtonType.generic, // Set your desired color
               ),
             ),
           ],

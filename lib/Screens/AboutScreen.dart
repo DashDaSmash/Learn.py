@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
+import 'package:learn_py/Screens/LoginScreen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 //TODO: Also manually change app version in pubspec.yaml
@@ -43,20 +44,16 @@ class _AboutScreenState extends State<AboutScreen> {
           ),
           Column(
             children: [
+              //BackButton
               GenericButton(
                 label: 'Back',
                 function: () => Navigator.pop(context),
-                labelTextColor: Colors.white,
-                backgroundColor: Colors.green,
-                strokeColor: Colors.black,
-                icon: Icons.add,
+                type: GenericButtonType.generic, // Set your desired color
               ),
               GenericButton(
                 label: 'Buy developers a coffee',
                 function: () => Navigator.of(context).pushNamed('/donate'),
-                labelTextColor: Color(0xFF000000),
-                backgroundColor: Color(0xFFD9D9D9),
-                strokeColor: Color(0xFFA3A3A3),
+                type: GenericButtonType.semiProceed,
               )
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:learn_py/Screens/LoginScreen.dart';
 import 'GenericButton.dart';
 
 import '../Screens/QuizScreen.dart';
@@ -71,9 +72,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
                           widget.myController
                               .nextQuestion(questionCount, context, true);
                         },
-                        labelTextColor: Colors.white,
-                        backgroundColor: Colors.black,
-                        strokeColor: Colors.purpleAccent,
+                        type: GenericButtonType.generic,
                       ),
                     ],
                   ),
@@ -100,9 +99,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
                           widget.myController
                               .nextQuestion(questionCount, context, false);
                         },
-                        labelTextColor: Colors.white,
-                        backgroundColor: Colors.black,
-                        strokeColor: Colors.purpleAccent,
+                        type: GenericButtonType.semiWarning,
                       ),
                     ],
                   ),
@@ -156,16 +153,15 @@ class _QuizQuestionState extends State<QuizQuestion> {
                         1;
                 i++)
               GenericButton(
-                  label: widget.questionDetails[i],
-                  function: () {
-                    print(
-                        'user selected option${i - 1} which is ${widget.questionDetails[i]}');
-                    selectedAnswer = 'option${i - 1}';
-                    _checkAnswer();
-                  },
-                  labelTextColor: Colors.white,
-                  backgroundColor: Colors.black,
-                  strokeColor: Colors.pink),
+                label: widget.questionDetails[i],
+                function: () {
+                  print(
+                      'user selected option${i - 1} which is ${widget.questionDetails[i]}');
+                  selectedAnswer = 'option${i - 1}';
+                  _checkAnswer();
+                },
+                type: GenericButtonType.generic,
+              ),
 
             // Display question text
             // Create widgets for displaying options (e.g., Text)
