@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:learn_py/Screens/LoginScreen.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:learn_py/main.dart';
@@ -14,14 +15,6 @@ import '../Objects/GenericButton.dart';
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Initialize any state variables or perform other setup here
-  //   // For example, fetch data from Firestore
-  //   _fetchUserData();
-  // }
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
@@ -30,8 +23,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int quizCount = 0;
   int averageScore = 0;
   int lastTestScore = 0;
-  String? FirstName;
-  String? LastName;
+  String FirstName = '';
+  String LastName = '';
   var imageUrl;
   bool wantToChangePP = false;
 
@@ -40,6 +33,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         FirebaseFirestore.instance.collection('users').doc(userEmail);
     final userDoc = await userScore.get();
     final Map<String, dynamic> quizScores = userDoc.data()?['QuizScores'] ?? {};
+    FirstName = userDoc.data()?['FirstName'];
+    LastName = userDoc.data()?['LastName'];
     print('quizScores: $quizScores');
     for (final key in quizScores.keys) {
       lastTestScore = int.parse(quizScores[key].toString());
@@ -75,81 +70,168 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: themeData().backgroundColor,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
-              onTap: () {
-                _clickedOnPP();
-              },
-              child: wantToChangePP
-                  ? CircleAvatar(
-                      radius: 50,
-                      child: Icon(Icons.edit),
-                    )
-                  : CircleAvatar(
-                      radius: 50,
-                      child: imageUrl != null
-                          ? Image.network(imageUrl)
-                          : Text(':(')),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Last test score: '),
-                Countup(
-                  begin: 0,
-                  end: lastTestScore.toDouble(),
-                  duration: Duration(seconds: 1),
-                  separator: ',',
-                  style: TextStyle(
-                    fontSize: 36,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 70, bottom: 30),
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _clickedOnPP();
+                          },
+                          child: wantToChangePP
+                              ? CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: 80,
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: Color(0xFF78FF8E),
+                                    size: 50,
+                                  ),
+                                )
+                              : imageUrl != null
+                                  ? CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 80,
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          imageUrl, // Replace with your image URL
+                                          height: 160,
+                                          width: 160,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    )
+                                  : CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 80,
+                                      child: Icon(
+                                        CupertinoIcons.profile_circled,
+                                        color: Color(0xFFB4FFC0),
+                                        size: 160,
+                                      ),
+                                    ),
+                        ),
+                        FirstName.isNotEmpty && LastName.isNotEmpty
+                            ? Text(
+                                '$FirstName $LastName',
+                                style: themeData().genericBigTextStyle,
+                              )
+                            : SizedBox.shrink(),
+                        Text(
+                          '$userEmail',
+                          style: themeData().genericTextStyle,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('averageScore: '),
-              Countup(
-                begin: 0,
-                end: averageScore.toDouble(),
-                duration: Duration(seconds: 1),
-                separator: ',',
-                style: TextStyle(
-                  fontSize: 36,
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Last Quiz Score: ',
+                        style: themeData().genericTextStyle,
+                      ),
+                      Row(
+                        children: [
+                          Countup(
+                            begin: 0,
+                            end: lastTestScore.toDouble(),
+                            duration: Duration(seconds: 1),
+                            separator: ',',
+                            style: themeData().boldDigit,
+                          ),
+                          Column(
+                            // mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                height: 18,
+                                width: 16,
+                              ),
+                              Text(
+                                '%',
+                                style: themeData().genericTextStyle,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Average Score: ',
+                          style: themeData().genericTextStyle,
+                        ),
+                        Row(
+                          children: [
+                            Countup(
+                              begin: 0,
+                              end: averageScore.toDouble(),
+                              duration: Duration(seconds: 1),
+                              separator: ',',
+                              style: themeData().boldDigit,
+                            ),
+                            Column(
+                              // mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  height: 18,
+                                  width: 16,
+                                ),
+                                Text(
+                                  '%',
+                                  style: themeData().genericTextStyle,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total Score: ',
+                        style: themeData().genericTextStyle,
+                      ),
+                      Countup(
+                        begin: 0,
+                        end: userTotalScore.toDouble(),
+                        duration: Duration(seconds: 1),
+                        separator: ',',
+                        style: themeData().boldDigit,
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('total: '),
-                Countup(
-                  begin: 0,
-                  end: userTotalScore.toDouble(),
-                  duration: Duration(seconds: 1),
-                  separator: ',',
-                  style: TextStyle(
-                    fontSize: 36,
-                  ),
-                ),
-              ],
             ),
-            Text('Email: $userEmail'),
-            ElevatedButton(
-              onPressed: () {
-                signOut();
-                // Handle sign-out logic here
-                // For example, call a sign-out function
-                // AuthService.signOut();
-              },
-              child: Text('Sign Out'),
-            ),
-            SizedBox(height: 16), // Add some spacing
+
+            // Add some spacing
             //BackButton
-            GenericButton(
-              label: 'Back',
-              function: () => Navigator.pop(context),
-              type: GenericButtonType.generic, // Set your desired color
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  GenericButton(
+                      label: 'Sign out',
+                      function: signOut,
+                      type: GenericButtonType.semiWarning),
+                  GenericButton(
+                    label: 'Back',
+                    function: () => Navigator.pop(context),
+                    type: GenericButtonType.generic, // Set your desired color
+                  ),
+                ],
+              ),
             ), //BackButton
           ],
         ),

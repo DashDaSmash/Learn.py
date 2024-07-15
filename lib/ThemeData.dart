@@ -1,14 +1,37 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class themeData {
   Color backgroundColor = Color(0xFFECFFF0);
 
   TextStyle genericTextStyle = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.normal,
     fontSize: 16,
   );
+
+  TextStyle genericBigTextStyle = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+  );
+
+  TextStyle boldDigit = TextStyle(
+      fontWeight: FontWeight.w700,
+      fontSize: 40,
+      color: Color(0xFF00FF29),
+      shadows: [
+        Shadow(
+          color: Colors.black26,
+          offset: Offset(2, 2),
+          blurRadius: 1,
+        ),
+        Shadow(
+          color: Colors.white,
+          offset: Offset(-2, -2),
+          blurRadius: 1,
+        ),
+      ]);
 
   //for buttons that do no give a hint
   Color genericButtonLabelTextColor = Colors.black;
