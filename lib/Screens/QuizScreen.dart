@@ -27,7 +27,7 @@ class _QuizScreenState extends State<QuizScreen> {
     if (widget.questionController.questionsCompleted == 0) {
       Progress = 0;
     } else {
-      Progress = widget.questionController.questionsGotCorrect /
+      Progress = widget.questionController.questionsCompleted /
           widget.questionController.totalQuestions;
     }
 
