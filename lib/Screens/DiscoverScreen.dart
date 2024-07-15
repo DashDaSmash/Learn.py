@@ -60,7 +60,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           ),
                           child: Center(
                             child: GeminiAI(
-                              prompt: 'Give me a tip about Python language',
+                              prompt: 'Give me a tip for Python coding',
                             ),
                           ),
                         ),

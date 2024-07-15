@@ -1,7 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class themeData {
   Color backgroundColor = Color(0xFFECFFF0);
+
+  TextStyle genericTextStyle = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+  );
 
   //for buttons that do no give a hint
   Color genericButtonLabelTextColor = Colors.black;
