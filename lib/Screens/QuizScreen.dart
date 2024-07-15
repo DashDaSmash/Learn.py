@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn_py/Screens/LoginScreen.dart';
+import 'package:learn_py/ThemeData.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/QuizQuestion.dart';
@@ -43,50 +44,128 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
+  void _showBottomSheet(BuildContext context) {
+    print('Bottom modal sheet coming right up....');
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.4,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.red,
+                width: 1.0,
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+              ),
+              gradient: LinearGradient(
+                colors: [Color(0xFFFFD0D0), Colors.white],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                    child: Center(
+                        child: Text(
+                  'Are you leaving?',
+                  style: themeData().BMSHeaderTextStyle,
+                ))),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        'Reallyyyy?',
+                        style: themeData().genericTextStyle,
+                      ),
+                      GenericButton(
+                        label: 'No',
+                        function: () {
+                          Navigator.of(context).pop();
+                        },
+                        type: GenericButtonType.semiProceed,
+                      ),
+                      GenericButton(
+                        label: 'Yes',
+                        function: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                        type: GenericButtonType.warning,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     print('updating screen...');
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text('Quiz ${widget.quizId}'),
-            //TODO: when this screen appears, prograss bar expands from middle, when user clicks next, it progresses with animantion
+      backgroundColor: themeData().backgroundColor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Quiz ${widget.quizId}'),
+                      GenericButton(
+                          label: 'Quit',
+                          function: () {
+                            _showBottomSheet(context);
+                          },
+                          type: GenericButtonType.semiWarning),
+                    ],
+                  ),
+                  GetBuilder<Controller>(
+                    builder: (_) => ProgressBar(),
+                  ),
+                ],
+              ), //Progressbar
+              GetBuilder<Controller>(builder: (_) {
+                if (widget.questionController.questionId <=
+                    widget.questionController.totalQuestions) {
+                  return QuizQuestion(
+                      quizId: widget.quizId,
+                      questionId: widget.questionController.questionId,
+                      myController: widget.questionController);
+                } else
+                  return GenericButton(
+                    label: 'Continue',
+                    function: () {
+                      double score =
+                          (widget.questionController.questionsGotCorrect /
+                                  widget.questionController.totalQuestions) *
+                              100;
 
-            Divider(),
-            GetBuilder<Controller>(
-              builder: (_) => ProgressBar(),
-            ),
-            GetBuilder<Controller>(builder: (_) {
-              if (widget.questionController.questionId <=
-                  widget.questionController.totalQuestions) {
-                return QuizQuestion(
-                    quizId: widget.quizId,
-                    questionId: widget.questionController.questionId,
-                    myController: widget.questionController);
-              } else
-                return GenericButton(
-                  label: 'Continue',
-                  function: () {
-                    double score =
-                        (widget.questionController.questionsGotCorrect /
-                                widget.questionController.totalQuestions) *
-                            100;
-
-                    Navigator.of(context).pop();
-                    Navigator.of(context, rootNavigator: true)
-                        .pushNamed('/grading', arguments: {
-                      'score': score.round(),
-                      'quizId': widget.quizId
-                    });
-                  },
-                  type: GenericButtonType.semiProceed,
-                );
-            }),
-          ],
+                      Navigator.of(context).pop();
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed('/grading', arguments: {
+                        'score': score.round(),
+                        'quizId': widget.quizId
+                      });
+                    },
+                    type: GenericButtonType.proceed,
+                  );
+              }), //Question and answers
+            ],
+          ),
         ),
       ),
     );

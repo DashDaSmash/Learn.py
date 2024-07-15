@@ -33,6 +33,24 @@ class themeData {
         ),
       ]);
 
+  TextStyle BMSHeaderTextStyle = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 40,
+    color: Colors.white,
+    shadows: [
+      Shadow(
+        color: Colors.black38,
+        offset: Offset(2, 2),
+        blurRadius: 2,
+      ),
+      // Shadow(
+      //   color: Colors.red,
+      //   offset: Offset(-2, -2),
+      //   blurRadius: 1,
+      // ),
+    ],
+  ); //Bottom Modal Sheet
+
   //for buttons that do no give a hint
   Color genericButtonLabelTextColor = Colors.black;
   Color genericButtonBackgroundColor = Colors.white;

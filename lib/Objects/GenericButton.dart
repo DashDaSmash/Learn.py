@@ -5,29 +5,30 @@ import '../ThemeData.dart';
 class GenericButton extends StatelessWidget {
   final VoidCallback function;
   final String label;
-  // final Color labelTextColor;
-  // final Color backgroundColor;
-  // final Color strokeColor;
   final IconData? icon;
   final String? image;
   final GenericButtonType type; //generic, proceed, warning
+  final int? height;
+  final int? width;
 
-  GenericButton({
-    required this.label,
-    required this.function,
-    // required this.labelTextColor,
-    // required this.backgroundColor,
-    // required this.strokeColor,
-    this.icon,
-    this.image,
-    required this.type,
-  });
+  GenericButton(
+      {required this.label,
+      required this.function,
+      this.icon,
+      this.image,
+      required this.type,
+      this.height,
+      this.width});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: function,
       style: ElevatedButton.styleFrom(
+        fixedSize: Size(
+          width?.toDouble() ?? double.infinity,
+          height?.toDouble() ?? 30.0,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(

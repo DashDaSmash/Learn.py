@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learn_py/Screens/LoginScreen.dart';
 import 'GenericButton.dart';
-
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../Screens/QuizScreen.dart';
 
 // ignore: must_be_immutable
@@ -127,7 +127,10 @@ class _QuizQuestionState extends State<QuizQuestion> {
           return Container(
               height: 100,
               width: 100,
-              child: CircularProgressIndicator()); // Show a loading indicator
+              child: LoadingAnimationWidget.threeRotatingDots(
+                color: Color(0xFF80FE94), // Set your desired color
+                size: 30.0, // Set the size of the animation
+              )); // Show a loading indicator
         }
 
         questionCount = snapshot.data!['questionCount'];
@@ -160,7 +163,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
                   selectedAnswer = 'option${i - 1}';
                   _checkAnswer();
                 },
-                type: GenericButtonType.generic,
+                type: GenericButtonType.semiProceed,
               ),
 
             // Display question text
