@@ -6,6 +6,7 @@ import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/QuizQuestion.dart';
 import 'package:get/get.dart';
 
+//TODO: Remember that you cant use two quizes in same launch. fix it
 class QuizScreen extends StatefulWidget {
   final questionController = Get.put(Controller());
 
@@ -133,8 +134,10 @@ class _QuizScreenState extends State<QuizScreen> {
                           type: GenericButtonType.semiWarning),
                     ],
                   ),
-                  GetBuilder<Controller>(
-                    builder: (_) => ProgressBar(),
+                  Center(
+                    child: GetBuilder<Controller>(
+                      builder: (_) => ProgressBar(),
+                    ),
                   ),
                 ],
               ), //Progressbar

@@ -6,6 +6,7 @@ import '../Objects/GeminiAI.dart';
 import '../Objects/News.dart';
 import '../Objects/GenericButton.dart';
 import 'package:flutter/services.dart';
+//TODO: show why you need to learn in here and tips and tricks in notes page
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({Key? key}) : super(key: key);

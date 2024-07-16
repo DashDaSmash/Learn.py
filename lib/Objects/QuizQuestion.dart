@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learn_py/Screens/LoginScreen.dart';
+import 'package:learn_py/ThemeData.dart';
 import 'GenericButton.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../Screens/QuizScreen.dart';
@@ -145,11 +146,20 @@ class _QuizQuestionState extends State<QuizQuestion> {
             snapshot.data!['question${widget.questionId}option$i'] as String,
         ];
 
-        print(widget.questionDetails);
+        String Question = widget.questionDetails[0];
+
+        String formattedQuestion = Question.replaceAll(r'\n', '\n')
+            .replaceAll(r'\t', '\t\t\t\t\t\t\t');
 
         return Column(
           children: [
-            Text(widget.questionDetails[0]),
+            Text(
+              formattedQuestion,
+              style: themeData().QuizQuestionTextStyle,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.1,
+            ),
             for (int i = 2;
                 i <=
                     snapshot.data!['question${widget.questionId}optionCount'] +

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learn_py/main.dart';
 
+// ignore: must_be_immutable
 class QuizGradingScreen extends StatefulWidget {
   final int quizId;
   final int score;
@@ -17,20 +18,34 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
   Future<void> updateQuizScore() async {
     final userRef =
         FirebaseFirestore.instance.collection('users').doc(userEmail);
+    final userDoc = await userRef.get();
+    print(userDoc.data()?['QuizScores']);
+    // widget.fireStoreQuizMap!['${widget.quizId}'] = widget.score;
+
+    // widget.fireStoreQuizMap {
+    //   '${widget.quizId}': widget.score,
+    // };
+    Map<String, dynamic> fireStoreQuizMap = userDoc.data()?['QuizScores'];
+    print('*******************');
+    print(fireStoreQuizMap);
+    fireStoreQuizMap['${widget.quizId}'] = widget.score;
+    print('####################');
+    print(fireStoreQuizMap);
+    //questionCount = snapshot.data!['questionCount'];
 
     if (widget.score >= 80) {
       await userRef.update({
         'LastUnlockedQuiz': widget.quizId + 1, // Set the unlocked quiz number
-        'QuizScores': {
-          '1': widget.score
-        }, // Initialize quiz scores (assuming quiz 1)
+        'QuizScores':
+            fireStoreQuizMap // Initialize quiz scores (assuming quiz 1)
       });
     } else {
       {
         await userRef.update({
-          'QuizScores': {
-            '1': widget.score
-          }, // Initialize quiz scores (assuming quiz 1)
+          'QuizScores': fireStoreQuizMap
+          // 'QuizScores': {
+          //   '${widget.quizId}': fireStoreQuizMap
+          // }, // Initialize quiz scores (assuming quiz 1)
         });
       }
     }

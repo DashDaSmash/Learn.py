@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -50,6 +49,12 @@ class themeData {
       // ),
     ],
   ); //Bottom Modal Sheet
+
+  TextStyle QuizQuestionTextStyle = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 20,
+    color: Colors.black54,
+  );
 
   //for buttons that do no give a hint
   Color genericButtonLabelTextColor = Colors.black;

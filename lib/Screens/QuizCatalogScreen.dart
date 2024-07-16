@@ -17,7 +17,13 @@ class QuizCatalogScreen extends StatelessWidget {
                 function: () => Navigator.of(context, rootNavigator: true)
                     .pushNamed('/quiz', arguments: 1),
                 type: GenericButtonType.generic,
-              )
+              ),
+              GenericButton(
+                label: 'Quiz 2',
+                function: () => Navigator.of(context, rootNavigator: true)
+                    .pushNamed('/quiz', arguments: 2),
+                type: GenericButtonType.generic,
+              ),
             ],
           ),
           Positioned(

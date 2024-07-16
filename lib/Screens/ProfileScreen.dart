@@ -38,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     print('quizScores: $quizScores');
     for (final key in quizScores.keys) {
       lastTestScore = int.parse(quizScores[key].toString());
+      print('lastTestScore: $lastTestScore');
       userTotalScore += lastTestScore;
       quizCount++;
       double average = userTotalScore / quizCount;
