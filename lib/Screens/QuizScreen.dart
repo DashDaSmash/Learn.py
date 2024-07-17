@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:learn_py/Screens/LoginScreen.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/QuizQuestion.dart';
 import 'package:get/get.dart';
+
+import '../main.dart';
 
 //TODO: Remember that you cant use two quizes in same launch. fix it
 class QuizScreen extends StatefulWidget {

@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:learn_py/Screens/LoginScreen.dart';
 import '../Objects/GeminiAI.dart';
 import '../Objects/News.dart';
 import '../Objects/GenericButton.dart';
 import 'package:flutter/services.dart';
+
+import '../main.dart';
 //TODO: show why you need to learn in here and tips and tricks in notes page
 
 class DiscoverScreen extends StatefulWidget {

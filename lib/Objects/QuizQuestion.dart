@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:learn_py/Screens/LoginScreen.dart';
 import 'package:learn_py/ThemeData.dart';
+import '../main.dart';
 import 'GenericButton.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../Screens/QuizScreen.dart';

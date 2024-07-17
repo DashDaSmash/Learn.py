@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learn_py/Screens/LoginScreen.dart';
 import '../ThemeData.dart';
+import '../main.dart';
 
 class GenericButton extends StatelessWidget {
   final VoidCallback function;

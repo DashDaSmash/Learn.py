@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
-import 'package:learn_py/Screens/LoginScreen.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
+import '../main.dart';
 
 //TODO: Also manually change app version in pubspec.yaml
 

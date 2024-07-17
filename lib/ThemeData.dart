@@ -56,6 +56,37 @@ class themeData {
     color: Colors.black54,
   );
 
+  TextStyle GradingScreenScoreTextStyle = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 100,
+    color: Colors.white,
+    shadows: [
+      Shadow(
+        color: Colors.black38,
+        offset: Offset(2, 2),
+        blurRadius: 2,
+      ),
+      // Shadow(
+      //   color: Colors.red,
+      //   offset: Offset(-2, -2),
+      //   blurRadius: 1,
+      // ),
+    ],
+  );
+
+  TextStyle GradingScreenMessageTextStyle = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 100,
+    color: Colors.white,
+    shadows: [
+      Shadow(
+        color: Color(0xFF008615),
+        offset: Offset(2, 2),
+        blurRadius: 2,
+      ),
+    ],
+  );
+
   //for buttons that do no give a hint
   Color genericButtonLabelTextColor = Colors.black;
   Color genericButtonBackgroundColor = Colors.white;

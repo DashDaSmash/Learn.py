@@ -3,8 +3,7 @@ import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/TextInputField.dart';
 import '../Objects/SignInWithGoogle.dart';
 import '../Objects/SignInWithEmail.dart';
-
-enum GenericButtonType { generic, proceed, semiProceed, warning, semiWarning }
+import '../main.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();

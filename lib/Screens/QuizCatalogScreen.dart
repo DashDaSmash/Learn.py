@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learn_py/Screens/LoginScreen.dart';
 import '../Objects/GenericButton.dart';
+import '../main.dart';
 
 class QuizCatalogScreen extends StatelessWidget {
   const QuizCatalogScreen({super.key});

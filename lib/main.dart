@@ -16,6 +16,8 @@ import 'Screens/LoginScreen.dart';
 import 'Screens/ProfileScreen.dart';
 import 'Screens/Paypal.dart';
 
+enum GenericButtonType { generic, proceed, semiProceed, warning, semiWarning }
+
 String userEmail = '';
 
 void main() async {
