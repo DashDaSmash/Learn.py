@@ -140,7 +140,10 @@ class _QuizScreenState extends State<QuizScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Quiz ${widget.quizId}'),
+                      Text(
+                        'Quiz ${widget.quizId}',
+                        style: themeData().genericBigTextStyle,
+                      ),
                       GenericButton(
                           label: 'Quit',
                           function: () {

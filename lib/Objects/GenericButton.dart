@@ -5,7 +5,7 @@ import '../main.dart';
 class GenericButton extends StatelessWidget {
   final VoidCallback function;
   final String label;
-  final IconData? icon;
+  final Icon? icon;
   final String? image;
   final GenericButtonType type; //generic, proceed, warning
   final int? height;
@@ -56,7 +56,7 @@ class GenericButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (icon != null) Icon(icon),
+          if (icon != null) icon!,
           if (image != null)
             Image.asset(
               image!,
