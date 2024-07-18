@@ -26,57 +26,72 @@ class _QuizCatalogScreenState extends State<QuizCatalogScreen> {
     checkUserQuizUnlockProgress();
     return Scaffold(
       backgroundColor: themeData().backgroundColor,
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('quiz').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-                child: LoadingAnimationWidget.threeRotatingDots(
-              color: Color(0xFF80FE94), // Set your desired color
-              size: 30.0, // Set the size of the animation
-            ));
-          }
+      body: Stack(children: [
+        StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('quiz').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                  child: LoadingAnimationWidget.threeRotatingDots(
+                color: Color(0xFF80FE94), // Set your desired color
+                size: 30.0, // Set the size of the animation
+              ));
+            }
 
-          final documents = snapshot.data?.docs;
+            final documents = snapshot.data?.docs;
 
-          return ListView.builder(
-            itemCount: documents?.length ?? 0,
-            itemBuilder: (context, index) {
-              final doc = documents![index];
-              final docId = doc.id;
-              final quizId = int.parse(docId.substring(4, 5));
+            return ListView.builder(
+              itemCount: documents?.length ?? 0,
+              itemBuilder: (context, index) {
+                final doc = documents![index];
+                final docId = doc.id;
+                final quizId = int.parse(docId.substring(4, 5));
 
-              return ListTile(
-                title: GenericButton(
-                  icon: quizId < lastUnlockedQuiz
-                      ? Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        )
-                      : quizId == lastUnlockedQuiz
-                          ? Icon(
-                              Icons.arrow_forward_outlined,
-                              color: Colors.white,
-                            )
-                          : Icon(
-                              Icons.lock_outline_rounded,
-                              color: Colors.black54,
-                            ),
-                  label: docId,
-                  function: () => Navigator.of(context, rootNavigator: true)
-                      .pushNamed('/quiz', arguments: quizId),
-                  type: quizId < lastUnlockedQuiz
-                      ? GenericButtonType.semiProceed
-                      : quizId == lastUnlockedQuiz
-                          ? GenericButtonType.proceed
-                          : GenericButtonType.generic,
-                ),
-                // Add other widgets or data from the document as needed
-              );
-            },
-          );
-        },
-      ),
+                return ListTile(
+                  title: GenericButton(
+                    icon: quizId < lastUnlockedQuiz
+                        ? Icon(
+                            Icons.check,
+                            color: Colors.green,
+                          )
+                        : quizId == lastUnlockedQuiz
+                            ? Icon(
+                                Icons.arrow_forward_outlined,
+                                color: Colors.white,
+                              )
+                            : Icon(
+                                Icons.lock_outline_rounded,
+                                color: Colors.black54,
+                              ),
+                    label: docId,
+                    function: () => Navigator.of(context, rootNavigator: true)
+                        .pushNamed('/quiz', arguments: quizId),
+                    type: quizId < lastUnlockedQuiz
+                        ? GenericButtonType.semiProceed
+                        : quizId == lastUnlockedQuiz
+                            ? GenericButtonType.proceed
+                            : GenericButtonType.generic,
+                  ),
+                  // Add other widgets or data from the document as needed
+                );
+              },
+            );
+          },
+        ),
+        Positioned(
+          //TODO: button customization
+          bottom: 8, // Adjust the position as needed
+          left: 8, // Adjust the position as needed
+          right: 8, // Adjust the position as needed
+          child: //BackButton
+              //BackButton
+              GenericButton(
+            label: 'Back',
+            function: () => Navigator.pop(context),
+            type: GenericButtonType.generic, // Set your desired color
+          ),
+        ),
+      ]),
     );
   }
 }

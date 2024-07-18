@@ -92,9 +92,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             ),
             Positioned(
               //TODO: button customization
-              bottom: 16, // Adjust the position as needed
-              left: 16, // Adjust the position as needed
-              right: 16, // Adjust the position as needed
+              bottom: 8, // Adjust the position as needed
+              left: 8, // Adjust the position as needed
+              right: 8, // Adjust the position as needed
               child: //BackButton
                   //BackButton
                   GenericButton(
