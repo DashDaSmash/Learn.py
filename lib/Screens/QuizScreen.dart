@@ -164,22 +164,34 @@ class _QuizScreenState extends State<QuizScreen> {
                       questionId: widget.questionController.questionId,
                       myController: widget.questionController);
                 } else
-                  return GenericButton(
-                    label: 'Continue',
-                    function: () {
-                      double score =
-                          (widget.questionController.questionsGotCorrect /
-                                  widget.questionController.totalQuestions) *
-                              100;
-                      print('score is $score');
-                      Navigator.of(context).pop();
-                      Navigator.of(context, rootNavigator: true)
-                          .pushNamed('/grading', arguments: {
-                        'score': score.round(),
-                        'quizId': widget.quizId
-                      });
-                    },
-                    type: GenericButtonType.proceed,
+                  return Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox.shrink(),
+                        Text(
+                          'You have answered all the questions!\nYou may proceed to grading screen now',
+                          style: themeData().genericBigTextStyle,
+                        ),
+                        GenericButton(
+                          label: 'Continue',
+                          function: () {
+                            double score = (widget.questionController
+                                        .questionsGotCorrect /
+                                    widget.questionController.totalQuestions) *
+                                100;
+                            print('score is $score');
+                            Navigator.of(context).pop();
+                            Navigator.of(context, rootNavigator: true)
+                                .pushNamed('/grading', arguments: {
+                              'score': score.round(),
+                              'quizId': widget.quizId
+                            });
+                          },
+                          type: GenericButtonType.proceed,
+                        ),
+                      ],
+                    ),
                   );
               }), //Question and answers
             ],

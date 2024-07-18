@@ -34,19 +34,12 @@ class _QuizQuestionState extends State<QuizQuestion> {
         context,
         true,
       );
-
-      // AnswerCheckBottomSheet(
-      //     isCorrect: true, myController: widget.myController);
-      // widget.myController.nextQuestion();
     } else {
       print('answer is wrong');
       _showBottomSheet(
         context,
         false,
       );
-      // AnswerCheckBottomSheet(
-      //     isCorrect: false, myController: widget.myController);
-      // widget.myController.nextQuestion();
     }
   }
 
@@ -171,9 +164,6 @@ class _QuizQuestionState extends State<QuizQuestion> {
                 },
                 type: GenericButtonType.semiProceed,
               ),
-
-            // Display question text
-            // Create widgets for displaying options (e.g., Text)
           ],
         );
       },
