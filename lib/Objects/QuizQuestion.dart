@@ -54,61 +54,57 @@ class _QuizQuestionState extends State<QuizQuestion> {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        if (isAnswerCorrect == true) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.5,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Expanded(child: Center(child: Text('Awesome!'))),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text('Hello, this is your bottom sheet!'),
-                      GenericButton(
-                        label: 'Next',
-                        function: () {
-                          Navigator.of(context).pop();
-                          widget.myController
-                              .nextQuestion(questionCount, context, true);
-                        },
-                        type: GenericButtonType.generic,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.3,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            gradient: LinearGradient(
+              colors: isAnswerCorrect
+                  ? [Color(0xFF00FF29), Colors.white]
+                  : [Colors.red, Colors.white],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
-          );
-        } else {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.5,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Expanded(child: Center(child: Text('Oops!'))),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text('Hello, this is your bottom sheet!'),
-                      GenericButton(
-                        label: 'Next',
-                        function: () {
-                          Navigator.of(context).pop();
-                          widget.myController
-                              .nextQuestion(questionCount, context, false);
-                        },
-                        type: GenericButtonType.semiWarning,
-                      ),
-                    ],
-                  ),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: Center(
+                      child: Text(
+                isAnswerCorrect ? 'Awesome!' : 'Oh no...',
+                style: themeData().BMSHeaderTextStyle,
+              ))),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      isAnswerCorrect
+                          ? 'That was the correct answer'
+                          : 'You selected the wrong one :(',
+                      style: themeData().genericTextStyle,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GenericButton(
+                          label: 'Next',
+                          function: () {
+                            Navigator.of(context).pop();
+                            widget.myController
+                                .nextQuestion(questionCount, context, true);
+                          },
+                          type: isAnswerCorrect
+                              ? GenericButtonType.proceed
+                              : GenericButtonType.semiWarning),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        }
+              ),
+            ],
+          ),
+        );
       },
     );
   }

@@ -42,7 +42,7 @@ class _QuizScreenState extends State<QuizScreen> {
       percent: Progress!,
       // center: Text("90.0%"),
       linearStrokeCap: LinearStrokeCap.roundAll,
-      progressColor: Colors.green,
+      progressColor: Color(0xFF80FE94),
     );
   }
 
