@@ -7,87 +7,107 @@ class RegistrationScreen extends StatefulWidget {
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-//TODO: make sure to create a user collection in firestore after registration
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordStrongEnough = false;
   String _firstName = '';
   String _lastName = '';
   String _email = '';
 
   Future<void> _registerUser() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        final newUser = await _auth.createUserWithEmailAndPassword(
-          email: _email,
-          password: 'temporaryPassword', // Generate a temporary password
-        );
+    try {
+      await _auth.createUserWithEmailAndPassword(
+        email: _email,
+        password: _passwordController.text,
+      );
 
-        // Store additional user data in Firestore
-        await _firestore.collection('users').doc(newUser.user!.uid).set({
-          'firstName': _firstName,
-          'lastName': _lastName,
-          'isEmailVerified': false,
-        });
+      await FirebaseFirestore.instance.collection('users').doc(_email).set({
+        'FirstName': _firstName,
+        'LastName': _lastName,
+        'LastUnlockedQuiz': 1,
+        'QuizScores': {},
+      });
 
-        // Send verification email
-        await newUser.user!.sendEmailVerification();
-      } catch (e) {
-        print('Error: $e');
-        // Handle registration errors (e.g., email already exists)
-        // Show an error message to the user
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed. Please try again.')),
-        );
-      }
+      // Send verification email (uncomment if needed)
+      // await newUser.user!.sendEmailVerification();
+      registrationComplete();
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Registration failed. Please try again.')),
+      );
     }
+  }
+
+  void registrationComplete() {
+    Navigator.pop(context);
+    Navigator.of(context, rootNavigator: true).pushNamed('/home');
+  }
+
+  bool _checkPasswordStrength(String password) {
+    // Implement your password strength logic here.
+    // For example, check for minimum length, uppercase, lowercase, digits, etc.
+    // Return true if the password is strong enough, otherwise false.
+    return password.length >= 8; // Example: Minimum length of 8 characters.
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Registration')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: 'First Name'),
-                validator: (value) {
-                  if (value!.isEmpty) return 'Please enter your first name';
-                  return null;
-                },
-                onChanged: (value) => _firstName = value,
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Last Name'),
-                validator: (value) {
-                  if (value!.isEmpty) return 'Please enter your last name';
-                  return null;
-                },
-                onChanged: (value) => _lastName = value,
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value!.isEmpty || !value.contains('@'))
-                    return 'Please enter a valid email address';
-                  return null;
-                },
-                onChanged: (value) => _email = value,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    _registerUser;
-                    Navigator.of(context, rootNavigator: true)
-                        .pushNamed('/password');
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'First Name'),
+                  validator: (value) {
+                    if (value!.isEmpty) return 'Please enter your first name';
+                    return null;
                   },
-                  child: Text('Register')),
-            ],
+                  onChanged: (value) => _firstName = value,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Last Name'),
+                  validator: (value) {
+                    if (value!.isEmpty) return 'Please enter your last name';
+                    return null;
+                  },
+                  onChanged: (value) => _lastName = value,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Email'),
+                  validator: (value) {
+                    if (value!.isEmpty || !value.contains('@'))
+                      return 'Please enter a valid email address';
+                    return null;
+                  },
+                  onChanged: (value) => _email = value,
+                ),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Enter Password',
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _isPasswordStrongEnough = _checkPasswordStrength(value);
+                    });
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: _registerUser,
+                  child: Text('Register'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
