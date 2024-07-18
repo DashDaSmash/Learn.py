@@ -79,26 +79,35 @@ class _QuizScreenState extends State<QuizScreen> {
                 ))),
                 Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
                         'Reallyyyy?',
                         style: themeData().genericTextStyle,
                       ),
-                      GenericButton(
-                        label: 'No',
-                        function: () {
-                          Navigator.of(context).pop();
-                        },
-                        type: GenericButtonType.semiProceed,
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: GenericButton(
+                          label: 'No',
+                          function: () {
+                            Navigator.of(context).pop();
+                          },
+                          type: GenericButtonType.semiProceed,
+                        ),
                       ),
-                      GenericButton(
-                        label: 'Yes',
-                        function: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        },
-                        type: GenericButtonType.warning,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 8.0, left: 8, right: 8),
+                        child: GenericButton(
+                          label: 'Yes',
+                          function: () {
+                            widget.questionController.resetQuizScreen();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          type: GenericButtonType.warning,
+                        ),
                       ),
                     ],
                   ),
@@ -107,6 +116,11 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           );
         });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -157,7 +171,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           (widget.questionController.questionsGotCorrect /
                                   widget.questionController.totalQuestions) *
                               100;
-
+                      print('score is $score');
                       Navigator.of(context).pop();
                       Navigator.of(context, rootNavigator: true)
                           .pushNamed('/grading', arguments: {
@@ -195,5 +209,13 @@ class Controller extends GetxController {
 
   void setTotalQuestionCount(count) {
     totalQuestions = count;
+  }
+
+  void resetQuizScreen() {
+    questionId = 1;
+    questionsCompleted = 0;
+    questionsGotCorrect = 0;
+    totalQuestions = 1;
+    update();
   }
 }

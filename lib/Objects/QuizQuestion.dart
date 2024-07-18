@@ -92,8 +92,8 @@ class _QuizQuestionState extends State<QuizQuestion> {
                           label: 'Next',
                           function: () {
                             Navigator.of(context).pop();
-                            widget.myController
-                                .nextQuestion(questionCount, context, true);
+                            widget.myController.nextQuestion(
+                                questionCount, context, isAnswerCorrect);
                           },
                           type: isAnswerCorrect
                               ? GenericButtonType.proceed

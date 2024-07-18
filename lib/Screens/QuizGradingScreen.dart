@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:learn_py/main.dart';
-
+import 'package:get/get.dart';
 import '../Objects/GenericButton.dart';
 import '../Objects/GradingScreenMessage.dart';
+import 'QuizScreen.dart';
 
 // ignore: must_be_immutable
 class QuizGradingScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class QuizGradingScreen extends StatefulWidget {
 
 class _QuizGradingScreenState extends State<QuizGradingScreen> {
   bool? userPassedQuiz;
+  final questionController = Get.put(Controller());
   Future<void> updateQuizScore() async {
     final userRef =
         FirebaseFirestore.instance.collection('users').doc(userEmail);
@@ -50,12 +52,14 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
         await userRef.update({'QuizScores': fireStoreQuizMap});
       }
     }
+    questionController.resetQuizScreen();
   }
 
   @override
   Widget build(BuildContext context) {
     userPassedQuiz = widget.score >= 80;
     updateQuizScore();
+
     return Scaffold(
       body: Container(
         height: double.infinity,
