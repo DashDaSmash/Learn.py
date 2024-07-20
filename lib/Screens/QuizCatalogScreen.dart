@@ -22,8 +22,13 @@ class _QuizCatalogScreenState extends State<QuizCatalogScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     checkUserQuizUnlockProgress();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: themeData().backgroundColor,
       body: Stack(children: [
