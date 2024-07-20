@@ -64,8 +64,10 @@ class _QuizCatalogScreenState extends State<QuizCatalogScreen> {
                                 color: Colors.black54,
                               ),
                     label: docId,
-                    function: () => Navigator.of(context, rootNavigator: true)
-                        .pushNamed('/quiz', arguments: quizId),
+                    function: () => quizId <= lastUnlockedQuiz
+                        ? Navigator.of(context, rootNavigator: true)
+                            .pushNamed('/quiz', arguments: quizId)
+                        : {},
                     type: quizId < lastUnlockedQuiz
                         ? GenericButtonType.semiProceed
                         : quizId == lastUnlockedQuiz
@@ -95,37 +97,3 @@ class _QuizCatalogScreenState extends State<QuizCatalogScreen> {
     );
   }
 }
-
-// body: Stack(
-//   children: [
-//     Column(
-//       children: [
-//         GenericButton(
-//           label: 'Quiz 1',
-//           function: () => Navigator.of(context, rootNavigator: true)
-//               .pushNamed('/quiz', arguments: 1),
-//           type: GenericButtonType.generic,
-//         ),
-//         GenericButton(
-//           label: 'Quiz 2',
-//           function: () => Navigator.of(context, rootNavigator: true)
-//               .pushNamed('/quiz', arguments: 2),
-//           type: GenericButtonType.generic,
-//         ),
-//       ],
-//     ),
-//     Positioned(
-//       //TODO: button customization
-//       bottom: 16, // Adjust the position as needed
-//       left: 16, // Adjust the position as needed
-//       right: 16, // Adjust the position as needed
-//       child: //BackButton
-//           //BackButton
-//           GenericButton(
-//         label: 'Back',
-//         function: () => Navigator.pop(context),
-//         type: GenericButtonType.generic, // Set your desired color
-//       ),
-//     ),
-//   ],
-// ),
