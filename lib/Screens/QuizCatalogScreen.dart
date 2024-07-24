@@ -50,7 +50,7 @@ class _QuizCatalogScreenState extends State<QuizCatalogScreen> {
               itemBuilder: (context, index) {
                 final doc = documents![index];
                 final docId = doc.id;
-                final quizId = int.parse(docId.substring(4, 5));
+                final quizId = int.parse(docId.substring(4, 7));
 
                 return ListTile(
                   title: GenericButton(

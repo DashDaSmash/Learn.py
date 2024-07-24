@@ -16,6 +16,8 @@ import 'Screens/LoginScreen.dart';
 import 'Screens/ProfileScreen.dart';
 import 'Screens/Paypal.dart';
 
+//TODO: Guide user after registration
+
 enum GenericButtonType { generic, proceed, semiProceed, warning, semiWarning }
 
 String userEmail = '';
