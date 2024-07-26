@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/ThemeData.dart';
@@ -79,6 +80,16 @@ class _AboutScreenState extends State<AboutScreen> {
                       style: themeData().genericTextStyle,
                     ),
                   ],
+                ),
+                Divider(
+                  color: Colors.black12,
+                ),
+                GestureDetector(
+                  onTap: () => {Navigator.of(context).pushNamed('/credits')},
+                  child: Text(
+                    'License and credits',
+                    style: themeData().genericBigTextStyle,
+                  ),
                 ),
                 Divider(
                   color: Colors.black12,

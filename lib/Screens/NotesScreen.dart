@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Objects/GeminiAI.dart';
 import '../Objects/GenericButton.dart';
 import 'package:flutter/services.dart';
@@ -21,18 +22,18 @@ class _DiscoverScreenState extends State<NotesScreen> {
   List<String> imageNames = [];
   bool doneFetichingImages = false;
 
-  Future<void> _fetchNotesImages() async {
-    final storageRef = FirebaseStorage.instance.ref();
-    try {
-      for (String imageName in imageNames)
-        final imageUrl =
-            await storageRef.child('notes/$imageName.jpg').getDownloadURL();
-      // imageUrls.add(imageUrl);
-    } catch (e) {
-      print('Error fetching images: $e');
-      imageUrls.add('');
-    }
-  }
+  // Future<void> _fetchNotesImages() async {
+  //   final storageRef = FirebaseStorage.instance.ref();
+  //   try {
+  //     for (String imageName in imageNames)
+  //       final imageUrl =
+  //           await storageRef.child('notes/$imageName.jpg').getDownloadURL();
+  //     // imageUrls.add(imageUrl);
+  //   } catch (e) {
+  //     print('Error fetching images: $e');
+  //     imageUrls.add('');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -117,28 +118,67 @@ class _DiscoverScreenState extends State<NotesScreen> {
                           return ListView.builder(
                             itemCount: notes.length,
                             itemBuilder: (context, index) {
-                              doneFetichingImages ? () {} : _fetchNotesImages();
+                              // doneFetichingImages ? () {} : _fetchNotesImages();
                               final note = notes[index];
                               final title = note['Title'];
                               final content = note['Content']
                                   .replaceAll(r'\n', '\n')
                                   .replaceAll(r'\t', '\t\t\t\t\t\t\t');
-                              final imageName = note['Image'];
-                              imageUrls.add(imageName);
 
-                              return ListTile(
-                                title: Column(
-                                  children: [
-                                    Text(title),
-                                    // Image.network(
-                                    //   imageUrl,
-                                    //   height: 160,
-                                    //   width: 160,
-                                    // ),
-                                  ],
-                                ),
-                                subtitle: Text(content),
-                              );
+                              return GestureDetector(
+                                  onTap: () async {
+                                    final resourceUrl = note[
+                                        'ResourceLink']; // Assuming the article URL is available
+                                    if (await canLaunch(resourceUrl)) {
+                                      await launch(resourceUrl);
+                                    } else {
+                                      print('Could not launch $resourceUrl');
+                                    }
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.all(
+                                        5.0), // Add vertical spacing
+                                    decoration: BoxDecoration(
+                                      color: Color(
+                                          0xFFB4FFC0), // Set your desired background color
+                                      borderRadius: BorderRadius.circular(
+                                          10.0), // Rounded corners
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 5,
+                                          color: Colors.black26,
+                                          offset: Offset(
+                                              2, 2), // Add a subtle shadow
+                                        ),
+                                      ],
+                                      border: Border.all(
+                                        color: Color(0xFF00B71D),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: ListTile(
+                                      title: Column(
+                                        children: [
+                                          Text(
+                                            title,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color(0xFF00CE2D)),
+                                          ),
+                                          // Image.network(
+                                          //   imageUrl,
+                                          //   height: 160,
+                                          //   width: 160,
+                                          // ),
+                                        ],
+                                      ),
+                                      subtitle: Text(
+                                        content,
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                  ));
                             },
                           );
                         }),

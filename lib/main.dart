@@ -15,6 +15,7 @@ import 'Screens/HomeScreen.dart';
 import 'Screens/LoginScreen.dart';
 import 'Screens/ProfileScreen.dart';
 import 'Screens/Paypal.dart';
+import 'Screens/LicenseAndCreditsScreen.dart';
 
 //TODO: Guide user after registration
 
@@ -58,6 +59,7 @@ void main() async {
           }
         },
         '/donate': (context) => PaypalPayment(),
+        '/credits': (context) => LiscenseAndCredits(),
       },
     ),
   );

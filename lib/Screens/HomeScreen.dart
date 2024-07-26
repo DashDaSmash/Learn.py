@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:learn_py/Objects/HomeScreenButtons.dart';
 import '../ThemeData.dart';
 
+//TODO:    MAKE HORIZONTAL VIEW AS WELL
+
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
