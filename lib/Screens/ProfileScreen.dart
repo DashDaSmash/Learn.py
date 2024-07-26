@@ -51,11 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       print(e);
     }
-    print('image URL is: $imageUrl');
-
     setState(() {});
-    print('userTotalScore: $userTotalScore');
-    print('quizCount: $quizCount');
   }
 
   @override

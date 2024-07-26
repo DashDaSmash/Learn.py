@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -118,14 +119,26 @@ class _QuizScreenState extends State<QuizScreen> {
         });
   }
 
+  void checkQuestionCount() async {
+    String formattedQuizId = widget.quizId.toString().padLeft(3, '0');
+
+    final userDetails = FirebaseFirestore.instance
+        .collection('quiz')
+        .doc('quiz$formattedQuizId');
+    final userDoc = await userDetails.get();
+    final questionCount = userDoc.data()?['questionCount'];
+    widget.questionController.setTotalQuestionCount(questionCount);
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
+    checkQuestionCount();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('updating screen...');
     return Scaffold(
       backgroundColor: themeData().backgroundColor,
       body: SafeArea(
@@ -227,6 +240,7 @@ class Controller extends GetxController {
   }
 
   void resetQuizScreen() {
+    print('resetting question screen');
     questionId = 1;
     questionsCompleted = 0;
     questionsGotCorrect = 0;

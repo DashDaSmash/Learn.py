@@ -27,19 +27,15 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
     final userRef =
         FirebaseFirestore.instance.collection('users').doc(userEmail);
     final userDoc = await userRef.get();
-    print(userDoc.data()?['QuizScores']);
+
     // widget.fireStoreQuizMap!['${widget.quizId}'] = widget.score;
 
     // widget.fireStoreQuizMap {
     //   '${widget.quizId}': widget.score,
     // };
     Map<String, dynamic> fireStoreQuizMap = userDoc.data()?['QuizScores'];
-    print('*******************');
-    print(fireStoreQuizMap);
+
     fireStoreQuizMap['${widget.quizId}'] = widget.score;
-    print('####################');
-    print(fireStoreQuizMap);
-    //questionCount = snapshot.data!['questionCount'];
 
     if (userPassedQuiz!) {
       await userRef.update({

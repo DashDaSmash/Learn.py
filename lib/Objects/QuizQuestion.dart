@@ -104,69 +104,93 @@ class _QuizQuestionState extends State<QuizQuestion> {
 
   @override
   Widget build(BuildContext context) {
+    String formattedQuizId = widget.quizId.toString().padLeft(3, '0');
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance
-          .collection('quiz')
-          .doc('quiz${widget.quizId}')
-          .get(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        if (!snapshot.hasData) {
-          return Container(
-              height: 100,
-              width: 100,
-              child: LoadingAnimationWidget.threeRotatingDots(
-                color: Color(0xFF80FE94), // Set your desired color
-                size: 30.0, // Set the size of the animation
-              )); // Show a loading indicator
-        }
+        future: FirebaseFirestore.instance
+            .collection('quiz')
+            .doc('quiz$formattedQuizId')
+            .get(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          if (!snapshot.hasData) {
+            return Container(
+                height: 100,
+                width: 100,
+                child: LoadingAnimationWidget.threeRotatingDots(
+                  color: Color(0xFF80FE94), // Set your desired color
+                  size: 30.0, // Set the size of the animation
+                )); // Show a loading indicator
+          }
 
-        questionCount = snapshot.data!['questionCount'];
-        widget.myController.setTotalQuestionCount(questionCount);
+          questionCount = snapshot.data!['questionCount'];
 
-        widget.questionDetails = [
-          snapshot.data!['question${widget.questionId}'],
-          snapshot.data!['question${widget.questionId}answer'],
-          for (int i = 1;
-              i <= snapshot.data!['question${widget.questionId}optionCount'];
-              i++)
-            snapshot.data!['question${widget.questionId}option$i'] as String,
-        ];
+          widget.myController.setTotalQuestionCount(questionCount);
 
-        String Question = widget.questionDetails[0];
-
-        String formattedQuestion = Question.replaceAll(r'\n', '\n')
-            .replaceAll(r'\t', '\t\t\t\t\t\t\t');
-
-        return Column(
-          children: [
-            Text(
-              formattedQuestion,
-              style: themeData().QuizQuestionTextStyle,
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
-            for (int i = 2;
-                i <=
-                    snapshot.data!['question${widget.questionId}optionCount'] +
-                        1;
+          // if (questionCount != 0) {
+          widget.questionDetails = [
+            snapshot.data!['question${widget.questionId}'],
+            snapshot.data!['question${widget.questionId}answer'],
+            for (int i = 1;
+                i <= snapshot.data!['question${widget.questionId}optionCount'];
                 i++)
-              GenericButton(
-                label: widget.questionDetails[i],
-                function: () {
-                  print(
-                      'user selected option${i - 1} which is ${widget.questionDetails[i]}');
-                  selectedAnswer = 'option${i - 1}';
-                  _checkAnswer();
-                },
-                type: GenericButtonType.semiProceed,
+              snapshot.data!['question${widget.questionId}option$i'] as String,
+          ];
+
+          String Question = widget.questionDetails[0];
+
+          String formattedQuestion = Question.replaceAll(r'\n', '\n')
+              .replaceAll(r'\t', '\t\t\t\t\t\t\t');
+
+          return Column(
+            children: [
+              Text(
+                formattedQuestion,
+                style: themeData().QuizQuestionTextStyle,
               ),
-          ],
-        );
-      },
-    );
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.1,
+              ),
+              for (int i = 2;
+                  i <=
+                      snapshot.data![
+                              'question${widget.questionId}optionCount'] +
+                          1;
+                  i++)
+                GenericButton(
+                  label: widget.questionDetails[i],
+                  function: () {
+                    print(
+                        'user selected option${i - 1} which is ${widget.questionDetails[i]}');
+                    selectedAnswer = 'option${i - 1}';
+                    _checkAnswer();
+                  },
+                  type: GenericButtonType.semiProceed,
+                ),
+            ],
+          );
+          // } else {
+          //         //   return SizedBox.shrink();
+
+          // return Center(
+          //   child: Column(
+          //     children: [
+          //       Text(
+          //         'This quiz does not have any questions...\n:(',
+          //         style: themeData().genericBigTextStyle,
+          //       ),
+          //       GenericButton(
+          //         label: 'Back',
+          //         function: () {
+          //           widget.myController.resetQuizScreen();
+          //           Navigator.pop(context);
+          //         },
+          //         type: GenericButtonType.proceed, // Set your desired color
+          //       ),
+          //     ],
+          //   ),
+          // );
+        });
   }
 }
