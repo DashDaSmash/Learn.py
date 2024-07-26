@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Objects/GeminiAI.dart';
 import '../Objects/GenericButton.dart';
@@ -109,7 +110,11 @@ class _DiscoverScreenState extends State<NotesScreen> {
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator(); // Show loading indicator
+                            return LoadingAnimationWidget.threeRotatingDots(
+                              color:
+                                  Color(0xFF80FE94), // Set your desired color
+                              size: 30.0, // Set the size of the animation
+                            ); // Show loading indicator
                           }
 
                           final notes =
@@ -125,60 +130,63 @@ class _DiscoverScreenState extends State<NotesScreen> {
                                   .replaceAll(r'\n', '\n')
                                   .replaceAll(r'\t', '\t\t\t\t\t\t\t');
 
-                              return GestureDetector(
-                                  onTap: () async {
-                                    final resourceUrl = note[
-                                        'ResourceLink']; // Assuming the article URL is available
-                                    if (await canLaunch(resourceUrl)) {
-                                      await launch(resourceUrl);
-                                    } else {
-                                      print('Could not launch $resourceUrl');
-                                    }
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.all(
-                                        5.0), // Add vertical spacing
-                                    decoration: BoxDecoration(
-                                      color: Color(
-                                          0xFFB4FFC0), // Set your desired background color
-                                      borderRadius: BorderRadius.circular(
-                                          10.0), // Rounded corners
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 5,
-                                          color: Colors.black26,
-                                          offset: Offset(
-                                              2, 2), // Add a subtle shadow
-                                        ),
-                                      ],
-                                      border: Border.all(
-                                        color: Color(0xFF00B71D),
-                                        width: 2,
-                                      ),
-                                    ),
-                                    child: ListTile(
-                                      title: Column(
-                                        children: [
-                                          Text(
-                                            title,
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xFF00CE2D)),
+                              return index == notes.length - 1
+                                  ? SizedBox(height: 60)
+                                  : GestureDetector(
+                                      onTap: () async {
+                                        final resourceUrl = note[
+                                            'ResourceLink']; // Assuming the article URL is available
+                                        if (await canLaunch(resourceUrl)) {
+                                          await launch(resourceUrl);
+                                        } else {
+                                          print(
+                                              'Could not launch $resourceUrl');
+                                        }
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.all(
+                                            5.0), // Add vertical spacing
+                                        decoration: BoxDecoration(
+                                          color: Color(
+                                              0xFFB4FFC0), // Set your desired background color
+                                          borderRadius: BorderRadius.circular(
+                                              10.0), // Rounded corners
+                                          boxShadow: [
+                                            BoxShadow(
+                                              blurRadius: 5,
+                                              color: Colors.black26,
+                                              offset: Offset(
+                                                  2, 2), // Add a subtle shadow
+                                            ),
+                                          ],
+                                          border: Border.all(
+                                            color: Color(0xFF00B71D),
+                                            width: 2,
                                           ),
-                                          // Image.network(
-                                          //   imageUrl,
-                                          //   height: 160,
-                                          //   width: 160,
-                                          // ),
-                                        ],
-                                      ),
-                                      subtitle: Text(
-                                        content,
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                    ),
-                                  ));
+                                        ),
+                                        child: ListTile(
+                                          title: Column(
+                                            children: [
+                                              Text(
+                                                title,
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFF00CE2D)),
+                                              ),
+                                              // Image.network(
+                                              //   imageUrl,
+                                              //   height: 160,
+                                              //   width: 160,
+                                              // ),
+                                            ],
+                                          ),
+                                          subtitle: Text(
+                                            content,
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                        ),
+                                      ));
                             },
                           );
                         }),
