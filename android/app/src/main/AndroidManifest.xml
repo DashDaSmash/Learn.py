@@ -8,7 +8,7 @@
 
 
     <application
-        android:label="learn_py"
+        android:label="Learn.py"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true">

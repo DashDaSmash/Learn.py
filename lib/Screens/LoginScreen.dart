@@ -1,16 +1,45 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/TextInputField.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../Objects/SignInWithGoogle.dart';
 import '../Objects/SignInWithEmail.dart';
 import '../main.dart';
 
-class LoginScreen extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
 
-  void _handleSignInWithEmail() async =>
-      await signInWithEmail(emailController.text, passwordController.text);
+class _LoginScreenState extends State<LoginScreen> {
+  bool areCredentialsWrong = false;
+  bool loading = false;
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  void _handleSignInWithEmail() async {
+    loading = true;
+    setState(() {});
+
+    await signInWithEmail(emailController.text, passwordController.text);
+
+    areCredentialsWrong = true;
+    passwordController = TextEditingController();
+    loading = false;
+    setState(() {});
+  }
+
+  void _forgotPassword() async {
+    loading = true;
+    setState(() {});
+    await FirebaseAuth.instance
+        .sendPasswordResetEmail(email: emailController.text);
+    print('Requesting pasword change for ${emailController.text}');
+    loading = false;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,70 +65,74 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            autovalidateMode: AutovalidateMode.always,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Flexible(child: Image.asset('assets/Learn.py border T.png')),
-                TextInputField(
-                    label: 'Email',
-                    isPassword: false,
-                    controller: emailController),
-                SizedBox(height: 10),
-                TextInputField(
-                    label: 'Password',
-                    isPassword: true,
-                    controller: passwordController),
-                SizedBox(height: 30),
-                GenericButton(
-                  label: 'Sign in',
-                  function: _handleSignInWithEmail,
-                  type: GenericButtonType.semiProceed,
+          padding: const EdgeInsets.all(8.0),
+          child: Stack(
+            children: [
+              Form(
+                autovalidateMode: AutovalidateMode.always,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                        child: Image.asset('assets/Learn.py border T.png')),
+                    TextInputField(
+                        label: 'Email',
+                        isPassword: false,
+                        controller: emailController),
+                    SizedBox(height: 10),
+                    TextInputField(
+                        label: 'Password',
+                        isPassword: true,
+                        controller: passwordController),
+                    SizedBox(height: 30),
+                    GenericButton(
+                      label: 'Sign in',
+                      function: _handleSignInWithEmail,
+                      type: GenericButtonType.semiProceed,
+                    ),
+                    areCredentialsWrong
+                        ? GenericButton(
+                            label: 'Forgot password',
+                            function: _forgotPassword,
+                            type: GenericButtonType.semiWarning)
+                        : SizedBox.shrink(),
+                    SizedBox(height: 10),
+                    Divider(
+                      color: Color(0xFF80FE94),
+                    ),
+                    SizedBox(height: 10),
+                    GenericButton(
+                      label: 'Sign in with Google',
+                      image: 'assets/google_logo.png',
+                      function: signInWithGoogle,
+                      type: GenericButtonType.generic,
+                    ),
+                    GenericButton(
+                      label: 'Register',
+                      function: () => Navigator.of(context, rootNavigator: true)
+                          .pushNamed('/registration'),
+                      type: GenericButtonType.proceed,
+                    )
+                    // Other form fields...
+                  ],
                 ),
-                SizedBox(height: 10),
-                Divider(
-                  color: Color(0xFF80FE94),
-                ),
-                SizedBox(height: 10),
-                GenericButton(
-                  label: 'Sign in with Google',
-                  image: 'assets/google_logo.png',
-                  function: signInWithGoogle,
-                  type: GenericButtonType.generic,
-                ),
-                GenericButton(
-                  label: 'Register',
-                  function: () => Navigator.of(context, rootNavigator: true)
-                      .pushNamed('/registration'),
-                  type: GenericButtonType.proceed,
-                )
-                // Other form fields...
-              ],
-            ),
-          )
-
-          //   children: [
-          //
-          //     SizedBox(height: 30),
-          //     ElevatedButton(
-          //       onPressed: () {
-          //         signInWithEmail(emailController.text, passwordController.text);
-          //         // Implement sign-in logic with email and password.
-          //         // Use emailController.text and passwordController.text.
-          //       },
-          //       child: Text('Sign in'),
-          //     ),
-          //     SizedBox(height: 16),
-          //     ElevatedButton(
-          //       onPressed: signInWithGoogle,
-          //       child: Text('Sign in with Google'),
-          //     ),
-          //   ],
-          // ),
-          ),
+              ),
+              loading
+                  ? Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.white.withOpacity(0.5),
+                      child: Center(
+                        child: LoadingAnimationWidget.threeRotatingDots(
+                          color: Color(0xFF80FE94), // Set your desired color
+                          size: 30.0, // Set the size of the animation
+                        ),
+                      ),
+                    )
+                  : SizedBox.shrink()
+            ],
+          )),
     );
   }
 }

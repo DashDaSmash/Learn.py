@@ -50,6 +50,7 @@ dependencies:
   package_info_plus: ^8.0.0
   loading_animation_widget: ^1.2.1
   url_launcher: ^6.3.0
+  firebase_app_check: ^0.3.0+3
 
 dev_dependencies:
   flutter_test:

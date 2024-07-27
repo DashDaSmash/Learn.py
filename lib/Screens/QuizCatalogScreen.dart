@@ -86,10 +86,9 @@ class _QuizCatalogScreenState extends State<QuizCatalogScreen> {
           },
         ),
         Positioned(
-          //TODO: button customization
-          bottom: 8, // Adjust the position as needed
-          left: 8, // Adjust the position as needed
-          right: 8, // Adjust the position as needed
+          bottom: 8,
+          left: 8,
+          right: 8,
           child: //BackButton
               //BackButton
               GenericButton(

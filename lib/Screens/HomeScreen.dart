@@ -13,6 +13,7 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: themeData().backgroundColor,
       appBar: AppBar(
         backgroundColor: themeData().backgroundColor,
+        automaticallyImplyLeading: false,
         title: Center(
           child: Text(
             'Learn.py',

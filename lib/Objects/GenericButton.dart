@@ -29,6 +29,7 @@ class GenericButton extends StatelessWidget {
           width?.toDouble() ?? double.infinity,
           height?.toDouble() ?? 30.0,
         ),
+        overlayColor: Color(0xFFB4FFC0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(

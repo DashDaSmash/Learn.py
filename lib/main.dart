@@ -16,8 +16,11 @@ import 'Screens/LoginScreen.dart';
 import 'Screens/ProfileScreen.dart';
 import 'Screens/Paypal.dart';
 import 'Screens/LicenseAndCreditsScreen.dart';
+import 'Screens/EmailVerificationScreen.dart';
 
 //TODO: Guide user after registration
+
+//TODO:    CHnage app icon and splash screen
 
 enum GenericButtonType { generic, proceed, semiProceed, warning, semiWarning }
 
@@ -26,12 +29,31 @@ String userEmail = '';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // await FirebaseAppCheck.instance.activate(
+  //   // You can also use a `ReCaptchaEnterpriseProvider` provider instance as an
+  //   // argument for `webProvider`
+  //   webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+  //   // Default provider for Android is the Play Integrity provider. You can use the "AndroidProvider" enum to choose
+  //   // your preferred provider. Choose from:
+  //   // 1. Debug provider
+  //   // 2. Safety Net provider
+  //   // 3. Play Integrity provider
+  //   androidProvider: AndroidProvider.debug,
+  //   // Default provider for iOS/macOS is the Device Check provider. You can use the "AppleProvider" enum to choose
+  //   // your preferred provider. Choose from:
+  //   // 1. Debug provider
+  //   // 2. Device Check provider
+  //   // 3. App Attest provider
+  //   // 4. App Attest provider with fallback to Device Check provider (App Attest provider is only available on iOS 14.0+, macOS 14.0+)
+  //   appleProvider: AppleProvider.appAttest,
+  // );
   runApp(
     MaterialApp(
       initialRoute: '/', // Start with the FirstScreen
       routes: {
         '/': (context) => MyApp(),
         '/login': (context) => LoginScreen(),
+        '/emailVerify': (context) => EmailVerificationScreen(),
         '/home': (context) => HomeScreen(),
         '/profile': (context) => ProfileScreen(),
         '/discover': (context) => DiscoverScreen(),
@@ -78,13 +100,19 @@ class MyApp extends StatelessWidget {
             if (user == null) {
               // User is not logged in. Show the login screen.
               return LoginScreen();
-            } else {
+            } else if (user.emailVerified) {
               print('User email: ${user.email}');
               userEmail = user.email!;
               // User is logged in. Navigate to the home page.
+
+              // Show content for verified users
               return HomeScreen();
+            } else {
+              // Show content for unverified users
+              return EmailVerificationScreen();
             }
           }
+
           // While the connection state is not active, show a loading indicator.
           return CircularProgressIndicator();
         },

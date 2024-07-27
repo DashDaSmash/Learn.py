@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:learn_py/main.dart';
@@ -52,6 +52,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print(e);
     }
     setState(() {});
+  }
+
+  void _signOut() {
+    FirebaseAuth.instance.signOut();
+    print('***********************************************************');
   }
 
   @override
@@ -219,7 +224,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   GenericButton(
                       label: 'Sign out',
-                      function: signOut,
+                      function: () {
+                        _signOut();
+                        Navigator.pop(context);
+                      },
                       type: GenericButtonType.semiWarning),
                   GenericButton(
                     label: 'Back',
@@ -266,15 +274,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       print(e);
     }
-  }
-}
-
-Future<void> signOut() async {
-  try {
-    await FirebaseAuth.instance.signOut();
-    // Navigate to the login screen or any other appropriate screen.
-  } catch (e) {
-    print(e);
-    // Handle sign-out error (show an error message).
   }
 }

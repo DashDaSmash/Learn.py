@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+//TODO: FIx the UI
 class RegistrationScreen extends StatefulWidget {
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
@@ -31,6 +32,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         'QuizScores': {},
       });
 
+      await _auth.currentUser!.sendEmailVerification();
+      print('Verification email sent successfully!');
       // Send verification email (uncomment if needed)
       // await newUser.user!.sendEmailVerification();
       registrationComplete();
@@ -44,7 +47,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void registrationComplete() {
     Navigator.pop(context);
-    Navigator.of(context, rootNavigator: true).pushNamed('/home');
+    //Navigator.of(context, rootNavigator: true).pushNamed('/home');
   }
 
   bool _checkPasswordStrength(String password) {
