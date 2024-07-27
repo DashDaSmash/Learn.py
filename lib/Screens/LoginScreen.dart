@@ -7,6 +7,8 @@ import '../Objects/SignInWithGoogle.dart';
 import '../Objects/SignInWithEmail.dart';
 import '../main.dart';
 
+// TODO:      Add Comments
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -79,23 +81,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextInputField(
                         label: 'Email',
                         isPassword: false,
-                        controller: emailController),
+                        controller: emailController), // EMAIL INPUT
                     SizedBox(height: 10),
                     TextInputField(
                         label: 'Password',
                         isPassword: true,
-                        controller: passwordController),
+                        controller: passwordController), // PASSWORD INPUT
                     SizedBox(height: 30),
                     GenericButton(
                       label: 'Sign in',
                       function: _handleSignInWithEmail,
                       type: GenericButtonType.semiProceed,
                     ),
-                    areCredentialsWrong
+                    //TODO: if user can't sign in and not registered either, show them register with guide screen
+                    areCredentialsWrong // IF EMAIL/PASSWORD IS WRONG, IT ALLOWS USER TO CLICK FORGOT PASSWORD
                         ? GenericButton(
                             label: 'Forgot password',
                             function: _forgotPassword,
-                            type: GenericButtonType.semiWarning)
+                            type: GenericButtonType
+                                .semiWarning) // FORGOT PASSWORD
                         : SizedBox.shrink(),
                     SizedBox(height: 10),
                     Divider(
@@ -107,13 +111,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       image: 'assets/google_logo.png',
                       function: signInWithGoogle,
                       type: GenericButtonType.generic,
-                    ),
+                    ), // SIGN IN WITH GOOGLE
                     GenericButton(
                       label: 'Register',
                       function: () => Navigator.of(context, rootNavigator: true)
                           .pushNamed('/registration'),
                       type: GenericButtonType.proceed,
-                    )
+                    ), // REGISTER BUTTON
                     // Other form fields...
                   ],
                 ),
