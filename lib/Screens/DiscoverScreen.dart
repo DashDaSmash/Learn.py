@@ -6,6 +6,7 @@ import '../Objects/News.dart';
 import '../Objects/GenericButton.dart';
 import 'package:flutter/services.dart';
 
+import '../ThemeData.dart';
 import '../main.dart';
 
 class DiscoverScreen extends StatefulWidget {
@@ -84,7 +85,27 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   child: Container(
                     width: double.infinity,
                     // child: Placeholder(),
-                    child: NewsScreen(),
+                    child: Stack(
+                      children: [
+                        NewsScreen(),
+                        Positioned(
+                            child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                themeData().backgroundColor.withOpacity(
+                                    0), // Transparent at the bottom
+                                themeData().backgroundColor, // Green at the top
+                              ],
+                            ),
+                          ),
+                        )),
+                      ],
+                    ),
                   ),
                 ),
               ],
