@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,6 +27,7 @@ import 'Screens/EmailVerificationScreen.dart';
 enum GenericButtonType { generic, proceed, semiProceed, warning, semiWarning }
 
 String userEmail = '';
+Map<String, dynamic> fireStoreGuideSheetMap = {};
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +35,7 @@ void main() async {
   await FirebaseAppCheck.instance.activate(
     // You can also use a `ReCaptchaEnterpriseProvider` provider instance as an
     // argument for `webProvider`
+
     webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
     // Default provider for Android is the Play Integrity provider. You can use the "AndroidProvider" enum to choose
     // your preferred provider. Choose from:
@@ -89,8 +92,18 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  Future<void> fetchVisitedScreens() async {
+    final userRef =
+        FirebaseFirestore.instance.collection('users').doc(userEmail);
+    final userDoc = await userRef.get();
+
+    // STORE DATA IN A MAP
+    fireStoreGuideSheetMap = userDoc.data()?['ShowGuideSheet'];
+  } // FETCH ALL DATA ABOUT CURRENT USER'S GUIDE SHEETS
+
   @override
   Widget build(BuildContext context) {
+    fetchVisitedScreens();
     return MaterialApp(
       title: 'My App',
       home: StreamBuilder<User?>(

@@ -25,6 +25,8 @@ class GenericButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: function,
       style: ElevatedButton.styleFrom(
+        elevation: 20,
+        shadowColor: Colors.black.withOpacity(0.5),
         fixedSize: Size(
           width?.toDouble() ?? double.infinity,
           height?.toDouble() ?? 30.0,

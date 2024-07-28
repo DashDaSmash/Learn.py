@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:learn_py/Objects/GuideSheet.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
@@ -141,76 +142,82 @@ class _QuizScreenState extends State<QuizScreen> {
     return Scaffold(
       backgroundColor: themeData().backgroundColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Column(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
                     children: [
-                      Text(
-                        'Quiz ${widget.quizId}',
-                        style: themeData().genericBigTextStyle,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Quiz ${widget.quizId}',
+                            style: themeData().genericBigTextStyle,
+                          ),
+                          GenericButton(
+                              label: 'Quit',
+                              function: () {
+                                _showBottomSheet(context);
+                              },
+                              type: GenericButtonType.semiWarning),
+                        ],
                       ),
-                      GenericButton(
-                          label: 'Quit',
-                          function: () {
-                            _showBottomSheet(context);
-                          },
-                          type: GenericButtonType.semiWarning),
+                      Center(
+                        child: GetBuilder<Controller>(
+                          builder: (_) => ProgressBar(),
+                        ),
+                      ),
                     ],
-                  ),
-                  Center(
-                    child: GetBuilder<Controller>(
-                      builder: (_) => ProgressBar(),
-                    ),
-                  ),
+                  ), //Progressbar
+                  GetBuilder<Controller>(builder: (_) {
+                    if (widget.questionController.questionId <=
+                        widget.questionController.totalQuestions) {
+                      return QuizQuestion(
+                          quizId: widget.quizId,
+                          questionId: widget.questionController.questionId,
+                          myController: widget.questionController);
+                    } else
+                      return Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox.shrink(),
+                            Text(
+                              'You have answered all the questions!\nYou may proceed to grading screen now',
+                              style: themeData().genericBigTextStyle,
+                            ),
+                            GenericButton(
+                              label: 'Continue',
+                              function: () {
+                                double score = (widget.questionController
+                                            .questionsGotCorrect /
+                                        widget.questionController
+                                            .totalQuestions) *
+                                    100;
+                                print('score is $score');
+                                Navigator.of(context).pop();
+                                Navigator.of(context, rootNavigator: true)
+                                    .pushNamed('/grading', arguments: {
+                                  'score': score.round(),
+                                  'quizId': widget.quizId
+                                });
+                              },
+                              type: GenericButtonType.proceed,
+                            ),
+                          ],
+                        ),
+                      );
+                  }), //Question and answers
                 ],
-              ), //Progressbar
-              GetBuilder<Controller>(builder: (_) {
-                if (widget.questionController.questionId <=
-                    widget.questionController.totalQuestions) {
-                  return QuizQuestion(
-                      quizId: widget.quizId,
-                      questionId: widget.questionController.questionId,
-                      myController: widget.questionController);
-                } else
-                  return Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox.shrink(),
-                        Text(
-                          'You have answered all the questions!\nYou may proceed to grading screen now',
-                          style: themeData().genericBigTextStyle,
-                        ),
-                        GenericButton(
-                          label: 'Continue',
-                          function: () {
-                            double score = (widget.questionController
-                                        .questionsGotCorrect /
-                                    widget.questionController.totalQuestions) *
-                                100;
-                            print('score is $score');
-                            Navigator.of(context).pop();
-                            Navigator.of(context, rootNavigator: true)
-                                .pushNamed('/grading', arguments: {
-                              'score': score.round(),
-                              'quizId': widget.quizId
-                            });
-                          },
-                          type: GenericButtonType.proceed,
-                        ),
-                      ],
-                    ),
-                  );
-              }), //Question and answers
-            ],
-          ),
+              ),
+            ),
+            GuideSheet(currentScreen: 'QuizScreen')
+          ],
         ),
       ),
     );

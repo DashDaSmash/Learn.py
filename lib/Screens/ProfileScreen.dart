@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:learn_py/Objects/GuideSheet.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:learn_py/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -69,176 +70,182 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: themeData().backgroundColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 70, bottom: 30),
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _clickedOnPP();
-                          },
-                          child: wantToChangePP
-                              ? CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 80,
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Color(0xFF78FF8E),
-                                    size: 50,
-                                  ),
-                                )
-                              : imageUrl != null
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 70, bottom: 30),
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _clickedOnPP();
+                              },
+                              child: wantToChangePP
                                   ? CircleAvatar(
                                       backgroundColor: Colors.white,
                                       radius: 80,
-                                      child: ClipOval(
-                                        child: Image.network(
-                                          imageUrl, // Replace with your image URL
-                                          height: 160,
-                                          width: 160,
-                                          fit: BoxFit.cover,
-                                        ),
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: Color(0xFF78FF8E),
+                                        size: 50,
                                       ),
                                     )
-                                  : CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: 80,
-                                      child: Icon(
-                                        CupertinoIcons.profile_circled,
-                                        color: Color(0xFFB4FFC0),
-                                        size: 160,
-                                      ),
-                                    ),
+                                  : imageUrl != null
+                                      ? CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          radius: 80,
+                                          child: ClipOval(
+                                            child: Image.network(
+                                              imageUrl, // Replace with your image URL
+                                              height: 160,
+                                              width: 160,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        )
+                                      : CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          radius: 80,
+                                          child: Icon(
+                                            CupertinoIcons.profile_circled,
+                                            color: Color(0xFFB4FFC0),
+                                            size: 160,
+                                          ),
+                                        ),
+                            ),
+                            FirstName.isNotEmpty && LastName.isNotEmpty
+                                ? Text(
+                                    '$FirstName $LastName',
+                                    style: themeData().genericBigTextStyle,
+                                  )
+                                : SizedBox.shrink(),
+                            Text(
+                              '$userEmail',
+                              style: themeData().genericTextStyle,
+                            ),
+                          ],
                         ),
-                        FirstName.isNotEmpty && LastName.isNotEmpty
-                            ? Text(
-                                '$FirstName $LastName',
-                                style: themeData().genericBigTextStyle,
-                              )
-                            : SizedBox.shrink(),
-                        Text(
-                          '$userEmail',
-                          style: themeData().genericTextStyle,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Last Quiz Score: ',
-                        style: themeData().genericTextStyle,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Countup(
-                            begin: 0,
-                            end: lastTestScore.toDouble(),
-                            duration: Duration(seconds: 1),
-                            separator: ',',
-                            style: themeData().boldDigit,
+                          Text(
+                            'Last Quiz Score: ',
+                            style: themeData().genericTextStyle,
                           ),
-                          Column(
-                            // mainAxisAlignment: MainAxisAlignment.end,
+                          Row(
                             children: [
-                              Container(
-                                height: 18,
-                                width: 16,
+                              Countup(
+                                begin: 0,
+                                end: lastTestScore.toDouble(),
+                                duration: Duration(seconds: 1),
+                                separator: ',',
+                                style: themeData().boldDigit,
                               ),
-                              Text(
-                                '%',
-                                style: themeData().genericTextStyle,
+                              Column(
+                                // mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    height: 18,
+                                    width: 16,
+                                  ),
+                                  Text(
+                                    '%',
+                                    style: themeData().genericTextStyle,
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Average Score: ',
-                          style: themeData().genericTextStyle,
-                        ),
-                        Row(
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Countup(
-                              begin: 0,
-                              end: averageScore.toDouble(),
-                              duration: Duration(seconds: 1),
-                              separator: ',',
-                              style: themeData().boldDigit,
+                            Text(
+                              'Average Score: ',
+                              style: themeData().genericTextStyle,
                             ),
-                            Column(
-                              // mainAxisAlignment: MainAxisAlignment.end,
+                            Row(
                               children: [
-                                Container(
-                                  height: 18,
-                                  width: 16,
+                                Countup(
+                                  begin: 0,
+                                  end: averageScore.toDouble(),
+                                  duration: Duration(seconds: 1),
+                                  separator: ',',
+                                  style: themeData().boldDigit,
                                 ),
-                                Text(
-                                  '%',
-                                  style: themeData().genericTextStyle,
+                                Column(
+                                  // mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      height: 18,
+                                      width: 16,
+                                    ),
+                                    Text(
+                                      '%',
+                                      style: themeData().genericTextStyle,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total Score: ',
-                        style: themeData().genericTextStyle,
-                      ),
-                      Countup(
-                        begin: 0,
-                        end: userTotalScore.toDouble(),
-                        duration: Duration(seconds: 1),
-                        separator: ',',
-                        style: themeData().boldDigit,
+                          ]),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Total Score: ',
+                            style: themeData().genericTextStyle,
+                          ),
+                          Countup(
+                            begin: 0,
+                            end: userTotalScore.toDouble(),
+                            duration: Duration(seconds: 1),
+                            separator: ',',
+                            style: themeData().boldDigit,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
+                ),
 
-            // Add some spacing
-            //BackButton
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  GenericButton(
-                      label: 'Sign out',
-                      function: () {
-                        _signOut();
-                        Navigator.pop(context);
-                      },
-                      type: GenericButtonType.semiWarning),
-                  GenericButton(
-                    label: 'Back',
-                    function: () => Navigator.pop(context),
-                    type: GenericButtonType.generic, // Set your desired color
+                // Add some spacing
+                //BackButton
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      GenericButton(
+                          label: 'Sign out',
+                          function: () {
+                            _signOut();
+                            Navigator.pop(context);
+                          },
+                          type: GenericButtonType.semiWarning),
+                      GenericButton(
+                        label: 'Back',
+                        function: () => Navigator.pop(context),
+                        type:
+                            GenericButtonType.generic, // Set your desired color
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ), //BackButton
-          ],
-        ),
+                ), //BackButton
+              ],
+            ),
+          ),
+          GuideSheet(currentScreen: 'ProfileScreen'),
+        ],
       ),
     );
   }
