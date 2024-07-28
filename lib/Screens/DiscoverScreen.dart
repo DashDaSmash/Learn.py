@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:learn_py/Objects/GuideSheet.dart';
 import '../Objects/GeminiAI.dart';
 import '../Objects/News.dart';
 import '../Objects/GenericButton.dart';
@@ -122,6 +123,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 type: GenericButtonType.generic, // Set your desired color
               ),
             ),
+            GuideSheet(currentScreen: 'DiscoveryScreen'),
           ],
         ),
       ),

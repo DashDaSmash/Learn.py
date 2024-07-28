@@ -62,6 +62,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         'LastName': lastNameController.text,
         'LastUnlockedQuiz': 1,
         'QuizScores': {},
+        'ShowGuideSheet': {
+          'DiscoveryScreen': true,
+          'HomeScreen': true,
+        }
       });
 
       // SEND EMAIL VERIFICATION TO USER
