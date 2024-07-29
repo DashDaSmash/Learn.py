@@ -146,7 +146,10 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: GenericButton(
                         label: 'Continue',
-                        function: () => Navigator.pop(context),
+                        function: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
                         type: userPassedQuiz!
                             ? GenericButtonType.semiProceed
                             : GenericButtonType.semiWarning),

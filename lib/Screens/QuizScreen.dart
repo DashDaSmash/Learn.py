@@ -141,10 +141,10 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: themeData().backgroundColor,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Padding(
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -216,9 +216,9 @@ class _QuizScreenState extends State<QuizScreen> {
                 ],
               ),
             ),
-            GuideSheet(currentScreen: 'QuizScreen')
-          ],
-        ),
+          ),
+          GuideSheet(currentScreen: 'QuizScreen'),
+        ],
       ),
     );
   }

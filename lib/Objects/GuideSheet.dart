@@ -2,12 +2,14 @@
 //                  DiscoveryScreen
 
 //TODO: make sure at add all guide screens to user registration
+//TODO: also in profile screen when resetting
 
 //TODO: Add an option to toggle guide sheet on again
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
+import 'package:learn_py/ThemeData.dart';
 
 import '../main.dart';
 
@@ -36,7 +38,6 @@ class _GuideSheetState extends State<GuideSheet> {
       // CHECK IF THIS SCREEN IS WHAT IS BEING DISPLAYED RN
       // AND ALSO IF WE SHOULD SHOW GUIDE SHEET
       if (key == widget.currentScreen && fireStoreGuideSheetMap[key]) {
-        print('#########################');
         // CHECK FOR SEPARATE VALUES
         if (widget.currentScreen == 'DiscoveryScreen') {
           assignVariables(guideData().DiscoveryScreen);
@@ -47,6 +48,12 @@ class _GuideSheetState extends State<GuideSheet> {
         } else if (widget.currentScreen == 'ProfileScreen') {
           assignVariables(guideData().ProfileScreen);
           guideSheetStamp(guideData().ProfileScreen);
+        } else if (widget.currentScreen == 'QuizCatalogScreen') {
+          assignVariables(guideData().QuizCatalogScreen);
+          guideSheetStamp(guideData().QuizCatalogScreen);
+        } else if (widget.currentScreen == 'AboutScreen') {
+          assignVariables(guideData().AboutScreen);
+          guideSheetStamp(guideData().AboutScreen);
         }
       }
     }
@@ -118,74 +125,107 @@ class _GuideSheetState extends State<GuideSheet> {
             Padding(
               // THIS PADDING ALLOWS TEXT TO BE ON A COMFORTABLE PLACE
               // TO BE CHANGED IN FUTURE
-              padding: const EdgeInsets.only(
-                  left: 10, right: 10, top: 100, bottom: 150),
+              padding:
+                  guideDataSet['textPosition'][currentPage] == Alignment.center
+                      ? const EdgeInsets.only(
+                          left: 60, right: 60, top: 100, bottom: 150)
+                      : const EdgeInsets.only(
+                          left: 10, right: 10, top: 100, bottom: 150),
               child: Align(
                 alignment: guideDataSet['textPosition'][currentPage],
                 child: Text(
                   guideDataSet['text'][currentPage],
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          color: Colors.grey,
-                          offset: Offset(2, 2),
-                          blurRadius: 10,
-                        ),
-                      ]),
+                  style: themeData().guideScreenBigTextStyle,
                 ),
               ), // ALIGNMENT OF TEXT
             ), // GUIDE TEXT
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
+            if (guideDataSet['containsWidgets'])
+              if (guideDataSet['pagesContainingWidgets'].contains(currentPage))
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      // FOLLOWING MAKES SURE BACK BUTTON IS NOT SHOWN IN FIRST PAGE OF GUIDE SHEET
-                      currentPage != 1
-                          ? Expanded(
-                              child: GenericButton(
-                                  label: 'Back',
-                                  function: () {
-                                    currentPage--;
-                                    guideSheetStamp(guideDataSet);
-                                    setState(() {});
-                                  },
-                                  type: GenericButtonType.generic),
-                            )
-                          : SizedBox.shrink(),
-                      // THIS MAKES SURE WE SHOW 'NEXT' ONLY UNTIL THE PAGE BEFORE LAST
-                      currentPage < totalPages!
-                          ? Expanded(
-                              child: GenericButton(
-                                  label: 'Next',
-                                  function: () {
-                                    currentPage++;
-                                    guideSheetStamp(guideDataSet);
-                                    setState(() {});
-                                  },
-                                  type: GenericButtonType.semiProceed),
-                            )
-                          : SizedBox.shrink(),
-                      // 'CONTINUE' BUTTON IS ONLY SHOWN ON LAST PAGE OF GUIDE SCREEN
-                      currentPage == totalPages
-                          ? Expanded(
-                              child: GenericButton(
-                                  label: 'Continue',
-                                  function: () {
-                                    guideComplete();
-                                  },
-                                  type: GenericButtonType.proceed),
-                            )
-                          : SizedBox.shrink(),
-                    ],
-                  ),
-                )
+                  // THIS PADDING ALLOWS WIDGET TO BE ON A COMFORTABLE PLACE
+                  // TO BE CHANGED IN FUTURE
+                  padding: const EdgeInsets.only(
+                      left: 60, right: 60, top: 100, bottom: 150),
+                  child: Align(
+                    alignment: guideDataSet['spotlightPosition'][currentPage],
+                    child: guideDataSet['widgets'][currentPage],
+                  ), // ALIGNMENT OF WIDGET
+                ), // GUIDE WIDGETS
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (currentPage != 1)
+                      ClipOval(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.greenAccent.shade700,
+                              width: 2.0,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                            color: Colors.black,
+                            icon: Icon(Icons.chevron_left_rounded, size: 30),
+                            onPressed: () {
+                              currentPage--;
+                              guideSheetStamp(guideDataSet);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      )
+                    else
+                      SizedBox.shrink(),
+                    if (currentPage < totalPages!)
+                      ClipOval(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.greenAccent.shade700,
+                              width: 2.0,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                            color: Color(0xFF00CE2D),
+                            icon: Icon(Icons.chevron_right_rounded, size: 30),
+                            onPressed: () {
+                              currentPage++;
+                              guideSheetStamp(guideDataSet);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ),
+                    if (currentPage == totalPages)
+                      ClipOval(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFF80FE94),
+                            border: Border.all(
+                              color: Colors.greenAccent.shade700,
+                              width: 2.0,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: IconButton(
+                            color: Colors.black54,
+                            icon: Icon(Icons.check_rounded, size: 30),
+                            onPressed: () {
+                              guideComplete();
+                            },
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ],
             ), // BUTTONS
           ],
@@ -201,19 +241,19 @@ class _GuideSheetState extends State<GuideSheet> {
 
     fireStoreGuideSheetMap[widget.currentScreen] = false;
     print(fireStoreGuideSheetMap);
+    setState(() {});
 
     final userRef =
         FirebaseFirestore.instance.collection('users').doc(userEmail);
 
     await userRef.update({'ShowGuideSheet': fireStoreGuideSheetMap});
-    setState(() {});
+    print('done uploading ┏(-_-)┛┗(-_- )┓');
   } // THIS UPDATES FIRESTORE DATABASE SO GUIDE SHEET DOESNT SHOW UP AGAIN
 
   @override
   void initState() {
     super.initState();
     // FOLLOWING CALL MAKES SURE WE HAVE THE FIRESTORE MAP
-    MyApp().fetchVisitedScreens();
   }
 
   @override
@@ -231,6 +271,7 @@ class guideData {
   Map DiscoveryScreen = {
     // DATA RELATED TO Discovery Screen
     'totalPages': 2,
+    'containsWidgets': false,
     'spotlightPosition': {
       1: Alignment.topCenter,
       2: Alignment.bottomCenter,
@@ -255,6 +296,7 @@ class guideData {
   Map QuizScreen = {
     // DATA RELATED TO Quiz Screen
     'totalPages': 3,
+    'containsWidgets': false,
     'spotlightPosition': {
       1: Alignment.topLeft,
       2: Alignment.bottomCenter,
@@ -276,14 +318,15 @@ class guideData {
       3: Alignment.center,
     },
     'text': {
-      1: 'Quiz name and Progress bar:\nYou will see progress as you go...',
-      2: 'Question....\nAnd options to select of course',
+      1: 'Quiz name and Progress bar\n\nYou will see some progress in a moment',
+      2: 'Question\n\nAnd options to select of course....',
       3: 'You can quit here\n\nbut don\'t you dare\n(ง •̀_•́)ง',
     },
   };
   Map ProfileScreen = {
     // DATA RELATED TO Profile Screen
     'totalPages': 3,
+    'containsWidgets': false,
     'spotlightPosition': {
       1: Alignment.topLeft,
       2: Alignment.bottomCenter,
@@ -307,8 +350,94 @@ class guideData {
     'text': {
       1: 'Looks like you?\nNah?\n Click on it to change',
       2: 'These are your scores',
-      3: 'This is...\nIt\'s just self explanatory\n(ノ-_-)ノ ミ ┴┴'
+      3: 'This is...\n\nIt\'s just self explanatory\n(ノ-_-)ノ ミ ┴┴'
     },
-    //TODO: Quizcatalog--------->   You can click on unlocked quizzes. I'll explain more on the way....
+  };
+  Map QuizCatalogScreen = {
+    // DATA RELATED TO Quiz Catalog Screen
+    'totalPages': 2,
+    'containsWidgets': true,
+    'pagesContainingWidgets': [1],
+    'spotlightPosition': {
+      1: Alignment.center,
+      2: Alignment.topCenter,
+    },
+    'spotlightSizeFraction': {
+      1: {'height': 0, 'width': 0},
+      2: {'height': 0.5, 'width': 2},
+    },
+    'spotlightOffsetFraction': {
+      1: {'vertical': 0.0, 'horizontal': 0.0},
+      2: {'vertical': -0.5, 'horizontal': 0.0},
+    },
+    'textPosition': {
+      1: Alignment.topCenter,
+      2: Alignment.center,
+    },
+    'text': {
+      1: 'Here\'s how they look,',
+      2: 'You can click on unlocked quizzes.\n\nI\'ll explain more as we go....\n٩(◕‿◕｡)۶',
+    },
+    'widgets': {
+      1: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Quiz to do ↴', style: themeData().guideScreenSmallTextStyle),
+          GenericButton(
+            icon: Icon(
+              Icons.arrow_forward_outlined,
+              color: Colors.white,
+            ),
+            label: 'quiz004',
+            function: () {},
+            type: GenericButtonType.proceed,
+          ),
+          SizedBox(height: 20),
+          Text('Quizzes you have done already ↴',
+              style: themeData().guideScreenSmallTextStyle),
+          GenericButton(
+            icon: Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+            label: 'quiz005',
+            function: () {},
+            type: GenericButtonType.semiProceed,
+          ),
+          SizedBox(height: 20),
+          Text('Quizzes that are locked yet ↴',
+              style: themeData().guideScreenSmallTextStyle),
+          GenericButton(
+            icon: Icon(
+              Icons.lock_outline_rounded,
+              color: Colors.black54,
+            ),
+            label: 'quiz006',
+            function: () {},
+            type: GenericButtonType.generic,
+          ),
+        ],
+      ),
+    }
+  };
+  Map AboutScreen = {
+    // DATA RELATED TO Quiz Catalog Screen
+    'totalPages': 1,
+    'containsWidgets': false,
+    'spotlightPosition': {
+      1: Alignment.bottomCenter,
+    },
+    'spotlightSizeFraction': {
+      1: {'height': 0.1, 'width': 0.9},
+    },
+    'spotlightOffsetFraction': {
+      1: {'vertical': 0.4, 'horizontal': 0.0},
+    },
+    'textPosition': {
+      1: Alignment.center,
+    },
+    'text': {
+      1: 'You\'re welcome\n\n♡⸜(ˆᗜˆ˵ )⸝♡',
+    },
   };
 }

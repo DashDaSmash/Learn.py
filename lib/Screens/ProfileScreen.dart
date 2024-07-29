@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:countup/countup.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../Objects/GenericButton.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -18,7 +19,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // Add your state variables and methods here
   int userTotalScore = 0;
   int quizCount = 0;
   int averageScore = 0;
@@ -26,18 +26,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String FirstName = '';
   String LastName = '';
   var imageUrl;
+  Map<String, dynamic>? quizScores;
+
+  //STATE VARIABLES
   bool wantToChangePP = false;
+  bool loading = false;
+  bool loadingScores = false;
 
   Future<void> _fetchUserData() async {
+    setState(() {
+      loadingScores = true;
+    });
+
+    userTotalScore = 0;
+
     final userScore =
         FirebaseFirestore.instance.collection('users').doc(userEmail);
     final userDoc = await userScore.get();
-    final Map<String, dynamic> quizScores = userDoc.data()?['QuizScores'] ?? {};
+    quizScores = userDoc.data()?['QuizScores'] ?? {};
     FirstName = userDoc.data()?['FirstName'];
     LastName = userDoc.data()?['LastName'];
     print('quizScores: $quizScores');
-    for (final key in quizScores.keys) {
-      lastTestScore = int.parse(quizScores[key].toString());
+    for (final key in quizScores!.keys) {
+      lastTestScore = int.parse(quizScores![key].toString());
       print('lastTestScore: $lastTestScore');
       userTotalScore += lastTestScore;
       quizCount++;
@@ -52,12 +63,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       print(e);
     }
-    setState(() {});
+    setState(() {
+      loadingScores = false;
+    });
   }
 
   void _signOut() {
     FirebaseAuth.instance.signOut();
     print('***********************************************************');
+  }
+
+  void showGuideAgain() async {
+    // SHOW LOADING SCREEN
+    loading = true;
+    setState(() {});
+
+    for (String screenName in fireStoreGuideSheetMap.keys) {
+      // SET ALL THE SCREENS TO SHOW AGAIN
+      fireStoreGuideSheetMap[screenName] = true;
+    }
+
+    final userRef =
+        FirebaseFirestore.instance.collection('users').doc(userEmail);
+
+    await userRef.update({'ShowGuideSheet': fireStoreGuideSheetMap});
+
+    // STOP LOADING SCREEN
+    loading = false;
+    setState(() {});
+  }
+
+  void resetQuizScores() async {
+    setState(() {
+      loading = true;
+    });
+
+    for (String quizId in quizScores!.keys) {
+      quizScores![quizId] = 0;
+    }
+
+    final userRef =
+        FirebaseFirestore.instance.collection('users').doc(userEmail);
+
+    await userRef.update({'QuizScores': quizScores});
+
+    loading = false;
+    _fetchUserData();
   }
 
   @override
@@ -76,146 +127,182 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 70, bottom: 30),
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                _clickedOnPP();
-                              },
-                              child: wantToChangePP
-                                  ? CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: 80,
-                                      child: Icon(
-                                        Icons.edit,
-                                        color: Color(0xFF78FF8E),
-                                        size: 50,
-                                      ),
-                                    )
-                                  : imageUrl != null
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 70, bottom: 30),
+                            child: Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _clickedOnPP();
+                                  },
+                                  child: wantToChangePP
                                       ? CircleAvatar(
                                           backgroundColor: Colors.white,
                                           radius: 80,
-                                          child: ClipOval(
-                                            child: Image.network(
-                                              imageUrl, // Replace with your image URL
-                                              height: 160,
-                                              width: 160,
-                                              fit: BoxFit.cover,
-                                            ),
+                                          child: Icon(
+                                            Icons.edit,
+                                            color: Color(0xFF78FF8E),
+                                            size: 50,
                                           ),
                                         )
-                                      : CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          radius: 80,
-                                          child: Icon(
-                                            CupertinoIcons.profile_circled,
-                                            color: Color(0xFFB4FFC0),
-                                            size: 160,
-                                          ),
-                                        ),
-                            ),
-                            FirstName.isNotEmpty && LastName.isNotEmpty
-                                ? Text(
-                                    '$FirstName $LastName',
-                                    style: themeData().genericBigTextStyle,
-                                  )
-                                : SizedBox.shrink(),
-                            Text(
-                              '$userEmail',
-                              style: themeData().genericTextStyle,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Last Quiz Score: ',
-                            style: themeData().genericTextStyle,
-                          ),
-                          Row(
-                            children: [
-                              Countup(
-                                begin: 0,
-                                end: lastTestScore.toDouble(),
-                                duration: Duration(seconds: 1),
-                                separator: ',',
-                                style: themeData().boldDigit,
-                              ),
-                              Column(
-                                // mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    height: 18,
-                                    width: 16,
-                                  ),
-                                  Text(
-                                    '%',
-                                    style: themeData().genericTextStyle,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Average Score: ',
-                              style: themeData().genericTextStyle,
-                            ),
-                            Row(
-                              children: [
-                                Countup(
-                                  begin: 0,
-                                  end: averageScore.toDouble(),
-                                  duration: Duration(seconds: 1),
-                                  separator: ',',
-                                  style: themeData().boldDigit,
+                                      : imageUrl != null
+                                          ? CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              radius: 80,
+                                              child: ClipOval(
+                                                child: Image.network(
+                                                  imageUrl, // Replace with your image URL
+                                                  height: 160,
+                                                  width: 160,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            )
+                                          : CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              radius: 80,
+                                              child: Icon(
+                                                CupertinoIcons.profile_circled,
+                                                color: Color(0xFFB4FFC0),
+                                                size: 160,
+                                              ),
+                                            ),
                                 ),
-                                Column(
-                                  // mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      height: 18,
-                                      width: 16,
-                                    ),
-                                    Text(
-                                      '%',
-                                      style: themeData().genericTextStyle,
-                                    ),
-                                  ],
+                                FirstName.isNotEmpty && LastName.isNotEmpty
+                                    ? Text(
+                                        '$FirstName $LastName',
+                                        style: themeData().genericBigTextStyle,
+                                      )
+                                    : SizedBox.shrink(),
+                                Text(
+                                  '$userEmail',
+                                  style: themeData().genericTextStyle,
                                 ),
                               ],
-                            ),
-                          ]),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Total Score: ',
-                            style: themeData().genericTextStyle,
+                            ), // PROFILE PIC, NAME AND EMAIL
                           ),
-                          Countup(
-                            begin: 0,
-                            end: userTotalScore.toDouble(),
-                            duration: Duration(seconds: 1),
-                            separator: ',',
-                            style: themeData().boldDigit,
-                          ),
+                          loadingScores
+                              ? LoadingAnimationWidget.threeRotatingDots(
+                                  color: Color(
+                                      0xFF80FE94), // Set your desired color
+                                  size: 50.0, // Set the size of the animation
+                                )
+                              : Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Last Quiz Score: ',
+                                          style: themeData().genericTextStyle,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Countup(
+                                              begin: 0,
+                                              end: lastTestScore.toDouble(),
+                                              duration: Duration(seconds: 1),
+                                              separator: ',',
+                                              style: themeData().boldDigit,
+                                            ),
+                                            Column(
+                                              // mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  height: 18,
+                                                  width: 16,
+                                                ),
+                                                Text(
+                                                  '%',
+                                                  style: themeData()
+                                                      .genericTextStyle,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ), // LAST QUIZ SCORE
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Average Score: ',
+                                            style: themeData().genericTextStyle,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Countup(
+                                                begin: 0,
+                                                end: averageScore.toDouble(),
+                                                duration: Duration(seconds: 1),
+                                                separator: ',',
+                                                style: themeData().boldDigit,
+                                              ),
+                                              Column(
+                                                // mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  Container(
+                                                    height: 18,
+                                                    width: 16,
+                                                  ),
+                                                  Text(
+                                                    '%',
+                                                    style: themeData()
+                                                        .genericTextStyle,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ]), // AVERAGE SCORE
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Total Score: ',
+                                          style: themeData().genericTextStyle,
+                                        ),
+                                        Countup(
+                                          begin: 0,
+                                          end: userTotalScore.toDouble(),
+                                          duration: Duration(seconds: 1),
+                                          separator: ',',
+                                          style: themeData().boldDigit,
+                                        ),
+                                      ],
+                                    ), // TOTAL SCORE
+                                    SizedBox(height: 10),
+                                    Column(
+                                      children: [
+                                        Text(
+                                            'By clicking the below button, you will consent to erase any scores you have achived. This action is irreversible.\n*Unlocked quizzes will remain the same',
+                                            textAlign: TextAlign.center),
+                                        TextButton(
+                                            onPressed: () {
+                                              resetQuizScores();
+                                            },
+                                            child: Text(
+                                              'Reset scores',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            )),
+                                      ],
+                                    ), // RESET SCORES SECTION
+                                  ],
+                                ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
 
@@ -233,6 +320,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           },
                           type: GenericButtonType.semiWarning),
                       GenericButton(
+                          label: 'Show guide again',
+                          function: () {
+                            showGuideAgain();
+                          },
+                          type: GenericButtonType.generic),
+                      GenericButton(
                         label: 'Back',
                         function: () => Navigator.pop(context),
                         type:
@@ -244,6 +337,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
+          loading
+              ? Container(
+                  color: Colors.white.withOpacity(0.5),
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(
+                      child: LoadingAnimationWidget.threeRotatingDots(
+                    color: Color(0xFF80FE94), // Set your desired color
+                    size: 50.0, // Set the size of the animation
+                  )),
+                )
+              : SizedBox.shrink(),
           GuideSheet(currentScreen: 'ProfileScreen'),
         ],
       ),

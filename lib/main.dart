@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -92,18 +91,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  Future<void> fetchVisitedScreens() async {
-    final userRef =
-        FirebaseFirestore.instance.collection('users').doc(userEmail);
-    final userDoc = await userRef.get();
-
-    // STORE DATA IN A MAP
-    fireStoreGuideSheetMap = userDoc.data()?['ShowGuideSheet'];
-  } // FETCH ALL DATA ABOUT CURRENT USER'S GUIDE SHEETS
-
   @override
   Widget build(BuildContext context) {
-    fetchVisitedScreens();
     return MaterialApp(
       title: 'My App',
       home: StreamBuilder<User?>(

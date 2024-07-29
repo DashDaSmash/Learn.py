@@ -22,10 +22,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFECFFF0),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
               children: [
                 Expanded(
                   flex: 2,
@@ -111,21 +111,21 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 ),
               ],
             ),
-            Positioned(
-              bottom: 8, // Adjust the position as needed
-              left: 8, // Adjust the position as needed
-              right: 8, // Adjust the position as needed
-              child: //BackButton
-                  //BackButton
-                  GenericButton(
-                label: 'Back',
-                function: () => Navigator.pop(context),
-                type: GenericButtonType.generic, // Set your desired color
-              ),
+          ),
+          Positioned(
+            bottom: 8, // Adjust the position as needed
+            left: 8, // Adjust the position as needed
+            right: 8, // Adjust the position as needed
+            child: //BackButton
+                //BackButton
+                GenericButton(
+              label: 'Back',
+              function: () => Navigator.pop(context),
+              type: GenericButtonType.generic, // Set your desired color
             ),
-            GuideSheet(currentScreen: 'DiscoveryScreen'),
-          ],
-        ),
+          ),
+          GuideSheet(currentScreen: 'DiscoveryScreen'),
+        ],
       ),
     );
   }

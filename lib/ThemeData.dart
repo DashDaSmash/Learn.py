@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 class themeData {
   Color backgroundColor = Color(0xFFECFFF0);
@@ -14,6 +15,30 @@ class themeData {
     fontWeight: FontWeight.bold,
     fontSize: 20,
   );
+
+  TextStyle guideScreenBigTextStyle = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 30,
+      color: Colors.white,
+      shadows: [
+        Shadow(
+          color: Colors.grey,
+          offset: Offset(2, 2),
+          blurRadius: 10,
+        ),
+      ]);
+
+  TextStyle guideScreenSmallTextStyle = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 20,
+      color: Colors.white,
+      shadows: [
+        Shadow(
+          color: Colors.grey,
+          offset: Offset(2, 2),
+          blurRadius: 10,
+        ),
+      ]);
 
   TextStyle boldDigit = TextStyle(
       fontWeight: FontWeight.w700,

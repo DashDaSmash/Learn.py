@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learn_py/Objects/GenericButton.dart';
+import 'package:learn_py/Objects/GuideSheet.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:learn_py/main.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -97,6 +98,7 @@ class _QuizCatalogScreenState extends State<QuizCatalogScreen> {
             type: GenericButtonType.generic, // Set your desired color
           ),
         ),
+        GuideSheet(currentScreen: 'QuizCatalogScreen'),
       ]),
     );
   }
