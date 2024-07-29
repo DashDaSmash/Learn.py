@@ -2,9 +2,6 @@
 //                  DiscoveryScreen
 
 //TODO: make sure at add all guide screens to user registration
-//TODO: also in profile screen when resetting
-
-//TODO: Add an option to toggle guide sheet on again
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

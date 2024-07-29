@@ -1,3 +1,5 @@
+import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,32 +31,11 @@ String userEmail = '';
 Map<String, dynamic> fireStoreGuideSheetMap = {};
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await FirebaseAppCheck.instance.activate(
-    // You can also use a `ReCaptchaEnterpriseProvider` provider instance as an
-    // argument for `webProvider`
-
-    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
-    // Default provider for Android is the Play Integrity provider. You can use the "AndroidProvider" enum to choose
-    // your preferred provider. Choose from:
-    // 1. Debug provider
-    // 2. Safety Net provider
-    // 3. Play Integrity provider
-    androidProvider: AndroidProvider.debug,
-    // Default provider for iOS/macOS is the Device Check provider. You can use the "AppleProvider" enum to choose
-    // your preferred provider. Choose from:
-    // 1. Debug provider
-    // 2. Device Check provider
-    // 3. App Attest provider
-    // 4. App Attest provider with fallback to Device Check provider (App Attest provider is only available on iOS 14.0+, macOS 14.0+)
-    appleProvider: AppleProvider.appAttest,
-  );
   runApp(
     MaterialApp(
       initialRoute: '/', // Start with the FirstScreen
       routes: {
-        '/': (context) => MyApp(),
+        '/': (context) => SplashScreen(),
         '/login': (context) => LoginScreen(),
         '/emailVerify': (context) => EmailVerificationScreen(),
         '/home': (context) => HomeScreen(),
@@ -88,6 +69,27 @@ void main() async {
       },
     ),
   );
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
+  // await FirebaseAppCheck.instance.activate(
+  //   // You can also use a `ReCaptchaEnterpriseProvider` provider instance as an
+  //   // argument for `webProvider`
+  //
+  //   webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+  //   // Default provider for Android is the Play Integrity provider. You can use the "AndroidProvider" enum to choose
+  //   // your preferred provider. Choose from:
+  //   // 1. Debug provider
+  //   // 2. Safety Net provider
+  //   // 3. Play Integrity provider
+  //   androidProvider: AndroidProvider.debug,
+  //   // Default provider for iOS/macOS is the Device Check provider. You can use the "AppleProvider" enum to choose
+  //   // your preferred provider. Choose from:
+  //   // 1. Debug provider
+  //   // 2. Device Check provider
+  //   // 3. App Attest provider
+  //   // 4. App Attest provider with fallback to Device Check provider (App Attest provider is only available on iOS 14.0+, macOS 14.0+)
+  //   appleProvider: AppleProvider.appAttest,
+  // );
 }
 
 class MyApp extends StatelessWidget {
@@ -120,6 +122,51 @@ class MyApp extends StatelessWidget {
           return CircularProgressIndicator();
         },
       ),
+    );
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FlutterSplashScreen.gif(
+      gifPath: 'assets/Learn.py.gif', // Path to your GIF
+      backgroundColor: Colors.white,
+      gifWidth: 500, // Width of the GIF
+      gifHeight: 500, // Height of the GIF
+      nextScreen: MyApp(), // Your next screen after the splash
+      asyncNavigationCallback: () async {
+        await Future.delayed(Duration(milliseconds: 4000));
+        await Firebase.initializeApp();
+        await FirebaseAppCheck.instance.activate(
+          // You can also use a `ReCaptchaEnterpriseProvider` provider instance as an
+          // argument for `webProvider`
+
+          webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+          // Default provider for Android is the Play Integrity provider. You can use the "AndroidProvider" enum to choose
+          // your preferred provider. Choose from:
+          // 1. Debug provider
+          // 2. Safety Net provider
+          // 3. Play Integrity provider
+          androidProvider: AndroidProvider.debug,
+          // Default provider for iOS/macOS is the Device Check provider. You can use the "AppleProvider" enum to choose
+          // your preferred provider. Choose from:
+          // 1. Debug provider
+          // 2. Device Check provider
+          // 3. App Attest provider
+          // 4. App Attest provider with fallback to Device Check provider (App Attest provider is only available on iOS 14.0+, macOS 14.0+)
+          appleProvider: AppleProvider.appAttest,
+        );
+      },
+      // duration: const Duration(milliseconds: 4200), // Duration of the splash
+      onInit: () async {
+        // Optional initialization callback
+        debugPrint("Splash screen initialized");
+      },
+      onEnd: () async {
+        // Optional callback when splash ends
+        debugPrint("Splash screen ended");
+      },
     );
   }
 }
