@@ -12,7 +12,12 @@
           "package_name": "com.example.learn_py"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "382176060857-sbl5vig2io531flvkk0afn0kdj2inr7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAg-dLXZ5dtkDldFtqEmhSlRu2Emh3VW5U"
@@ -20,7 +25,55 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382176060857-sbl5vig2io531flvkk0afn0kdj2inr7m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "382176060857-ee8ob4mvda0t54rde44lb0fivrt2554t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.learnPy"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382176060857:android:119b2f072202ba0fa04268",
+        "android_client_info": {
+          "package_name": "com.vihangasenarath.learn_py"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382176060857-sbl5vig2io531flvkk0afn0kdj2inr7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg-dLXZ5dtkDldFtqEmhSlRu2Emh3VW5U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382176060857-sbl5vig2io531flvkk0afn0kdj2inr7m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "382176060857-ee8ob4mvda0t54rde44lb0fivrt2554t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.learnPy"
+              }
+            }
+          ]
         }
       }
     }

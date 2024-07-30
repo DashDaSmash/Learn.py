@@ -1,5 +1,4 @@
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,6 +27,7 @@ import 'Screens/EmailVerificationScreen.dart';
 enum GenericButtonType { generic, proceed, semiProceed, warning, semiWarning }
 
 String userEmail = '';
+String displayName = '';
 Map<String, dynamic> fireStoreGuideSheetMap = {};
 
 void main() async {
@@ -134,6 +134,7 @@ class SplashScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       gifWidth: 500, // Width of the GIF
       gifHeight: 500, // Height of the GIF
+      useImmersiveMode: true,
       nextScreen: MyApp(), // Your next screen after the splash
       asyncNavigationCallback: () async {
         await Future.delayed(Duration(milliseconds: 4000));

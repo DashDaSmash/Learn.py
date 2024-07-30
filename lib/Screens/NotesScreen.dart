@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:learn_py/Objects/GuideSheet.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -40,10 +41,10 @@ class _DiscoverScreenState extends State<NotesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFECFFF0),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
               children: [
                 Expanded(
                   flex: 2,
@@ -381,20 +382,21 @@ class _DiscoverScreenState extends State<NotesScreen> {
                 ),
               ],
             ),
-            Positioned(
-              bottom: 8, // Adjust the position as needed
-              left: 8, // Adjust the position as needed
-              right: 8, // Adjust the position as needed
-              child: //BackButton
-                  //BackButton
-                  GenericButton(
-                label: 'Back',
-                function: () => Navigator.pop(context),
-                type: GenericButtonType.generic, // Set your desired color
-              ),
+          ),
+          Positioned(
+            bottom: 8, // Adjust the position as needed
+            left: 8, // Adjust the position as needed
+            right: 8, // Adjust the position as needed
+            child: //BackButton
+                //BackButton
+                GenericButton(
+              label: 'Back',
+              function: () => Navigator.pop(context),
+              type: GenericButtonType.generic, // Set your desired color
             ),
-          ],
-        ),
+          ),
+          GuideSheet(currentScreen: 'NotesScreen'),
+        ],
       ),
     );
   }

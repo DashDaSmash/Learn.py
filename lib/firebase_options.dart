@@ -64,6 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '382176060857',
     projectId: 'learn-py-app',
     storageBucket: 'learn-py-app.appspot.com',
+    iosClientId: '382176060857-ee8ob4mvda0t54rde44lb0fivrt2554t.apps.googleusercontent.com',
     iosBundleId: 'com.example.learnPy',
   );
 
@@ -73,6 +74,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '382176060857',
     projectId: 'learn-py-app',
     storageBucket: 'learn-py-app.appspot.com',
+    iosClientId: '382176060857-ee8ob4mvda0t54rde44lb0fivrt2554t.apps.googleusercontent.com',
     iosBundleId: 'com.example.learnPy',
   );
 

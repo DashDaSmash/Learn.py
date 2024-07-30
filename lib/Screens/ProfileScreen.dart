@@ -44,8 +44,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         FirebaseFirestore.instance.collection('users').doc(userEmail);
     final userDoc = await userScore.get();
     quizScores = userDoc.data()?['QuizScores'] ?? {};
-    FirstName = userDoc.data()?['FirstName'];
-    LastName = userDoc.data()?['LastName'];
     print('quizScores: $quizScores');
     for (final key in quizScores!.keys) {
       lastTestScore = int.parse(quizScores![key].toString());
@@ -56,12 +54,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       averageScore = average.round();
     }
 
-    final storageRef =
-        FirebaseStorage.instance.ref().child('profile_images/$userEmail.jpg');
     try {
+      final storageRef =
+          FirebaseStorage.instance.ref().child('profile_images/$userEmail.jpg');
       imageUrl = await storageRef.getDownloadURL();
     } catch (e) {
-      print(e);
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      imageUrl = currentUser?.photoURL;
     }
     setState(() {
       loadingScores = false;
@@ -174,9 +173,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               ),
                                             ),
                                 ),
-                                FirstName.isNotEmpty && LastName.isNotEmpty
+                                //todo: ADD A FEATURE TO CHANGE NAME
+                                //todo: IF NAME IS EMPTY, SHOW 'CLICK TO ADD NAME'
+                                displayName.isNotEmpty
                                     ? Text(
-                                        '$FirstName $LastName',
+                                        '$displayName',
                                         style: themeData().genericBigTextStyle,
                                       )
                                     : SizedBox.shrink(),

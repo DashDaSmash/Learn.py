@@ -52,22 +52,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         password: passwordController.text,
       );
 
-      // SETUP A FIRESTORE DOCUMENT WITH USER'S EMAIL AS DOC ID
-      // THIS IS REQUIRED FOR FURTHER FUNCTIONALITY
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(emailController.text)
-          .set({
-        'FirstName': firstNameController.text,
-        'LastName': lastNameController.text,
-        'LastUnlockedQuiz': 1,
-        'QuizScores': {},
-        'ShowGuideSheet': {
-          'DiscoveryScreen': true,
-          'HomeScreen': true,
-        }
-      });
-
       // SEND EMAIL VERIFICATION TO USER
       await _auth.currentUser!.sendEmailVerification();
       print('Verification email sent successfully!');
@@ -337,6 +321,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   firstNameController.text.isNotEmpty &&
                                   lastNameController.text.isNotEmpty) {
                                 // ALL THE RESTRICTIONS ARE FULFILLED AND READY TO REGISTER
+                                //todo: SETUP displayName VARIBLE TO UPLOAD TO FIRESTORE
+                                displayName = firstNameController.text +
+                                    ' ' +
+                                    lastNameController.text;
                                 registerUser();
                               } else {
                                 emptyFieldWarning = true;

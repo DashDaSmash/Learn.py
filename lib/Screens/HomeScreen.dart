@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_py/Objects/HomeScreenButtons.dart';
@@ -17,6 +18,51 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isDonefetchingGuideSheetMap = false;
 
+  Future<void> setupUserDocumentInFirebase() async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+
+    if (displayName == '')
+      try {
+        displayName = currentUser!.displayName!;
+      } catch (e) {}
+
+    final DocumentReference docRef =
+        FirebaseFirestore.instance.collection('users').doc(currentUser!.email);
+
+    docRef.get().then((DocumentSnapshot snapshot) async {
+      if (snapshot.exists) {
+        print('User exists!');
+        fetchVisitedScreens();
+      } else {
+        print('It\'s a new user');
+        // SETUP A FIRESTORE DOCUMENT WITH USER'S EMAIL AS DOC ID
+        // THIS IS REQUIRED FOR FURTHER FUNCTIONALITY
+        Map<String, dynamic> fireStoreGuideSheetMap = {
+          'Name': displayName,
+          'LastUnlockedQuiz': 1,
+          'QuizScores': {},
+          'ShowGuideSheet': {
+            'AboutScreen': true,
+            'DiscoveryScreen': true,
+            'HomeScreen': true,
+            'ProfileScreen': true,
+            'QuizCatalogScreen': true,
+            'QuizScreen': true,
+            'NotesScreen': true,
+          }
+        };
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.email)
+            .set(fireStoreGuideSheetMap);
+
+        isDonefetchingGuideSheetMap = true;
+        setState(() {});
+      }
+    });
+  }
+
   Future<void> fetchVisitedScreens() async {
     final userRef =
         FirebaseFirestore.instance.collection('users').doc(userEmail);
@@ -32,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    fetchVisitedScreens();
+    setupUserDocumentInFirebase();
   }
 
   @override

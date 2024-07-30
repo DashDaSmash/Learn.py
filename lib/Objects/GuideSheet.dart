@@ -51,6 +51,9 @@ class _GuideSheetState extends State<GuideSheet> {
         } else if (widget.currentScreen == 'AboutScreen') {
           assignVariables(guideData().AboutScreen);
           guideSheetStamp(guideData().AboutScreen);
+        } else if (widget.currentScreen == 'NotesScreen') {
+          assignVariables(guideData().NotesScreen);
+          guideSheetStamp(guideData().NotesScreen);
         }
       }
     }
@@ -435,6 +438,31 @@ class guideData {
     },
     'text': {
       1: 'You\'re welcome\n\n♡⸜(ˆᗜˆ˵ )⸝♡',
+    },
+  };
+  Map NotesScreen = {
+    // DATA RELATED TO Notes Screen
+    'totalPages': 2,
+    'containsWidgets': false,
+    'spotlightPosition': {
+      1: Alignment.topCenter,
+      2: Alignment.bottomCenter,
+    },
+    'spotlightSizeFraction': {
+      1: {'height': 1, 'width': 2},
+      2: {'height': 1, 'width': 2},
+    },
+    'spotlightOffsetFraction': {
+      1: {'vertical': -0.5, 'horizontal': 0.0},
+      2: {'vertical': 0.4, 'horizontal': 0.0},
+    },
+    'textPosition': {
+      1: Alignment.bottomCenter,
+      2: Alignment.topCenter,
+    },
+    'text': {
+      1: 'Python tips and tricks',
+      2: 'Click on these notes to view them',
     },
   };
 }
