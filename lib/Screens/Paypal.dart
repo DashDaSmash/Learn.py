@@ -1,6 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
+import 'package:learn_py/Objects/GenericButton.dart';
+import 'package:learn_py/main.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PaypalPayment extends StatefulWidget {
   const PaypalPayment({Key? key}) : super(key: key);
@@ -10,6 +13,8 @@ class PaypalPayment extends StatefulWidget {
 }
 
 class _PaypalPaymentState extends State<PaypalPayment> {
+  bool donationComplete = false;
+
   @override
   void initState() {
     super.initState();
@@ -29,10 +34,10 @@ class _PaypalPaymentState extends State<PaypalPayment> {
           transactions: const [
             {
               "amount": {
-                "total": '100',
+                "total": '5',
                 "currency": "USD",
                 "details": {
-                  "subtotal": '100',
+                  "subtotal": '5',
                   "shipping": '0',
                   "shipping_discount": 0,
                 },
@@ -41,25 +46,22 @@ class _PaypalPaymentState extends State<PaypalPayment> {
               "item_list": {
                 "items": [
                   {
-                    "name": "Apple",
-                    "quantity": 4,
-                    "price": '10',
-                    "currency": "USD",
-                  },
-                  {
-                    "name": "Pineapple",
-                    "quantity": 5,
-                    "price": '12',
+                    "name": "Donation",
+                    "quantity": 1,
+                    "price": '5',
                     "currency": "USD",
                   },
                 ],
               },
             },
           ],
-          note: "Contact us for any questions on your order.",
+          note: "Contact us for any questions on your payment.",
           onSuccess: (Map<String, dynamic> params) async {
             log("onSuccess: $params");
             Navigator.pop(context);
+            setState(() {
+              donationComplete = true;
+            });
           },
           onError: (dynamic error) {
             log("onError: $error");
@@ -77,8 +79,59 @@ class _PaypalPaymentState extends State<PaypalPayment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('Loading PayPal payment gateway...'),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: donationComplete
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(),
+                    Image.asset('assets/donation.gif'),
+                    GenericButton(
+                        label: 'Continue',
+                        function: () {
+                          Navigator.pop(context);
+                        },
+                        type: GenericButtonType.proceed)
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox.shrink(),
+                    Column(
+                      children: [
+                        LoadingAnimationWidget.threeRotatingDots(
+                          color: Color(0xFF80FE94), // Set your desired color
+                          size: 100.0, // Set the size of the animation
+                        ),
+                        Center(
+                          child: Text('Loading PayPal payment gateway...'),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        GenericButton(
+                          label: 'Try again',
+                          function: () {
+                            _showPaypalCheckoutView();
+                          },
+                          type: GenericButtonType.semiProceed,
+                          width: 200,
+                        ),
+                      ],
+                    ),
+                    GenericButton(
+                        label: 'Back',
+                        function: () {
+                          Navigator.pop(context);
+                        },
+                        type: GenericButtonType.generic)
+                  ],
+                ),
+        ),
       ),
     );
   }

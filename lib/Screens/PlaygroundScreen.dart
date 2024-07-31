@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:learn_py/Objects/GenericButton.dart';
+import 'package:learn_py/ThemeData.dart';
+import 'package:learn_py/main.dart';
 
 class PlaygroundScreen extends StatelessWidget {
   @override
@@ -41,15 +44,41 @@ class _MyWidgetState extends State<MyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
       children: [
-        ElevatedButton(
-          onPressed: fetchPythonOutput,
-          child: Text('Execute Python Code'),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: fetchPythonOutput,
+              child: Text('Execute Python Code'),
+            ),
+            SizedBox(height: 20),
+            Text(pythonOutput),
+          ],
         ),
-        SizedBox(height: 20),
-        Text(pythonOutput),
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.white.withOpacity(0.5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox.shrink(),
+              Center(
+                child: Text(
+                  'This page is still under development',
+                  style: themeData().genericTextStyle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              GenericButton(
+                  label: 'Close',
+                  function: () => Navigator.pop(context),
+                  type: GenericButtonType.proceed)
+            ],
+          ),
+        )
       ],
     );
   }

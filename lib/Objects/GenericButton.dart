@@ -35,6 +35,7 @@ class GenericButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(
+            width: 2,
             color: type == GenericButtonType.proceed
                 ? themeData().proceedButtonBorderColor
                 : type == GenericButtonType.warning

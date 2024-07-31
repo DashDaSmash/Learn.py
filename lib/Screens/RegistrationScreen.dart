@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -9,11 +8,8 @@ import '../Objects/GenericButton.dart';
 import '../Objects/TextInputField.dart';
 import '../main.dart';
 
-//TODO: FIx the UI
-
 // TODO:      If that email already has an account, send it to login
 
-//TODO:       If user clicks on resend email verification, show an animation
 class RegistrationScreen extends StatefulWidget {
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
