@@ -140,8 +140,7 @@ class _QuizQuestionState extends State<QuizQuestion> {
 
           String Question = widget.questionDetails[0];
 
-          String formattedQuestion = Question.replaceAll(r'\n', '\n')
-              .replaceAll(r'\t', '\t\t\t\t\t\t\t');
+          String formattedQuestion = Question.replaceAll(r'\n', '\n');
 
           return Column(
             children: [

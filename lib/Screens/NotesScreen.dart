@@ -153,9 +153,8 @@ class _DiscoverScreenState extends State<NotesScreen> {
                                   // doneFetichingImages ? () {} : _fetchNotesImages();
                                   final note = notes[index];
                                   final title = note['Title'];
-                                  final content = note['Content']
-                                      .replaceAll(r'\n', '\n')
-                                      .replaceAll(r'\t', '\t\t\t\t\t\t\t');
+                                  final content =
+                                      note['Content'].replaceAll(r'\n', '\n');
 
                                   return index ==
                                           notes.length -
