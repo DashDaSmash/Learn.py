@@ -15,22 +15,32 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // STATE VARIABLES
   bool areCredentialsWrong = false;
   bool loading = false;
+  String errorMessage = '';
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   void _handleSignInWithEmail() async {
-    loading = true;
-    setState(() {});
+    setState(() {
+      loading = true;
+    });
 
-    await signInWithEmail(emailController.text, passwordController.text);
-
+    try {
+      await signInWithEmail(emailController.text, passwordController.text);
+      errorMessage = '';
+    } catch (e) {
+      errorMessage =
+          'Failed to sign in...\nCheck your email address and password';
+    }
     areCredentialsWrong = true;
     passwordController = TextEditingController();
-    loading = false;
-    setState(() {});
+
+    setState(() {
+      loading = false;
+    });
   }
 
   void _forgotPassword() async {
@@ -74,10 +84,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 autovalidateMode: AutovalidateMode.always,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Flexible(
                         child: Image.asset('assets/Learn.py border T.png')),
+                    areCredentialsWrong
+                        ? Text(
+                            'Failed to sign in...\nCheck your email address and password',
+                            style: TextStyle(color: Colors.red),
+                            textAlign: TextAlign.center,
+                          )
+                        : SizedBox.shrink(),
                     TextInputField(
                         label: 'Email',
                         isPassword: false,
@@ -92,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       label: 'Sign in',
                       function: _handleSignInWithEmail,
                       type: GenericButtonType.semiProceed,
-                    ),
+                    ), // SIGN IN BUTTON
                     //TODO: if user can't sign in and not registered either, show them register with guide screen
                     areCredentialsWrong // IF EMAIL/PASSWORD IS WRONG, IT ALLOWS USER TO CLICK FORGOT PASSWORD
                         ? GenericButton(
