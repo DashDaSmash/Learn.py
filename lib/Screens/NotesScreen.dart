@@ -1,19 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import 'package:learn_py/Objects/GuideSheet.dart';
 import 'package:learn_py/ThemeData.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../Objects/GeminiAI.dart';
 import '../Objects/GenericButton.dart';
-import 'package:flutter/services.dart';
-
 import '../main.dart';
 
 class NotesScreen extends StatefulWidget {
-  const NotesScreen({Key? key}) : super(key: key);
+  const NotesScreen({super.key});
 
   @override
   State<NotesScreen> createState() => _DiscoverScreenState();
@@ -24,23 +22,10 @@ class _DiscoverScreenState extends State<NotesScreen> {
   List<String> imageNames = [];
   bool doneFetichingImages = false;
 
-  // Future<void> _fetchNotesImages() async {
-  //   final storageRef = FirebaseStorage.instance.ref();
-  //   try {
-  //     for (String imageName in imageNames)
-  //       final imageUrl =
-  //           await storageRef.child('notes/$imageName.jpg').getDownloadURL();
-  //     // imageUrls.add(imageUrl);
-  //   } catch (e) {
-  //     print('Error fetching images: $e');
-  //     imageUrls.add('');
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFECFFF0),
+      backgroundColor: const Color(0xFFECFFF0),
       body: Stack(
         children: [
           SafeArea(
@@ -51,7 +36,7 @@ class _DiscoverScreenState extends State<NotesScreen> {
                   // child: Placeholder(),
                   child: Column(
                     children: [
-                      Text(
+                      const Text(
                         'Hungry for knowledge bytes!?!',
                         style: TextStyle(
                             color: Color(0xFF3C3C3C),
@@ -60,13 +45,13 @@ class _DiscoverScreenState extends State<NotesScreen> {
                       ),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
                           // height: 300,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                 color: Color(0xFFBDCEC1),
                                 blurRadius: 5,
@@ -75,14 +60,14 @@ class _DiscoverScreenState extends State<NotesScreen> {
                               ),
                             ],
                             border: Border.all(
-                              color: Color(0xFF00B71D),
+                              color: const Color(0xFF00B71D),
                               width: 2,
                             ),
                           ),
                           child: Center(
                             child: Stack(
                               children: [
-                                GeminiAI(
+                                const GeminiAI(
                                   prompt:
                                       'Give me a new tip for Python programming',
                                 ),
@@ -91,7 +76,7 @@ class _DiscoverScreenState extends State<NotesScreen> {
                                   child: Container(
                                     height: 30,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
+                                      borderRadius: const BorderRadius.only(
                                           bottomLeft: Radius.circular(10),
                                           bottomRight: Radius.circular(10)),
                                       gradient: LinearGradient(
@@ -105,17 +90,17 @@ class _DiscoverScreenState extends State<NotesScreen> {
                                       ),
                                     ),
                                   ),
-                                )
+                                ) // FADING EFFECT
                               ],
                             ),
                           ),
                         ),
-                      ),
+                      ), // AI BOX
                     ],
                   ),
-                ),
-                SizedBox(height: 10),
-                Text(
+                ), // TIPS WITH GEMINI AI
+                const SizedBox(height: 10),
+                const Text(
                   'Resources',
                   style: TextStyle(
                     color: Color(0xFF3C3C3C),
@@ -126,198 +111,61 @@ class _DiscoverScreenState extends State<NotesScreen> {
                 Expanded(
                   flex: 3,
                   // child: Placeholder(),
-                  child: Container(
+                  child: SizedBox(
                     width: double.infinity,
                     // child: Placeholder(),
                     child: Stack(
                       children: [
                         StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection('notes')
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return LoadingAnimationWidget.threeRotatingDots(
-                                  color: Color(
-                                      0xFF80FE94), // Set your desired color
-                                  size: 30.0, // Set the size of the animation
-                                ); // Show loading indicator
-                              }
+                          stream: FirebaseFirestore.instance
+                              .collection('notes')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return LoadingAnimationWidget.threeRotatingDots(
+                                color: const Color(
+                                    0xFF80FE94), // Set your desired color
+                                size: 30.0, // Set the size of the animation
+                              ); // Show loading indicator
+                            }
 
-                              final notes =
-                                  snapshot.data!.docs; // List of documents
+                            final notes =
+                                snapshot.data!.docs; // List of documents
 
-                              return ListView.builder(
-                                itemCount: notes.length,
-                                itemBuilder: (context, index) {
-                                  // doneFetichingImages ? () {} : _fetchNotesImages();
-                                  final note = notes[index];
-                                  final title = note['Title'];
-                                  final content =
-                                      note['Content'].replaceAll(r'\n', '\n');
+                            return ListView.builder(
+                              itemCount: notes.length,
+                              itemBuilder: (context, index) {
+                                // doneFetichingImages ? () {} : _fetchNotesImages();
+                                final note = notes[index];
+                                final title = note['Title'];
+                                final content =
+                                    note['Content'].replaceAll(r'\n', '\n');
 
-                                  return index ==
-                                          notes.length -
-                                              1 //IF ITS THE LAST NOTE, ADD EMPTY SPACE AT BOTTOM
-                                      ? Column(
-                                          children: [
-                                            GestureDetector(
-                                                onTap: () async {
-                                                  final resourceUrl = note[
-                                                      'ResourceLink']; // Assuming the article URL is available
-                                                  if (await canLaunch(
-                                                      resourceUrl)) {
-                                                    await launch(resourceUrl);
-                                                  } else {
-                                                    print(
-                                                        'Could not launch $resourceUrl');
-                                                  }
-                                                },
-                                                child: Container(
-                                                  margin: EdgeInsets.all(
-                                                      5.0), // Add vertical spacing
-                                                  decoration: BoxDecoration(
-                                                    color: Color(
-                                                        0xFFB4FFC0), // Set your desired background color
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0), // Rounded corners
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        blurRadius: 5,
-                                                        color: Colors.black26,
-                                                        offset: Offset(2,
-                                                            2), // Add a subtle shadow
-                                                      ),
-                                                    ],
-                                                    border: Border.all(
-                                                      color: Color(0xFF00B71D),
-                                                      width: 2,
-                                                    ),
-                                                  ),
-                                                  child: ListTile(
-                                                    title: Column(
-                                                      children: [
-                                                        Text(
-                                                          title,
-                                                          style: TextStyle(
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              color: Color(
-                                                                  0xFF00CE2D)),
-                                                        ),
-                                                        // Image.network(
-                                                        //   imageUrl,
-                                                        //   height: 160,
-                                                        //   width: 160,
-                                                        // ),
-                                                      ],
-                                                    ),
-                                                    subtitle: Text(
-                                                      content,
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                  ),
-                                                )),
-                                            SizedBox(height: 60),
-                                          ],
-                                        )
-                                      : index ==
-                                              0 // IF THE NOTE IS THE FIRST ONE, ADD EMPTY SPACE AT TOP
-                                          ? Column(
-                                              children: [
-                                                SizedBox(height: 30),
-                                                GestureDetector(
-                                                    onTap: () async {
-                                                      final resourceUrl = note[
-                                                          'ResourceLink']; // Assuming the article URL is available
-                                                      if (await canLaunch(
-                                                          resourceUrl)) {
-                                                        await launch(
-                                                            resourceUrl);
-                                                      } else {
-                                                        print(
-                                                            'Could not launch $resourceUrl');
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      margin: EdgeInsets.all(
-                                                          5.0), // Add vertical spacing
-                                                      decoration: BoxDecoration(
-                                                        color: Color(
-                                                            0xFFB4FFC0), // Set your desired background color
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                10.0), // Rounded corners
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            blurRadius: 5,
-                                                            color:
-                                                                Colors.black26,
-                                                            offset: Offset(2,
-                                                                2), // Add a subtle shadow
-                                                          ),
-                                                        ],
-                                                        border: Border.all(
-                                                          color:
-                                                              Color(0xFF00B71D),
-                                                          width: 2,
-                                                        ),
-                                                      ),
-                                                      child: ListTile(
-                                                        title: Column(
-                                                          children: [
-                                                            Text(
-                                                              title,
-                                                              style: TextStyle(
-                                                                  fontSize: 20,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  color: Color(
-                                                                      0xFF00CE2D)),
-                                                            ),
-                                                            // Image.network(
-                                                            //   imageUrl,
-                                                            //   height: 160,
-                                                            //   width: 160,
-                                                            // ),
-                                                          ],
-                                                        ),
-                                                        subtitle: Text(
-                                                          content,
-                                                          style: TextStyle(
-                                                              fontSize: 18),
-                                                        ),
-                                                      ),
-                                                    )),
-                                              ],
-                                            )
-                                          : GestureDetector(
+                                return index ==
+                                        notes.length -
+                                            1 //IF ITS THE LAST NOTE, ADD EMPTY SPACE AT BOTTOM
+                                    ? Column(
+                                        children: [
+                                          GestureDetector(
                                               onTap: () async {
                                                 final resourceUrl = note[
                                                     'ResourceLink']; // Assuming the article URL is available
-                                                if (await canLaunch(
+                                                if (await canLaunchUrlString(
                                                     resourceUrl)) {
-                                                  await launch(resourceUrl);
-                                                } else {
-                                                  print(
-                                                      'Could not launch $resourceUrl');
+                                                  await launchUrlString(
+                                                      resourceUrl);
                                                 }
                                               },
                                               child: Container(
-                                                margin: EdgeInsets.all(
+                                                margin: const EdgeInsets.all(
                                                     5.0), // Add vertical spacing
                                                 decoration: BoxDecoration(
-                                                  color: Color(
+                                                  color: const Color(
                                                       0xFFB4FFC0), // Set your desired background color
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           10.0), // Rounded corners
-                                                  boxShadow: [
+                                                  boxShadow: const [
                                                     BoxShadow(
                                                       blurRadius: 5,
                                                       color: Colors.black26,
@@ -326,7 +174,8 @@ class _DiscoverScreenState extends State<NotesScreen> {
                                                     ),
                                                   ],
                                                   border: Border.all(
-                                                    color: Color(0xFF00B71D),
+                                                    color:
+                                                        const Color(0xFF00B71D),
                                                     width: 2,
                                                   ),
                                                 ),
@@ -335,50 +184,178 @@ class _DiscoverScreenState extends State<NotesScreen> {
                                                     children: [
                                                       Text(
                                                         title,
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             fontSize: 20,
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             color: Color(
                                                                 0xFF00CE2D)),
                                                       ),
-                                                      // Image.network(
-                                                      //   imageUrl,
-                                                      //   height: 160,
-                                                      //   width: 160,
-                                                      // ),
                                                     ],
                                                   ),
                                                   subtitle: Text(
                                                     content,
-                                                    style:
-                                                        TextStyle(fontSize: 18),
+                                                    style: const TextStyle(
+                                                        fontSize: 18),
                                                   ),
                                                 ),
-                                              ));
-                                },
-                              );
-                            }),
+                                              )),
+                                          const SizedBox(height: 60),
+                                        ],
+                                      )
+                                    : index ==
+                                            0 // IF THE NOTE IS THE FIRST ONE, ADD EMPTY SPACE AT TOP
+                                        ? Column(
+                                            children: [
+                                              const SizedBox(height: 30),
+                                              GestureDetector(
+                                                  onTap: () async {
+                                                    final resourceUrl = note[
+                                                        'ResourceLink']; // Assuming the article URL is available
+                                                    if (await canLaunchUrlString(
+                                                        resourceUrl)) {
+                                                      await canLaunchUrlString(
+                                                          resourceUrl);
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    margin: const EdgeInsets
+                                                        .all(
+                                                        5.0), // Add vertical spacing
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xFFB4FFC0), // Set your desired background color
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0), // Rounded corners
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          blurRadius: 5,
+                                                          color: Colors.black26,
+                                                          offset: Offset(2,
+                                                              2), // Add a subtle shadow
+                                                        ),
+                                                      ],
+                                                      border: Border.all(
+                                                        color: const Color(
+                                                            0xFF00B71D),
+                                                        width: 2,
+                                                      ),
+                                                    ),
+                                                    child: ListTile(
+                                                      title: Column(
+                                                        children: [
+                                                          Text(
+                                                            title,
+                                                            style: const TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color: Color(
+                                                                    0xFF00CE2D)),
+                                                          ),
+                                                          // Image.network(
+                                                          //   imageUrl,
+                                                          //   height: 160,
+                                                          //   width: 160,
+                                                          // ),
+                                                        ],
+                                                      ),
+                                                      subtitle: Text(
+                                                        content,
+                                                        style: const TextStyle(
+                                                            fontSize: 18),
+                                                      ),
+                                                    ),
+                                                  )),
+                                            ],
+                                          )
+                                        : GestureDetector(
+                                            onTap: () async {
+                                              final resourceUrl = note[
+                                                  'ResourceLink']; // Assuming the article URL is available
+                                              if (await canLaunchUrlString(
+                                                  resourceUrl)) {
+                                                await launchUrlString(
+                                                    resourceUrl);
+                                              }
+                                            },
+                                            child: Container(
+                                              margin: const EdgeInsets.all(
+                                                  5.0), // Add vertical spacing
+                                              decoration: BoxDecoration(
+                                                color: const Color(
+                                                    0xFFB4FFC0), // Set your desired background color
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10.0), // Rounded corners
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    blurRadius: 5,
+                                                    color: Colors.black26,
+                                                    offset: Offset(2,
+                                                        2), // Add a subtle shadow
+                                                  ),
+                                                ],
+                                                border: Border.all(
+                                                  color:
+                                                      const Color(0xFF00B71D),
+                                                  width: 2,
+                                                ),
+                                              ),
+                                              child: ListTile(
+                                                title: Column(
+                                                  children: [
+                                                    Text(
+                                                      title,
+                                                      style: const TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: Color(
+                                                              0xFF00CE2D)),
+                                                    ),
+                                                    // Image.network(
+                                                    //   imageUrl,
+                                                    //   height: 160,
+                                                    //   width: 160,
+                                                    // ),
+                                                  ],
+                                                ),
+                                                subtitle: Text(
+                                                  content,
+                                                  style: const TextStyle(
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ));
+                              },
+                            );
+                          },
+                        ), // NOTES
                         Positioned(
-                            child: Container(
-                          width: double.infinity,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                themeData().backgroundColor.withOpacity(
-                                    0), // Transparent at the bottom
-                                themeData().backgroundColor, // Green at the top
-                              ],
+                          child: Container(
+                            width: double.infinity,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  themeData().backgroundColor.withOpacity(
+                                      0), // Transparent at the bottom
+                                  themeData()
+                                      .backgroundColor, // Green at the top
+                                ],
+                              ),
                             ),
                           ),
-                        )),
+                        ), // FADING EFFECT
                       ],
                     ),
                   ),
-                ),
+                ), // NOTES PART OF THE SCREEN
               ],
             ),
           ),
@@ -393,7 +370,7 @@ class _DiscoverScreenState extends State<NotesScreen> {
               function: () => Navigator.pop(context),
               type: GenericButtonType.generic, // Set your desired color
             ),
-          ),
+          ), // BACK BUTTON
           GuideSheet(currentScreen: 'NotesScreen'),
         ],
       ),

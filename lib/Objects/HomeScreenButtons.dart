@@ -7,9 +7,10 @@ class HomeScreenButton extends StatelessWidget {
   final String text;
   final IconData icon;
   final String orientation; // 'horizontal' or 'vertical'
-  final String route;
+  final String route; // VALUES FROM ROUTE MAP
 
-  HomeScreenButton({
+  const HomeScreenButton({
+    super.key,
     required this.flex,
     required this.color,
     required this.strokeColor,
@@ -40,7 +41,7 @@ class HomeScreenButton extends StatelessWidget {
                     color: Colors.grey.withOpacity(0.3), // Shadow color
                     spreadRadius: 5, // Spread radius
                     blurRadius: 10, // Blur radius
-                    offset: Offset(0, 4), // Shadow offset (x, y)
+                    offset: const Offset(0, 4), // Shadow offset (x, y)
                   ),
                 ],
               ),
@@ -52,12 +53,12 @@ class HomeScreenButton extends StatelessWidget {
                               Icon(
                                 icon,
                                 size: 50,
-                                color: Color(0xFF3C3C3C),
+                                color: const Color(0xFF3C3C3C),
                               ),
-                              SizedBox(width: 10, height: 10),
+                              const SizedBox(width: 10, height: 10),
                               Text(
                                 text,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w900,
                                   color: Color(0xFF3C3C3C),
@@ -70,12 +71,12 @@ class HomeScreenButton extends StatelessWidget {
                               Icon(
                                 icon,
                                 size: 50,
-                                color: Color(0xFF3C3C3C),
+                                color: const Color(0xFF3C3C3C),
                               ),
-                              SizedBox(width: 10, height: 10),
+                              const SizedBox(width: 10, height: 10),
                               Text(
                                 text,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w900,
                                   color: Color(0xFF3C3C3C),

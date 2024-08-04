@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:email_validator/email_validator.dart';
 
 class TextInputField extends StatefulWidget {
@@ -6,7 +7,7 @@ class TextInputField extends StatefulWidget {
   final bool isPassword;
   final TextEditingController controller;
 
-  TextInputField({
+  const TextInputField({super.key,
     required this.label,
     required this.isPassword,
     required this.controller,
@@ -17,12 +18,15 @@ class TextInputField extends StatefulWidget {
 }
 
 class _TextInputFieldState extends State<TextInputField> {
-  Color currentBorderColor = Colors.green; // Initialize with green
+  Color currentBorderColor = Colors.green; // STARTS OFF AS GREEN
+
+  // STATE VARIABLE
   bool error = false;
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: widget.isPassword,
+      obscureText: widget.isPassword, // CHECKS IF ITS A PASSWORD
       controller: widget.controller,
       textAlign: TextAlign.center,
       textAlignVertical: TextAlignVertical.center,
@@ -31,14 +35,14 @@ class _TextInputFieldState extends State<TextInputField> {
         alignLabelWithHint: true,
         filled: true,
         fillColor: Colors.white,
-        labelStyle: TextStyle(
-          color: Color(0xFF3C3C3C), // Set your desired color here
-          fontSize: 18.0, // Optional: adjust font size
-          fontWeight: FontWeight.w400, // Optional: adjust font weight
+        labelStyle: const TextStyle(
+          color: Color(0xFF3C3C3C),
+          fontSize: 18.0,
+          fontWeight: FontWeight.w400,
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: error ? Color(0xFFFF0000) : Color(0xFFD9D9D9),
+            color: error ? const Color(0xFFFF0000) : const Color(0xFFD9D9D9),
             width: 3.0, // Adjust the border thickness here
           ),
           borderRadius: BorderRadius.circular(15),
@@ -46,39 +50,33 @@ class _TextInputFieldState extends State<TextInputField> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(
-              width: 2, color: error ? Color(0xFFFF0000) : Color(0xFFD9D9D9)),
+              width: 2, color: error ? const Color(0xFFFF0000) : const Color(0xFFD9D9D9)),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              width: 2, color: error ? Color(0xFFFF0000) : Color(0xFF00B71D)),
+              width: 2, color: error ? const Color(0xFFFF0000) : const Color(0xFF00B71D)),
           borderRadius: BorderRadius.circular(15.0),
         ),
       ),
       validator: (value) {
         if (value!.isEmpty && widget.label == 'Email') {
+          // IF THE EMAIL FIELD IS EMPTY, DON'T SHOW AN ERROR
           error = false;
           return null;
         } else if (!EmailValidator.validate(value) && widget.label == 'Email') {
+          // CAUGHT AN ERROR....
           setState(() {
             error = true;
-            //borderColor = Colors.red; // Set border color to red
           });
           return 'Enter a valid email address';
         } else {
+          // ERROR IS FIXED - CORRECT EMAIL FORMAT
           setState(() {
             error = false;
-            //borderColor = Colors.green; // Set border color to green
           });
           return null;
         }
       },
     );
-  }
-
-  // To change to red (e.g., on button press):
-  void changeBorderColorToRed() {
-    setState(() {
-      currentBorderColor = Colors.red;
-    });
   }
 }

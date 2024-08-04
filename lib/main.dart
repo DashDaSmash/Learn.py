@@ -1,11 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import 'package:learn_py/Screens/DiscoverScreen.dart';
 import 'package:learn_py/Screens/NotesScreen.dart';
-import 'package:learn_py/Screens/PasswordSetupScreen.dart';
 import 'package:learn_py/Screens/QuizCatalogScreen.dart';
 import 'package:learn_py/Screens/QuizScreen.dart';
 import 'package:learn_py/Screens/PlaygroundScreen.dart';
@@ -20,10 +23,8 @@ import 'Screens/Paypal.dart';
 import 'Screens/LicenseAndCreditsScreen.dart';
 import 'Screens/EmailVerificationScreen.dart';
 
-//TODO: Guide user after registration
-
-//TODO:    CHnage app icon and splash screen
-
+// FOLLOWING DATA TYPE IS USED TO IDENTIFY WHAT KIND OF BUTTON SHOULD BE PLACED
+// THERE ARE PRESETS FOR EACH TYPE IN ThemeData()
 enum GenericButtonType { generic, proceed, semiProceed, warning, semiWarning }
 
 String userEmail = '';
@@ -31,28 +32,30 @@ String displayName = '';
 Map<String, dynamic> fireStoreGuideSheetMap = {};
 
 void main() async {
+  // EVEN THOUGH THIS IS NOT THE BEST PRACTICE, WE RUN APP BEFORE ALL THE WIDGETS ARE BOUND.
+  // THE REASON IS THAT WE HAVE A SPLASH SCREEN WHICH HAS ITS WIDGETS BOUND ALREADY.
+  // BY THE TIME SPLASH SCREEN FINISHES, WE EXPECT THE APP TO BE READY AS IT IS INITIALIZED IN BACKGROUND.
   runApp(
     MaterialApp(
       initialRoute: '/', // Start with the FirstScreen
       routes: {
-        '/': (context) => SplashScreen(),
-        '/login': (context) => LoginScreen(),
-        '/emailVerify': (context) => EmailVerificationScreen(),
-        '/home': (context) => HomeScreen(),
-        '/profile': (context) => ProfileScreen(),
-        '/discover': (context) => DiscoverScreen(),
-        '/notes': (context) => NotesScreen(),
+        '/': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/emailVerify': (context) => const EmailVerificationScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/discover': (context) => const DiscoverScreen(),
+        '/notes': (context) => const NotesScreen(),
         '/quiz': (context) {
           final args = ModalRoute.of(context)?.settings.arguments;
           final quizId = args as int;
           return QuizScreen(quizId: quizId);
         },
-        '/quizCatalog': (context) => QuizCatalogScreen(),
-        '/playground': (context) => PlaygroundScreen(),
-        '/external': (context) => ExternalLibrariesScreen(),
-        '/about': (context) => AboutScreen(),
-        '/registration': (context) => RegistrationScreen(),
-        '/password': (context) => PasswordSetupScreen(),
+        '/quizCatalog': (context) => const QuizCatalogScreen(),
+        '/playground': (context) => const PlaygroundScreen(),
+        '/external': (context) => const ExternalLibrariesScreen(),
+        '/about': (context) => const AboutScreen(),
+        '/registration': (context) => const RegistrationScreen(),
         '/grading': (context) {
           final args = ModalRoute.of(context)?.settings.arguments;
           if (args is Map<String, int>) {
@@ -64,42 +67,52 @@ void main() async {
             return Container(); // Replace with appropriate widget
           }
         },
-        '/donate': (context) => PaypalPayment(),
+        '/donate': (context) => const PaypalPayment(),
         '/credits': (context) => LiscenseAndCredits(),
       },
     ),
   );
   WidgetsFlutterBinding.ensureInitialized();
+  // THIS APP IS MADE TO WORK IN PORTRAIT MODE AT ALL TIMES
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My App',
+      // THE FOLLOWING CODE LISTENS TO STREAM FOR ANY CHANGES IN FIREBASE AUTHENTICATION
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
             final user = snapshot.data;
             if (user == null) {
-              // User is not logged in. Show the login screen.
-              return LoginScreen();
+              // NOT LOGGED IN
+              return const LoginScreen();
             } else if (user.emailVerified) {
-              print('User email: ${user.email}');
               userEmail = user.email!;
-              // User is logged in. Navigate to the home page.
-
-              // Show content for verified users
-              return HomeScreen();
+              // LOGGED IN WITH VERIFIED EMAIL
+              return const HomeScreen();
             } else {
-              // Show content for unverified users
-              return EmailVerificationScreen();
+              // LOGGED IN BUT EMAIL NOT VERIFIED YET
+              return const EmailVerificationScreen();
             }
           }
 
-          // While the connection state is not active, show a loading indicator.
-          return CircularProgressIndicator();
+          // WHEN CONNECTION IS NOT ACTIVE SHOW LOADING SCREEN
+          return Center(
+            child: LoadingAnimationWidget.threeRotatingDots(
+              color: const Color(0xFF80FE94),
+              size: 30.0,
+            ),
+          );
         },
       ),
     );
@@ -107,18 +120,23 @@ class MyApp extends StatelessWidget {
 }
 
 class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
+  // THIS SCREEN IS SHOWN BEFORE USER GO TO HOME SCREEN.
+  // BEFORE THIS, A FAKE SPLASH SCREEN IS SHOWN
   @override
   Widget build(BuildContext context) {
     return FlutterSplashScreen.gif(
-      gifPath: 'assets/Learn.py.gif', // Path to your GIF
+      gifPath: 'assets/Learn.py.gif',
       backgroundColor: Colors.white,
-      gifWidth: 500, // Width of the GIF
-      gifHeight: 500, // Height of the GIF
+      gifWidth: 500,
+      gifHeight: 500,
       useImmersiveMode: true,
-      nextScreen: MyApp(), // Your next screen after the splash
+      nextScreen: const MyApp(),
       asyncNavigationCallback: () async {
-        await Future.delayed(Duration(milliseconds: 4000));
+        await Future.delayed(const Duration(milliseconds: 4000));
         await Firebase.initializeApp();
+        // APP CHECK IS NOT FULLY CONFIGURED YET
         await FirebaseAppCheck.instance.activate(
           // You can also use a `ReCaptchaEnterpriseProvider` provider instance as an
           // argument for `webProvider`

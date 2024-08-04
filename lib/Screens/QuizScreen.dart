@@ -1,12 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:learn_py/Objects/GuideSheet.dart';
-import 'package:learn_py/ThemeData.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:learn_py/Objects/GenericButton.dart';
-import 'package:learn_py/Objects/QuizQuestion.dart';
 import 'package:get/get.dart';
 
+import 'package:learn_py/Objects/GuideSheet.dart';
+import 'package:learn_py/ThemeData.dart';
+import 'package:learn_py/Objects/GenericButton.dart';
+import 'package:learn_py/Objects/QuizQuestion.dart';
 import '../main.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class QuizScreen extends StatefulWidget {
 
   final int quizId;
 
-  QuizScreen({required this.quizId});
+  QuizScreen({super.key, required this.quizId});
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -35,7 +36,7 @@ class _QuizScreenState extends State<QuizScreen> {
           widget.questionController.totalQuestions;
     }
 
-    return new LinearPercentIndicator(
+    return LinearPercentIndicator(
       width: MediaQuery.of(context).size.width - 50,
       animation: true,
       lineHeight: 10.0,
@@ -43,12 +44,11 @@ class _QuizScreenState extends State<QuizScreen> {
       percent: Progress!,
       // center: Text("90.0%"),
       linearStrokeCap: LinearStrokeCap.roundAll,
-      progressColor: Color(0xFF80FE94),
+      progressColor: const Color(0xFF80FE94),
     );
   }
 
   void _showBottomSheet(BuildContext context) {
-    print('Bottom modal sheet coming right up....');
     showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
@@ -60,11 +60,11 @@ class _QuizScreenState extends State<QuizScreen> {
                 color: Colors.red,
                 width: 1.0,
               ),
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20.0),
                 topRight: Radius.circular(20.0),
               ),
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 colors: [Color(0xFFFFD0D0), Colors.white],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -86,7 +86,7 @@ class _QuizScreenState extends State<QuizScreen> {
                         'Reallyyyy?',
                         style: themeData().genericTextStyle,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: GenericButton(
@@ -186,7 +186,7 @@ class _QuizScreenState extends State<QuizScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox.shrink(),
+                            const SizedBox.shrink(),
                             Text(
                               'You have answered all the questions!\nYou may proceed to grading screen now',
                               style: themeData().genericBigTextStyle,
@@ -199,7 +199,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                         widget.questionController
                                             .totalQuestions) *
                                     100;
-                                print('score is $score');
+
                                 Navigator.of(context).pop();
                                 Navigator.of(context, rootNavigator: true)
                                     .pushNamed('/grading', arguments: {
@@ -231,7 +231,6 @@ class Controller extends GetxController {
   var totalQuestions = 1;
 
   void nextQuestion(questionCount, context, isAnswerCorrect) {
-    print('there are only $questionCount questions in the firestore');
     questionsCompleted++;
     questionId++;
 
@@ -246,7 +245,6 @@ class Controller extends GetxController {
   }
 
   void resetQuizScreen() {
-    print('resetting question screen');
     questionId = 1;
     questionsCompleted = 0;
     questionsGotCorrect = 0;

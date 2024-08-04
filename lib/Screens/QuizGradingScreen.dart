@@ -1,10 +1,11 @@
-import 'package:countup/countup.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'package:countup/countup.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+
 import 'package:learn_py/ThemeData.dart';
 import 'package:learn_py/main.dart';
-import 'package:get/get.dart';
 import '../Objects/GenericButton.dart';
 import '../Objects/GradingScreenMessage.dart';
 import 'QuizScreen.dart';
@@ -14,7 +15,8 @@ class QuizGradingScreen extends StatefulWidget {
   final int quizId;
   final int score;
 
-  QuizGradingScreen({required this.score, required this.quizId});
+  const QuizGradingScreen(
+      {super.key, required this.score, required this.quizId});
 
   @override
   State<QuizGradingScreen> createState() => _QuizGradingScreenState();
@@ -23,23 +25,23 @@ class QuizGradingScreen extends StatefulWidget {
 class _QuizGradingScreenState extends State<QuizGradingScreen> {
   bool? userPassedQuiz;
   final questionController = Get.put(Controller());
+
   Future<void> updateQuizScore() async {
     final userRef =
         FirebaseFirestore.instance.collection('users').doc(userEmail);
     final userDoc = await userRef.get();
 
-    // widget.fireStoreQuizMap!['${widget.quizId}'] = widget.score;
-
-    // widget.fireStoreQuizMap {
-    //   '${widget.quizId}': widget.score,
-    // };
     Map<String, dynamic> fireStoreQuizMap = userDoc.data()?['QuizScores'];
+
+    // NEXT QUIZ IS UNLOCKED ONLY IF USER PASSES QUIZ
+    int unlockedQuiz = userDoc.data()?['LastUnlockedQuiz'];
+    unlockedQuiz == widget.quizId ? unlockedQuiz++ : {};
 
     fireStoreQuizMap['${widget.quizId}'] = widget.score;
 
     if (userPassedQuiz!) {
       await userRef.update({
-        'LastUnlockedQuiz': widget.quizId + 1, // Set the unlocked quiz number
+        'LastUnlockedQuiz': unlockedQuiz, // Set the unlocked quiz number
         'QuizScores':
             fireStoreQuizMap // Initialize quiz scores (assuming quiz 1)
       });
@@ -63,7 +65,7 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: userPassedQuiz!
-                ? [Colors.white, Color(0xFF00FF29)]
+                ? [Colors.white, const Color(0xFF00FF29)]
                 : [Colors.white, Colors.red],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -72,23 +74,23 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
+            const Expanded(
               flex: 1,
-              child: Container(
+              child: SizedBox(
                 height: double.infinity,
                 width: double.infinity,
               ),
-            ), //Just to fill the space
+            ), //TO FILL THE SPACE
             Expanded(
               flex: 3,
-              child: Container(
+              child: SizedBox(
                 height: double.infinity,
                 width: double.infinity,
                 child: TextEnlargementAnimation(
                   userPassedQuiz: userPassedQuiz!,
                 ),
               ),
-            ),
+            ), // ANIMATED TEXT
             Expanded(
               flex: 3,
               child: Column(
@@ -112,11 +114,11 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
                         Countup(
                           begin: 0,
                           end: widget.score.toDouble(),
-                          duration: Duration(seconds: 2),
+                          duration: const Duration(seconds: 2),
                           separator: ',',
-                          style: themeData().GradingScreenScoreTextStyle,
+                          style: themeData().gradingScreenScoreTextStyle,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
                         Column(
@@ -136,7 +138,7 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
                   ),
                 ],
               ),
-            ),
+            ), // SCORE
             Expanded(
               flex: 1,
               child: Column(
@@ -156,7 +158,7 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
                   ),
                 ],
               ),
-            ),
+            ), // CONTINUE BUTTON
           ],
         ),
       ),

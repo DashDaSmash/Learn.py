@@ -1,11 +1,15 @@
+// EVEN THOUGH THIS SCREEN WAS PROPOSED TO BE DYNAMICALLY FETCHED USING GEMINI AI OR BING SEARCH, TO SUIT THE PROJECT DEADLINE, FINALLY I DECIDED TO LEAVE IT STATIC CONSTANT
+
 import 'package:flutter/material.dart';
 import 'package:learn_py/ThemeData.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../Objects/GenericButton.dart';
 import '../main.dart';
 
 class ExternalLibrariesScreen extends StatefulWidget {
+  const ExternalLibrariesScreen({super.key});
+
   @override
   _ExternalLibrariesScreenState createState() =>
       _ExternalLibrariesScreenState();
@@ -13,6 +17,8 @@ class ExternalLibrariesScreen extends StatefulWidget {
 
 class _ExternalLibrariesScreenState extends State<ExternalLibrariesScreen> {
   List exLibItems = [
+    // ALL THE DETAILS ARE MANUALLY ENTERED HERE.
+    // RECOMMENDED TO USE A PYTHON SCRIPT TO AUTOMATE IN FUTURE
     {
       'name': 'Tkinter',
       'link': 'https://docs.python.org/3/library/tkinter.html',
@@ -121,7 +127,26 @@ class _ExternalLibrariesScreenState extends State<ExternalLibrariesScreen> {
     return Scaffold(
       backgroundColor: themeData().backgroundColor,
       appBar: AppBar(
-        title: Text('External Libraries'),
+        scrolledUnderElevation: 0.0,
+        elevation: 0.0,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: themeData().backgroundColor,
+        title: const Text(
+          'External Libraries',
+          style: TextStyle(
+            color: Color(0xFF00FF29),
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            shadows: [
+              Shadow(
+                color: Colors.grey,
+                offset: Offset(2, 2),
+                blurRadius: 6,
+              ),
+            ],
+          ),
+        ),
       ),
       body: Stack(
         children: [
@@ -131,15 +156,14 @@ class _ExternalLibrariesScreenState extends State<ExternalLibrariesScreen> {
               return index == 0
                   ? Column(
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         ListTile(
                           title: GestureDetector(
                             onTap: () async {
-                              if (await canLaunch(exLibItems[index]['link'])) {
-                                await launch(exLibItems[index]['link']);
-                              } else {
-                                print(
-                                    'Could not launch ${exLibItems[index]['link']}');
+                              if (await canLaunchUrlString(
+                                  exLibItems[index]['link'])) {
+                                await launchUrlString(
+                                    exLibItems[index]['link']);
                               }
                             },
                             child: Container(
@@ -157,11 +181,11 @@ class _ExternalLibrariesScreenState extends State<ExternalLibrariesScreen> {
                                 ],
                               ),
                               decoration: BoxDecoration(
-                                color: Color(
+                                color: const Color(
                                     0xFFB4FFC0), // Set your desired background color
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Rounded corners
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                     blurRadius: 5,
                                     color: Colors.black26,
@@ -169,7 +193,7 @@ class _ExternalLibrariesScreenState extends State<ExternalLibrariesScreen> {
                                   ),
                                 ],
                                 border: Border.all(
-                                  color: Color(0xFF00B71D),
+                                  color: const Color(0xFF00B71D),
                                   width: 2,
                                 ),
                               ),
@@ -184,12 +208,10 @@ class _ExternalLibrariesScreenState extends State<ExternalLibrariesScreen> {
                             ListTile(
                               title: GestureDetector(
                                 onTap: () async {
-                                  if (await canLaunch(
+                                  if (await canLaunchUrlString(
                                       exLibItems[index]['link'])) {
-                                    await launch(exLibItems[index]['link']);
-                                  } else {
-                                    print(
-                                        'Could not launch ${exLibItems[index]['link']}');
+                                    await launchUrlString(
+                                        exLibItems[index]['link']);
                                   }
                                 },
                                 child: Container(
@@ -207,11 +229,11 @@ class _ExternalLibrariesScreenState extends State<ExternalLibrariesScreen> {
                                     ],
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Color(
+                                    color: const Color(
                                         0xFFB4FFC0), // Set your desired background color
                                     borderRadius: BorderRadius.circular(
                                         10.0), // Rounded corners
-                                    boxShadow: [
+                                    boxShadow: const [
                                       BoxShadow(
                                         blurRadius: 5,
                                         color: Colors.black26,
@@ -220,24 +242,23 @@ class _ExternalLibrariesScreenState extends State<ExternalLibrariesScreen> {
                                       ),
                                     ],
                                     border: Border.all(
-                                      color: Color(0xFF00B71D),
+                                      color: const Color(0xFF00B71D),
                                       width: 2,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                            SizedBox(height: 50),
+                            const SizedBox(height: 50),
                           ],
                         )
                       : ListTile(
                           title: GestureDetector(
                             onTap: () async {
-                              if (await canLaunch(exLibItems[index]['link'])) {
-                                await launch(exLibItems[index]['link']);
-                              } else {
-                                print(
-                                    'Could not launch ${exLibItems[index]['link']}');
+                              if (await canLaunchUrlString(
+                                  exLibItems[index]['link'])) {
+                                await launchUrlString(
+                                    exLibItems[index]['link']);
                               }
                             },
                             child: Container(
@@ -255,11 +276,11 @@ class _ExternalLibrariesScreenState extends State<ExternalLibrariesScreen> {
                                 ],
                               ),
                               decoration: BoxDecoration(
-                                color: Color(
+                                color: const Color(
                                     0xFFB4FFC0), // Set your desired background color
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Rounded corners
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                     blurRadius: 5,
                                     color: Colors.black26,
@@ -267,7 +288,7 @@ class _ExternalLibrariesScreenState extends State<ExternalLibrariesScreen> {
                                   ),
                                 ],
                                 border: Border.all(
-                                  color: Color(0xFF00B71D),
+                                  color: const Color(0xFF00B71D),
                                   width: 2,
                                 ),
                               ),

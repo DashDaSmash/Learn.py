@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
-import 'package:learn_py/ThemeData.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import 'package:learn_py/ThemeData.dart';
 import '../Objects/GenericButton.dart';
 import '../Objects/TextInputField.dart';
 import '../main.dart';
@@ -11,6 +11,8 @@ import '../main.dart';
 // TODO:      If that email already has an account, send it to login
 
 class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
+
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
@@ -47,17 +49,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         email: emailController.text,
         password: passwordController.text,
       );
+      final user = FirebaseAuth.instance.currentUser;
+      await user!.updateProfile(
+          displayName:
+              '${firstNameController.text} ${lastNameController.text}');
 
       // SEND EMAIL VERIFICATION TO USER
       await _auth.currentUser!.sendEmailVerification();
-      print('Verification email sent successfully!');
 
       // ONCE DONE, EXECUTE THE FOLLOWING
       registrationComplete();
     } catch (e) {
-      print('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration failed. Please try again.')),
+        const SnackBar(content: Text('Registration failed. Please try again.')),
       );
     }
 
@@ -123,14 +127,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 color: Colors.white.withOpacity(0.5),
                 child: Center(
                   child: LoadingAnimationWidget.threeRotatingDots(
-                    color: Color(0xFF80FE94), // Set your desired color
-                    size: 30.0, // Set the size of the animation
+                    color: const Color(0xFF80FE94),
+                    size: 30.0,
                   ),
                 ),
               ) // LOADING ICON (FULL SCREEN)
             : Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
+                child: SizedBox(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
@@ -150,29 +154,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   width: 200,
                                 ), // LOGO ABOVE INPUT FIELDS
                                 emptyFieldWarning
-                                    ? Text(
+                                    ? const Text(
                                         'Please fill all the fields below',
                                         style: TextStyle(color: Colors.red),
                                       ) // THIS WARNING ONLY SHOWS UP IF FIELDS ARE EMPTY AND USER CLICKS REGISTER BUTTON
-                                    : SizedBox.shrink(),
+                                    : const SizedBox.shrink(),
                                 TextInputField(
                                   label: 'First Name',
                                   isPassword: false,
                                   controller: firstNameController,
                                 ), // FIRST NAME INPUT
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 TextInputField(
                                   label: 'Last Name',
                                   isPassword: false,
                                   controller: lastNameController,
                                 ), // LAST NAME INPUT
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 TextInputField(
                                   label: 'Email',
                                   isPassword: false,
                                   controller: emailController,
                                 ), // EMAIL INPUT
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 TextFormField(
                                   obscureText: true,
                                   controller: passwordController,
@@ -183,7 +187,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     alignLabelWithHint: true,
                                     filled: true,
                                     fillColor: Colors.white,
-                                    labelStyle: TextStyle(
+                                    labelStyle: const TextStyle(
                                       color: Color(
                                           0xFF3C3C3C), // Set your desired color here
                                       fontSize:
@@ -196,8 +200,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                         color: passNotStrong &&
                                                 passwordController
                                                     .text.isNotEmpty
-                                            ? Color(0xFFFF0000)
-                                            : Color(0xFFD9D9D9),
+                                            ? const Color(0xFFFF0000)
+                                            : const Color(0xFFD9D9D9),
                                         width:
                                             3.0, // Adjust the border thickness here
                                       ),
@@ -210,8 +214,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           color: passNotStrong &&
                                                   passwordController
                                                       .text.isNotEmpty
-                                              ? Color(0xFFFF0000)
-                                              : Color(0xFFD9D9D9)),
+                                              ? const Color(0xFFFF0000)
+                                              : const Color(0xFFD9D9D9)),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
@@ -219,8 +223,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           color: passNotStrong &&
                                                   passwordController
                                                       .text.isNotEmpty
-                                              ? Color(0xFFFF0000)
-                                              : Color(0xFF00B71D)),
+                                              ? const Color(0xFFFF0000)
+                                              : const Color(0xFF00B71D)),
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
                                   ),
@@ -244,7 +248,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           alignLabelWithHint: true,
                                           filled: true,
                                           fillColor: Colors.white,
-                                          labelStyle: TextStyle(
+                                          labelStyle: const TextStyle(
                                             color: Color(
                                                 0xFF3C3C3C), // Set your desired color here
                                             fontSize:
@@ -255,8 +259,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                               color: passComfirmError
-                                                  ? Color(0xFFFF0000)
-                                                  : Color(0xFFD9D9D9),
+                                                  ? const Color(0xFFFF0000)
+                                                  : const Color(0xFFD9D9D9),
                                               width:
                                                   2, // Adjust the border thickness here
                                             ),
@@ -269,15 +273,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             borderSide: BorderSide(
                                                 width: 2,
                                                 color: passComfirmError
-                                                    ? Color(0xFFFF0000)
-                                                    : Color(0xFFD9D9D9)),
+                                                    ? const Color(0xFFFF0000)
+                                                    : const Color(0xFFD9D9D9)),
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 width: 2,
                                                 color: passComfirmError
-                                                    ? Color(0xFFFF0000)
-                                                    : Color(0xFF00B71D)),
+                                                    ? const Color(0xFFFF0000)
+                                                    : const Color(0xFF00B71D)),
                                             borderRadius:
                                                 BorderRadius.circular(15.0),
                                           ),
@@ -296,11 +300,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     : Text(
                                         passwordWarning), // WARNING OF PASSWORD CRITERIA
                                 passComfirmError
-                                    ? Text(
+                                    ? const Text(
                                         'Looks like they don\'t match :(',
                                         style: TextStyle(color: Colors.red),
                                       ) // WARNING TEXT OF PASSWORDS NOT MATCHING
-                                    : SizedBox.shrink(),
+                                    : const SizedBox.shrink(),
                               ],
                             ), // LOGO + INPUT FIELDS
                           ), // LOGO + INPUT FIELDS
@@ -318,9 +322,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   lastNameController.text.isNotEmpty) {
                                 // ALL THE RESTRICTIONS ARE FULFILLED AND READY TO REGISTER
                                 //todo: SETUP displayName VARIBLE TO UPLOAD TO FIRESTORE
-                                displayName = firstNameController.text +
-                                    ' ' +
-                                    lastNameController.text;
+                                displayName = '${firstNameController.text} ${lastNameController.text}';
                                 registerUser();
                               } else {
                                 emptyFieldWarning = true;

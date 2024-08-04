@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
+
 import 'package:learn_py/ThemeData.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../Objects/GenericButton.dart';
 import '../main.dart';
 
@@ -67,7 +68,7 @@ class LiscenseAndCredits extends StatelessWidget {
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: themeData().backgroundColor,
-        title: Text(
+        title: const Text(
           'License and Credits',
           style: TextStyle(
             color: Color(0xFF00FF29),
@@ -92,7 +93,9 @@ class LiscenseAndCredits extends StatelessWidget {
                   // WITH THIS LOOP, WE USE SAME WIDGETS TO GENERATE AND SHOW DETAILS IN COLUMNS
                   Column(
                     children: [
-                      i == 0 ? SizedBox(height: 50) : SizedBox.shrink(),
+                      i == 0
+                          ? const SizedBox(height: 50)
+                          : const SizedBox.shrink(),
                       Text(
                         LicenseAndCreditsData[i]['title'],
                         style: themeData().genericBigTextStyle,
@@ -104,7 +107,7 @@ class LiscenseAndCredits extends StatelessWidget {
                               width: 200,
                               height: 200,
                             )
-                          : SizedBox.shrink(), // IMAGE
+                          : const SizedBox.shrink(), // IMAGE
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Text(
@@ -115,25 +118,23 @@ class LiscenseAndCredits extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () async {
-                          if (await canLaunch(
+                          if (await canLaunchUrlString(
                               LicenseAndCreditsData[i]['link'])) {
-                            await launch(LicenseAndCreditsData[i]['link']);
-                          } else {
-                            print(
-                                'Could not launch ${LicenseAndCreditsData[i]['link']}');
+                            await launchUrlString(
+                                LicenseAndCreditsData[i]['link']);
                           }
                         },
                         child: Text(
                           LicenseAndCreditsData[i]['link'],
                         ),
                         style: ButtonStyle(
-                          overlayColor:
-                              MaterialStateProperty.all(Color(0xFF80FE94)),
+                          overlayColor: MaterialStateProperty.all(
+                              const Color(0xFF80FE94)),
                         ),
                       ), // LINK
                       i != LicenseAndCreditsData.length - 1
-                          ? Divider()
-                          : SizedBox(height: 100),
+                          ? const Divider()
+                          : const SizedBox(height: 100),
                     ],
                   ), // ITEMS IN EACH SET OF DETAILS
               ],

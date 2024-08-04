@@ -1,21 +1,31 @@
+// GUIDE SCREEN ALLOWS DEVS TO HELP USER NAVIGATE THE APP
+// SCREEN IS BLACKENED EXCEPT A CERTAIN PLACE TO ISOLATE THAT PART (LIKE A SPOTLIGHT)
+// ANY TEXT OR WIDGET CAN BE DIRECTLY SHOWN ON THIS
+//
 // VALUES FOR CURRENT SCREEN STRING:
 //                  DiscoveryScreen
+//                  QuizScreen
+//                  ProfileScreen
+//                  QuizCatalogScreen
+//                  AboutScreen
+//                  NotesScreen
 
-//TODO: make sure at add all guide screens to user registration
+// ignore_for_file: file_names, camel_case_types, non_constant_identifier_names
+
+import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:learn_py/Objects/GenericButton.dart';
-import 'package:learn_py/ThemeData.dart';
 
+import 'package:learn_py/ThemeData.dart';
 import '../main.dart';
+import 'package:learn_py/Objects/GenericButton.dart';
 
 // ignore: must_be_immutable
 class GuideSheet extends StatefulWidget {
   String currentScreen = 'DiscoveryScreen';
-  Widget guideSheetWidget = SizedBox.shrink();
+  Widget guideSheetWidget = const SizedBox.shrink();
 
-  GuideSheet({required this.currentScreen});
+  GuideSheet({super.key, required this.currentScreen});
 
   @override
   State<GuideSheet> createState() => _GuideSheetState();
@@ -36,6 +46,7 @@ class _GuideSheetState extends State<GuideSheet> {
       // AND ALSO IF WE SHOULD SHOW GUIDE SHEET
       if (key == widget.currentScreen && fireStoreGuideSheetMap[key]) {
         // CHECK FOR SEPARATE VALUES
+        // SWITCH CASE IS NOT USED HERE FOR LOGICAL REASONS
         if (widget.currentScreen == 'DiscoveryScreen') {
           assignVariables(guideData().DiscoveryScreen);
           guideSheetStamp(guideData().DiscoveryScreen);
@@ -60,10 +71,12 @@ class _GuideSheetState extends State<GuideSheet> {
   } // TO CHECK IF WE SHOULD SHOW GUIDE SHEET FOR THIS SCREEN
 
   void guideSheetStamp(var guideDataSet) {
-    print('Guide sheet stamp is called');
     // THE FOLLOWING WIDGET IS TO COVER THE ENTIRE SCREEN SO WE CAN LAY OUT CHILDREN WIDGET
     widget.guideSheetWidget = GestureDetector(
+      // THE GUIDE SHEET ITSELF IS CLICKABLE FOR BETTER ACCESSIBILITY
       onTap: () {
+        // ON TAP, GOTO NEXT PAGE
+        // IF ITS THE LAST PAGE, THEN CLOSE SHEET AND SAVE IT IN FIRESTORE
         if (currentPage < totalPages!) {
           currentPage++;
           guideSheetStamp(guideDataSet);
@@ -72,7 +85,7 @@ class _GuideSheetState extends State<GuideSheet> {
           guideComplete();
         }
       },
-      child: Container(
+      child: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Stack(
@@ -84,7 +97,7 @@ class _GuideSheetState extends State<GuideSheet> {
                 // LAYERS WITH BLENDING ENABLED
                 children: [
                   Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.black,
                         backgroundBlendMode: BlendMode.dstOut),
                   ), // DARK BACKGROUND
@@ -112,8 +125,6 @@ class _GuideSheetState extends State<GuideSheet> {
                           width: MediaQuery.of(context).size.width *
                               guideDataSet['spotlightSizeFraction'][currentPage]
                                   ['width'],
-                          // guideDataSet['spotlightSizeFraction'][currentPage]
-                          //     [guideSpotlightSize.width],
                           color: Colors.red,
                         ),
                       ),
@@ -124,7 +135,7 @@ class _GuideSheetState extends State<GuideSheet> {
             ), // SPOTLIGHT
             Padding(
               // THIS PADDING ALLOWS TEXT TO BE ON A COMFORTABLE PLACE
-              // TO BE CHANGED IN FUTURE
+              // IF ITS IN CENTER ALIGNMENT, THEN EXTRA PADDING IS ADDED TO AVOID OVERLAPPING WITH NAVIGATION BUTTONS
               padding:
                   guideDataSet['textPosition'][currentPage] == Alignment.center
                       ? const EdgeInsets.only(
@@ -144,7 +155,6 @@ class _GuideSheetState extends State<GuideSheet> {
               if (guideDataSet['pagesContainingWidgets'].contains(currentPage))
                 Padding(
                   // THIS PADDING ALLOWS WIDGET TO BE ON A COMFORTABLE PLACE
-                  // TO BE CHANGED IN FUTURE
                   padding: const EdgeInsets.only(
                       left: 60, right: 60, top: 100, bottom: 150),
                   child: Align(
@@ -158,8 +168,10 @@ class _GuideSheetState extends State<GuideSheet> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // BELOW WIDGET IS BACK BUTTON - PREVIOUS PAGE (ONLY SHOWN ON SECOND PAGE ONWARDS)
                     if (currentPage != 1)
                       ClipOval(
+                        // ICON BUTTON WIDGETS ARE MADE TO LOOK CIRCULAR HERE
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -171,7 +183,7 @@ class _GuideSheetState extends State<GuideSheet> {
                           ),
                           child: IconButton(
                             color: Colors.black,
-                            icon: Icon(Icons.chevron_left_rounded, size: 30),
+                            icon: const Icon(Icons.chevron_left_rounded, size: 30),
                             onPressed: () {
                               currentPage--;
                               guideSheetStamp(guideDataSet);
@@ -181,7 +193,8 @@ class _GuideSheetState extends State<GuideSheet> {
                         ),
                       )
                     else
-                      SizedBox.shrink(),
+                      const SizedBox.shrink(),
+                    // NEXT BUTTON IS SHOWN ONLY IF CURRENT PAGE IS NOT THE LAST PAGE
                     if (currentPage < totalPages!)
                       ClipOval(
                         child: Container(
@@ -194,8 +207,8 @@ class _GuideSheetState extends State<GuideSheet> {
                             shape: BoxShape.circle,
                           ),
                           child: IconButton(
-                            color: Color(0xFF00CE2D),
-                            icon: Icon(Icons.chevron_right_rounded, size: 30),
+                            color: const Color(0xFF00CE2D),
+                            icon: const Icon(Icons.chevron_right_rounded, size: 30),
                             onPressed: () {
                               currentPage++;
                               guideSheetStamp(guideDataSet);
@@ -204,11 +217,12 @@ class _GuideSheetState extends State<GuideSheet> {
                           ),
                         ),
                       ),
+                    // DONE BUTTON IS SHOWN ONLY ON THE LAST PAGE
                     if (currentPage == totalPages)
                       ClipOval(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Color(0xFF80FE94),
+                            color: const Color(0xFF80FE94),
                             border: Border.all(
                               color: Colors.greenAccent.shade700,
                               width: 2.0,
@@ -217,7 +231,7 @@ class _GuideSheetState extends State<GuideSheet> {
                           ),
                           child: IconButton(
                             color: Colors.black54,
-                            icon: Icon(Icons.check_rounded, size: 30),
+                            icon: const Icon(Icons.check_rounded, size: 30),
                             onPressed: () {
                               guideComplete();
                             },
@@ -233,33 +247,26 @@ class _GuideSheetState extends State<GuideSheet> {
       ),
     );
     setState(() {});
-  } // THIS WIDGET IS USED TO DYNAMICALLY SHOW GUIDE SHEETS
+  } // STAMP - THIS WIDGET IS USED TO DYNAMICALLY SHOW GUIDE SHEETS
 
   Future<void> guideComplete() async {
-    print('Guide is complete now');
-    widget.guideSheetWidget = SizedBox.shrink();
+    // MAKE GUIDE SHEET DISAPPEAR
+    widget.guideSheetWidget = const SizedBox.shrink();
 
-    fireStoreGuideSheetMap[widget.currentScreen] = false;
-    print(fireStoreGuideSheetMap);
-    setState(() {});
+    setState(() {
+      fireStoreGuideSheetMap[widget.currentScreen] = false;
+    });
 
+    // FOLLOWING CODE IS TO UPDATE USER DOCUMENT IN FIRESTORE SO USER WON'T SEE GUIDE SHEET AGAIN
     final userRef =
         FirebaseFirestore.instance.collection('users').doc(userEmail);
 
     await userRef.update({'ShowGuideSheet': fireStoreGuideSheetMap});
-    print('done uploading ┏(-_-)┛┗(-_- )┓');
   } // THIS UPDATES FIRESTORE DATABASE SO GUIDE SHEET DOESNT SHOW UP AGAIN
-
-  @override
-  void initState() {
-    super.initState();
-    // FOLLOWING CALL MAKES SURE WE HAVE THE FIRESTORE MAP
-  }
 
   @override
   Widget build(BuildContext context) {
     checkGuideSheetForCurrentScreen();
-    print('Build has been called');
     // THIS IS THE VARIABLE WIDGET WE USE TO STORE GUIDE SHEET
     // THE REASON WHY WE USE A VARIABLE INSTEAD OF BUILDING COMPLETELY IS TO REDUCE WORKFLOW AND COMPLEXITY
     return widget.guideSheetWidget;
@@ -384,31 +391,31 @@ class guideData {
         children: [
           Text('Quiz to do ↴', style: themeData().guideScreenSmallTextStyle),
           GenericButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_forward_outlined,
               color: Colors.white,
             ),
-            label: 'quiz004',
+            label: 'quiz005',
             function: () {},
             type: GenericButtonType.proceed,
           ),
-          SizedBox(height: 20),
-          Text('Quizzes you have done already ↴',
+          const SizedBox(height: 20),
+          Text('Quizzes you have done already',
               style: themeData().guideScreenSmallTextStyle),
           GenericButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.check,
               color: Colors.green,
             ),
-            label: 'quiz005',
+            label: 'quiz004',
             function: () {},
             type: GenericButtonType.semiProceed,
           ),
-          SizedBox(height: 20),
-          Text('Quizzes that are locked yet ↴',
+          const SizedBox(height: 20),
+          Text('Quizzes that are locked yet',
               style: themeData().guideScreenSmallTextStyle),
           GenericButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.lock_outline_rounded,
               color: Colors.black54,
             ),

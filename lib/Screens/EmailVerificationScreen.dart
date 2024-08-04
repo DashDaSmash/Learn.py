@@ -1,3 +1,6 @@
+// AFTER GETTING REGISTERED WITH AN EMAIL, USER RECEIVES AN EMAIL CONFIRMATION
+// IF USER HAVEN'T VERIFIED THEIR EMAIL YET, THEN THEY'RE LOCKED IN THIS SCREEN
+
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +9,8 @@ import 'package:learn_py/ThemeData.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
+  const EmailVerificationScreen({super.key});
+
   @override
   _EmailVerificationScreenState createState() =>
       _EmailVerificationScreenState();
@@ -20,31 +25,28 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   }
 
   Future<void> checkVerificationStatus(BuildContext context) async {
+    // THIS VOID IS RUN PERIODICALLY TO CHECK USER'S EMAIL VERIFICATION STATUS
+    // AS SOON AS USER IS DONE VERIFYING, THIS REDIRECTS USER TO HOME SCREEN
     final FirebaseAuth _auth = FirebaseAuth.instance;
     await _auth.currentUser!.reload();
     if (_auth.currentUser!.emailVerified) {
-      // User is verified
-      // Implement your logic here (e.g., navigate to a different screen)
       Navigator.pop(context);
       Navigator.of(context, rootNavigator: true).pushNamed('/home');
-    } else {
-      // User is not verified
-      // You can display a message or take appropriate action
     }
   }
 
   @override
   void initState() {
     super.initState();
-    // Start the timer to check verification status every 30 seconds
-    verificationTimer = Timer.periodic(Duration(seconds: 3), (timer) {
+    // VERIFICATION STATUS IS CHECKED EVERY 3 SECONDS
+    verificationTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
       checkVerificationStatus(context);
     });
   }
 
   @override
   void dispose() {
-    // Cancel the timer when the widget is disposed
+    // TO SAVE DEVICE RESOURCES
     verificationTimer.cancel();
     super.dispose();
   }
@@ -61,36 +63,36 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               LoadingAnimationWidget.threeRotatingDots(
-                color: Color(0xFF80FE94), // Set your desired color
-                size: 100.0, // Set the size of the animation
+                color: const Color(0xFF80FE94),
+                size: 100.0,
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Text(
                 'We\'re waiting for you\nto verify your email',
                 style: themeData().genericBigTextStyle,
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               GestureDetector(
                 onTap: () {
                   resendEmailVerification();
                 },
-                child: Text(
+                child: const Text(
                   'Resend verification link',
                   style: TextStyle(color: Colors.red),
                 ),
-              ),
-              SizedBox(height: 10),
-              Text('or'),
-              SizedBox(height: 10),
+              ), // RESEND BUTTON
+              const SizedBox(height: 10),
+              const Text('or'),
+              const SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
                   FirebaseAuth.instance.signOut();
                 },
-                child: Text(
+                child: const Text(
                   'Use another account',
                   style: TextStyle(color: Colors.red),
                 ),
-              ),
+              ), // SWITCH ACCOUNT
             ],
           ),
         ),

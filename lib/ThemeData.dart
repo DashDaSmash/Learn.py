@@ -1,22 +1,20 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 class themeData {
-  Color backgroundColor = Color(0xFFECFFF0);
+  Color backgroundColor = const Color(0xFFECFFF0);
 
-  TextStyle genericTextStyle = TextStyle(
+  TextStyle genericTextStyle = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: 16,
   );
 
-  TextStyle genericBigTextStyle = TextStyle(
+  TextStyle genericBigTextStyle = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 20,
   );
 
-  TextStyle guideScreenBigTextStyle = TextStyle(
+  TextStyle guideScreenBigTextStyle = const TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 30,
       color: Colors.white,
@@ -28,7 +26,7 @@ class themeData {
         ),
       ]);
 
-  TextStyle guideScreenSmallTextStyle = TextStyle(
+  TextStyle guideScreenSmallTextStyle = const TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 20,
       color: Colors.white,
@@ -40,7 +38,7 @@ class themeData {
         ),
       ]);
 
-  TextStyle boldDigit = TextStyle(
+  TextStyle boldDigit = const TextStyle(
       fontWeight: FontWeight.w700,
       fontSize: 40,
       color: Color(0xFF00FF29),
@@ -57,7 +55,7 @@ class themeData {
         ),
       ]);
 
-  TextStyle BMSHeaderTextStyle = TextStyle(
+  TextStyle BMSHeaderTextStyle = const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 40,
     color: Colors.white,
@@ -75,13 +73,13 @@ class themeData {
     ],
   ); //Bottom Modal Sheet
 
-  TextStyle QuizQuestionTextStyle = TextStyle(
+  TextStyle quizQuestionTextStyle = const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 20,
     color: Colors.black54,
   );
 
-  TextStyle GradingScreenScoreTextStyle = TextStyle(
+  TextStyle gradingScreenScoreTextStyle = const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 100,
     color: Colors.white,
@@ -99,7 +97,7 @@ class themeData {
     ],
   );
 
-  TextStyle GradingScreenMessageTextStyle = TextStyle(
+  TextStyle gradingScreenMessageTextStyle = const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 100,
     color: Colors.white,
@@ -118,22 +116,22 @@ class themeData {
   Color genericButtonBorderColor = Colors.black;
 
   //for buttons that i want user to click on
-  Color proceedButtonLabelTextColor = Color(0xFF3C3C3C);
-  Color proceedButtonBackgroundColor = Color(0xFF80FE94);
-  Color proceedButtonBorderColor = Color(0xFF14AE5C);
+  Color proceedButtonLabelTextColor = const Color(0xFF3C3C3C);
+  Color proceedButtonBackgroundColor = const Color(0xFF80FE94);
+  Color proceedButtonBorderColor = const Color(0xFF14AE5C);
 
   //for buttons that i want user to click on - secondary
-  Color semiProceedButtonLabelTextColor = Color(0xFF00CE2D);
+  Color semiProceedButtonLabelTextColor = const Color(0xFF00CE2D);
   Color semiProceedButtonBackgroundColor = Colors.white;
   Color semiProceedButtonBorderColor = Colors.black;
 
   //for buttons that i warn user before click
-  Color warningButtonLabelTextColor = Color(0xFF000000);
-  Color warningButtonBackgroundColor = Color(0xFFFFD0D0);
-  Color warningButtonBorderColor = Color(0xFFFF0000);
+  Color warningButtonLabelTextColor = const Color(0xFF000000);
+  Color warningButtonBackgroundColor = const Color(0xFFFFD0D0);
+  Color warningButtonBorderColor = const Color(0xFFFF0000);
 
   //for buttons that i warn user before click - secondary
-  Color semiWarningButtonLabelTextColor = Color(0xFFFF0000);
+  Color semiWarningButtonLabelTextColor = const Color(0xFFFF0000);
   Color semiWarningButtonBackgroundColor = Colors.white;
   Color semiWarningButtonBorderColor = Colors.black;
 }

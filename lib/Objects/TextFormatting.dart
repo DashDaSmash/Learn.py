@@ -1,19 +1,21 @@
+// THIS CLASS ALLOWS A TEXT WITH FORMATTING SYMBOLS TO BE FORMATTED AS INTENDED
+
 import 'package:flutter/material.dart';
 
 class TextFormatting extends StatelessWidget {
   final String textWithFormattingSymbols;
-  final Color boldTextColor = Color(0xFF3C3C3C);
+  final Color boldTextColor = const Color(0xFF3C3C3C);
   final Color genericTextColor = Colors.black;
-  final Color headerTextColor = Color(0xFF00FF29);
-  final Color secondaryTextColor = Color(0xFF008615);
+  final Color headerTextColor = const Color(0xFF00FF29);
+  final Color secondaryTextColor = const Color(0xFF008615);
 
-  TextFormatting({required this.textWithFormattingSymbols});
+  const TextFormatting({super.key, required this.textWithFormattingSymbols});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: parseAndFormatText(textWithFormattingSymbols),
@@ -27,10 +29,12 @@ class TextFormatting extends StatelessWidget {
     final List<String> lines = text.split('\n');
 
     for (String line in lines) {
+      // APPLY FORMATTING LINE BY LINE
       final formattedLine = applyFormatting(line);
       formattedWidgets.add(formattedLine);
     }
 
+    // THE BELOW CODE IS THE FINAL OUTPUT - RICH TEXT
     return formattedWidgets;
   }
 
@@ -38,6 +42,7 @@ class TextFormatting extends StatelessWidget {
     final List<TextSpan> spans = [];
 
     while (line.isNotEmpty) {
+      // THE FOLLOWING CODE WILL APPLY FORMATTING BY IDENTIFYING FORMATTING SYMBOLS
       if (line.startsWith('**')) {
         final boldEnd = line.indexOf('**', 2);
         if (boldEnd != -1) {
@@ -121,7 +126,7 @@ class TextFormatting extends StatelessWidget {
         if (blockQuoteEnd != -1) {
           spans.add(TextSpan(
             text: line.substring(blockQuoteStart + 3, blockQuoteEnd),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontStyle: FontStyle.italic,
               color: Colors.blue,

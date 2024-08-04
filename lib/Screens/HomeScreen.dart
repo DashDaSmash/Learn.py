@@ -1,13 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:learn_py/Objects/HomeScreenButtons.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import 'package:learn_py/Objects/HomeScreenButtons.dart';
 import '../ThemeData.dart';
 import '../main.dart';
 
-//TODO:    MAKE HORIZONTAL VIEW AS WELL
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -19,6 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isDonefetchingGuideSheetMap = false;
 
   Future<void> setupUserDocumentInFirebase() async {
+    // IF USER IS NEW, THEN A NEW DOCUMENT IS CREATED UNDER THEIR EMAIL
+
     User? currentUser = FirebaseAuth.instance.currentUser;
 
     if (displayName == '')
@@ -29,38 +32,39 @@ class _HomeScreenState extends State<HomeScreen> {
     final DocumentReference docRef =
         FirebaseFirestore.instance.collection('users').doc(currentUser!.email);
 
-    docRef.get().then((DocumentSnapshot snapshot) async {
-      if (snapshot.exists) {
-        print('User exists!');
-        fetchVisitedScreens();
-      } else {
-        print('It\'s a new user');
-        // SETUP A FIRESTORE DOCUMENT WITH USER'S EMAIL AS DOC ID
-        // THIS IS REQUIRED FOR FURTHER FUNCTIONALITY
-        Map<String, dynamic> fireStoreGuideSheetMap = {
-          'Name': displayName,
-          'LastUnlockedQuiz': 1,
-          'QuizScores': {},
-          'ShowGuideSheet': {
-            'AboutScreen': true,
-            'DiscoveryScreen': true,
-            'HomeScreen': true,
-            'ProfileScreen': true,
-            'QuizCatalogScreen': true,
-            'QuizScreen': true,
-            'NotesScreen': true,
-          }
-        };
+    docRef.get().then(
+      (DocumentSnapshot snapshot) async {
+        if (snapshot.exists) {
+          fetchVisitedScreens();
+        } else {
+          // SETUP A FIRESTORE DOCUMENT WITH USER'S EMAIL AS DOC ID
+          // THIS IS REQUIRED FOR FURTHER FUNCTIONALITY
+          Map<String, dynamic> fireStoreGuideSheetMap = {
+            'Name': displayName,
+            'LastUnlockedQuiz': 1,
+            'QuizScores': {},
+            'ShowGuideSheet': {
+              'AboutScreen': true,
+              'DiscoveryScreen': true,
+              'HomeScreen': true,
+              'ProfileScreen': true,
+              'QuizCatalogScreen': true,
+              'QuizScreen': true,
+              'NotesScreen': true,
+            }
+          };
 
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(currentUser.email)
-            .set(fireStoreGuideSheetMap);
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(currentUser.email)
+              .set(fireStoreGuideSheetMap);
 
-        isDonefetchingGuideSheetMap = true;
-        setState(() {});
-      }
-    });
+          setState(() {
+            isDonefetchingGuideSheetMap = true;
+          });
+        }
+      },
+    );
   }
 
   Future<void> fetchVisitedScreens() async {
@@ -83,7 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Implement your home page UI here.
     return Stack(
       children: [
         Scaffold(
@@ -91,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             backgroundColor: themeData().backgroundColor,
             automaticallyImplyLeading: false,
-            title: Center(
+            title: const Center(
               child: Text(
                 'Learn.py',
                 style: TextStyle(
@@ -108,8 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
+          body: const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               // mainAxisAlignment: MainAxisAlignment.stretch,
@@ -143,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           route: '/profile'),
                     ],
                   ),
-                ),
+                ), // LEFT SIDE
                 Expanded(
                     child: Column(
                   children: [
@@ -180,40 +183,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         orientation: 'horizontal',
                         route: '/about')
                   ],
-                )),
+                )), // RIGHT SIDE
               ],
             ),
           ),
-          // body: GestureDetector(
-          //   onTap: () =>
-          //       Navigator.of(context, rootNavigator: true).pushNamed('/profile'),
-          //   child: Container(
-          //     color: Colors.green,
-          //     width: 100,
-          //     height: 100,
-          //   ),
-          // ),
-          //
-          //
-          // body: Center(
-          //   child: ElevatedButton(
-          //     onPressed: signOut,
-          //     child: Text('Sign Out'),
-          //   ),
-          // ),
         ),
+        // LOADING ICON IS SHOWN UNTIL USER DETAILS ARE CHECKED
         isDonefetchingGuideSheetMap
-            ? SizedBox.shrink()
+            ? const SizedBox.shrink()
             : Container(
                 color: Colors.white.withOpacity(0.5),
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: Center(
-                    child: LoadingAnimationWidget.threeRotatingDots(
-                  color: Color(0xFF80FE94), // Set your desired color
-                  size: 50.0, // Set the size of the animation
-                )),
-              )
+                  child: LoadingAnimationWidget.threeRotatingDots(
+                    color: const Color(0xFF80FE94),
+                    size: 50.0,
+                  ),
+                ),
+              ) // LOADING ICON
       ],
     );
   }

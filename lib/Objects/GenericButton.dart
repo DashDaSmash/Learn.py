@@ -1,8 +1,12 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
+
 import '../ThemeData.dart';
 import '../main.dart';
 
 class GenericButton extends StatelessWidget {
+  // INITIATING VARIABLES
   final VoidCallback function;
   final String label;
   final Icon? icon;
@@ -11,14 +15,15 @@ class GenericButton extends StatelessWidget {
   final int? height;
   final int? width;
 
-  GenericButton(
-      {required this.label,
-      required this.function,
-      this.icon,
-      this.image,
-      required this.type,
-      this.height,
-      this.width});
+  const GenericButton({super.key,
+    required this.label,
+    required this.function,
+    this.icon,
+    this.image,
+    required this.type,
+    this.height,
+    this.width,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,7 @@ class GenericButton extends StatelessWidget {
           width?.toDouble() ?? double.infinity,
           height?.toDouble() ?? 30.0,
         ),
-        overlayColor: Color(0xFFB4FFC0),
+        overlayColor: const Color(0xFFB4FFC0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(
@@ -60,14 +65,17 @@ class GenericButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (icon != null) icon!,
+          if (icon != null) icon!, // ICON IS SHOWN ONLY IF IT IS PROVIDED
           if (image != null)
             Image.asset(
               image!,
               height: 25,
               width: 25,
-            ),
-          if (image != null || icon != null) SizedBox(width: 30),
+            ), // IF PROVIDED, THEN IMAGE IS SHOWN IN THE BUTTON
+          if (image != null || icon != null)
+            const SizedBox(
+                width:
+                    30), // IF THERE IS AN IMAGE OR ICON, THEN HAVE SOME SPACE BETWEEN THEM AND TITLE
           Text(
             label,
             style: TextStyle(

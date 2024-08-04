@@ -1,9 +1,11 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:flutter/animation.dart';
 
 class TextEnlargementAnimation extends StatefulWidget {
   final bool userPassedQuiz;
-  TextEnlargementAnimation({required this.userPassedQuiz});
+  const TextEnlargementAnimation({super.key, required this.userPassedQuiz});
+
   @override
   _TextEnlargementAnimationState createState() =>
       _TextEnlargementAnimationState();
@@ -23,9 +25,7 @@ class _TextEnlargementAnimationState extends State<TextEnlargementAnimation>
     );
     _animation = CurvedAnimation(
       parent: _controller,
-      curve: widget.userPassedQuiz
-          ? Curves.elasticOut
-          : Curves.bounceOut, // Use ElasticInOutCurve
+      curve: widget.userPassedQuiz ? Curves.elasticOut : Curves.bounceOut,
     );
     _controller.forward();
   }
@@ -44,15 +44,14 @@ class _TextEnlargementAnimationState extends State<TextEnlargementAnimation>
         builder: (context, child) {
           if (widget.userPassedQuiz) {
             final fontSize =
-                95.0 + (_animation.value * 10.0); // Adjust as needed
+                95.0 + (_animation.value * 10.0); // STARTS FROM 95pts
             return Text(
               'Good\n     job!',
-              // style: themeData().GradingScreenMessageTextStyle(fontSize: fontSize),
               style: TextStyle(
                 fontSize: fontSize,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
-                shadows: [
+                shadows: const [
                   Shadow(
                     color: Colors.black54,
                     offset: Offset(8, 8),
@@ -66,14 +65,12 @@ class _TextEnlargementAnimationState extends State<TextEnlargementAnimation>
                 ],
               ),
             );
-          } else {
+          } //PASSED SCREEN
+          else {
             return Transform.translate(
-              offset: Offset(
-                  0,
-                  MediaQuery.of(context).size.width *
-                      0.1 *
-                      _animation.value), // Adjust the distance
-              child: Text(
+              offset: Offset(0,
+                  MediaQuery.of(context).size.width * 0.1 * _animation.value),
+              child: const Text(
                 'Let\'s\n  try\n again...',
                 // style: themeData().GradingScreenMessageTextStyle(fontSize: fontSize),
                 style: TextStyle(
@@ -95,7 +92,7 @@ class _TextEnlargementAnimationState extends State<TextEnlargementAnimation>
                 ),
               ),
             );
-          }
+          } // FAILED SCREEN
         },
       ),
     );

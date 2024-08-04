@@ -1,19 +1,22 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:countup/countup.dart';
+
 import 'package:learn_py/Objects/GuideSheet.dart';
 import 'package:learn_py/ThemeData.dart';
 import 'package:learn_py/main.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:countup/countup.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../Objects/GenericButton.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -44,10 +47,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         FirebaseFirestore.instance.collection('users').doc(userEmail);
     final userDoc = await userScore.get();
     quizScores = userDoc.data()?['QuizScores'] ?? {};
-    print('quizScores: $quizScores');
     for (final key in quizScores!.keys) {
       lastTestScore = int.parse(quizScores![key].toString());
-      print('lastTestScore: $lastTestScore');
       userTotalScore += lastTestScore;
       quizCount++;
       double average = userTotalScore / quizCount;
@@ -68,8 +69,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _signOut() {
+    // -10000 AURA
     FirebaseAuth.instance.signOut();
-    print('***********************************************************');
   }
 
   void showGuideAgain() async {
@@ -141,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     _clickedOnPP();
                                   },
                                   child: wantToChangePP
-                                      ? CircleAvatar(
+                                      ? const CircleAvatar(
                                           backgroundColor: Colors.white,
                                           radius: 80,
                                           child: Icon(
@@ -163,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 ),
                                               ),
                                             )
-                                          : CircleAvatar(
+                                          : const CircleAvatar(
                                               backgroundColor: Colors.white,
                                               radius: 80,
                                               child: Icon(
@@ -177,12 +178,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 //todo: IF NAME IS EMPTY, SHOW 'CLICK TO ADD NAME'
                                 displayName.isNotEmpty
                                     ? Text(
-                                        '$displayName',
+                                        displayName,
                                         style: themeData().genericBigTextStyle,
                                       )
-                                    : SizedBox.shrink(),
+                                    : const SizedBox.shrink(),
                                 Text(
-                                  '$userEmail',
+                                  userEmail,
                                   style: themeData().genericTextStyle,
                                 ),
                               ],
@@ -190,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           loadingScores
                               ? LoadingAnimationWidget.threeRotatingDots(
-                                  color: Color(
+                                  color: const Color(
                                       0xFF80FE94), // Set your desired color
                                   size: 50.0, // Set the size of the animation
                                 )
@@ -209,14 +210,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             Countup(
                                               begin: 0,
                                               end: lastTestScore.toDouble(),
-                                              duration: Duration(seconds: 1),
+                                              duration:
+                                                  const Duration(seconds: 1),
                                               separator: ',',
                                               style: themeData().boldDigit,
                                             ),
                                             Column(
                                               // mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
-                                                Container(
+                                                const SizedBox(
                                                   height: 18,
                                                   width: 16,
                                                 ),
@@ -244,14 +246,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               Countup(
                                                 begin: 0,
                                                 end: averageScore.toDouble(),
-                                                duration: Duration(seconds: 1),
+                                                duration:
+                                                    const Duration(seconds: 1),
                                                 separator: ',',
                                                 style: themeData().boldDigit,
                                               ),
                                               Column(
                                                 // mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
-                                                  Container(
+                                                  const SizedBox(
                                                     height: 18,
                                                     width: 16,
                                                   ),
@@ -276,23 +279,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         Countup(
                                           begin: 0,
                                           end: userTotalScore.toDouble(),
-                                          duration: Duration(seconds: 1),
+                                          duration: const Duration(seconds: 1),
                                           separator: ',',
                                           style: themeData().boldDigit,
                                         ),
                                       ],
                                     ), // TOTAL SCORE
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Column(
                                       children: [
-                                        Text(
+                                        const Text(
                                             'By clicking the below button, you will consent to erase any scores you have achived. This action is irreversible.\n*Unlocked quizzes will remain the same',
                                             textAlign: TextAlign.center),
                                         TextButton(
                                             onPressed: () {
                                               resetQuizScores();
                                             },
-                                            child: Text(
+                                            child: const Text(
                                               'Reset scores',
                                               style:
                                                   TextStyle(color: Colors.red),
@@ -319,19 +322,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             _signOut();
                             Navigator.pop(context);
                           },
-                          type: GenericButtonType.semiWarning),
+                          type:
+                              GenericButtonType.semiWarning), // SIGN OUT BUTTON
                       GenericButton(
                           label: 'Show guide again',
                           function: () {
                             showGuideAgain();
                           },
-                          type: GenericButtonType.generic),
+                          type:
+                              GenericButtonType.generic), // GUIDE SHEET BUTTON
                       GenericButton(
                         label: 'Back',
                         function: () => Navigator.pop(context),
                         type:
                             GenericButtonType.generic, // Set your desired color
-                      ),
+                      ), // BACK BUTTON
                     ],
                   ),
                 ), //BackButton
@@ -345,11 +350,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: MediaQuery.of(context).size.width,
                   child: Center(
                       child: LoadingAnimationWidget.threeRotatingDots(
-                    color: Color(0xFF80FE94), // Set your desired color
+                    color: const Color(0xFF80FE94), // Set your desired color
                     size: 50.0, // Set the size of the animation
                   )),
                 )
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
           GuideSheet(currentScreen: 'ProfileScreen'),
         ],
       ),
@@ -358,7 +363,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _clickedOnPP() {
     if (wantToChangePP) {
-      print('user wants to changePP');
+      // PP = PROFILE PICTURE
       _changePP();
     }
 
@@ -376,16 +381,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (selectedImage != null) {
         File imageFile = File(selectedImage.path);
-        // Now you can use 'imageFile' as a regular File
+//STORE IMAGE FILE IN FIREBASE STORAGE
         final storageRef = FirebaseStorage.instance
             .ref()
             .child('profile_images/$userEmail.jpg');
         await storageRef.putFile(imageFile);
       }
-
-      // Use 'imageFile' here
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 }

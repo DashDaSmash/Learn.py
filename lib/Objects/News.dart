@@ -1,15 +1,21 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class NewsScreen extends StatefulWidget {
+  const NewsScreen({super.key});
+
   @override
   _NewsScreenState createState() => _NewsScreenState();
 }
 
 class _NewsScreenState extends State<NewsScreen> {
+  // FROM newsAPI
   final String apiKey = '94ce7564ba2d4c898efbffb21c45da0a';
   List<dynamic> articles = [];
 
@@ -20,29 +26,32 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   Future<void> fetchNews() async {
+    // FETCH NEWS
     final response = await http.get(
       Uri.parse(
           'https://newsapi.org/v2/everything?q=python&apiKey=$apiKey&sortBy=publishedAt&language=en'),
     );
 
     if (response.statusCode == 200) {
+      // FOR SUCCESSFUL CALLBACKS, DECODE DATA AND STORE IN A LIST
       final data = json.decode(response.body);
       setState(() {
         articles = data['articles'];
       });
-    } else {
-      print('Error fetching news: ${response.statusCode}');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return articles.isEmpty
+        // LOADING ICON IS SHOWN UNTIL NEWS IS DONE FETCHING
         ? Center(
             child: LoadingAnimationWidget.threeRotatingDots(
-            color: Color(0xFF80FE94), // Set your desired color
-            size: 30.0, // Set the size of the animation
-          ))
+              color: const Color(0xFF80FE94), // Set your desired color
+              size: 30.0, // Set the size of the animation
+            ),
+          )
+        // ALL THE NEWS ITEMS ARE SHOWN IN SEPARATE CONTAINERS AND ALSO CLICKABLE
         : ListView.builder(
             itemCount: articles.length,
             itemBuilder: (context, index) {
@@ -51,15 +60,15 @@ class _NewsScreenState extends State<NewsScreen> {
                       0 // IF THE NOTE IS THE FIRST ONE, ADD EMPTY SPACE AT TOP
                   ? Column(
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Container(
-                          margin: EdgeInsets.all(5.0), // Add vertical spacing
+                          margin: const EdgeInsets.all(5.0), // Add vertical spacing
                           decoration: BoxDecoration(
-                            color: Color(
+                            color: const Color(
                                 0xFFB4FFC0), // Set your desired background color
                             borderRadius:
                                 BorderRadius.circular(10.0), // Rounded corners
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                 blurRadius: 5,
                                 color: Colors.black26,
@@ -67,29 +76,27 @@ class _NewsScreenState extends State<NewsScreen> {
                               ),
                             ],
                             border: Border.all(
-                              color: Color(0xFF00B71D),
+                              color: const Color(0xFF00B71D),
                               width: 2,
                             ),
                           ),
                           child: ListTile(
                             title: Text(
                               article['title'],
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w500,
                                   color: Color(0xFF00CE2D)),
                             ),
                             subtitle: Text(
                               article['description'],
-                              style: TextStyle(fontSize: 18),
+                              style: const TextStyle(fontSize: 18),
                             ),
                             onTap: () async {
                               final articleUrl = article[
                                   'url']; // Assuming the article URL is available
                               if (await canLaunch(articleUrl)) {
                                 await launch(articleUrl);
-                              } else {
-                                print('Could not launch $articleUrl');
                               }
                             },
                           ),
@@ -97,13 +104,13 @@ class _NewsScreenState extends State<NewsScreen> {
                       ],
                     )
                   : Container(
-                      margin: EdgeInsets.all(5.0), // Add vertical spacing
+                      margin: const EdgeInsets.all(5.0), // Add vertical spacing
                       decoration: BoxDecoration(
-                        color: Color(
+                        color: const Color(
                             0xFFB4FFC0), // Set your desired background color
                         borderRadius:
                             BorderRadius.circular(10.0), // Rounded corners
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             blurRadius: 5,
                             color: Colors.black26,
@@ -111,21 +118,21 @@ class _NewsScreenState extends State<NewsScreen> {
                           ),
                         ],
                         border: Border.all(
-                          color: Color(0xFF00B71D),
+                          color: const Color(0xFF00B71D),
                           width: 2,
                         ),
                       ),
                       child: ListTile(
                         title: Text(
                           article['title'],
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF00CE2D)),
                         ),
                         subtitle: Text(
                           article['description'],
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                         ),
                         onTap: () async {
                           final articleUrl = article[
@@ -133,7 +140,6 @@ class _NewsScreenState extends State<NewsScreen> {
                           if (await canLaunch(articleUrl)) {
                             await launch(articleUrl);
                           } else {
-                            print('Could not launch $articleUrl');
                           }
                         },
                       ),

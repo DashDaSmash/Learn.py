@@ -1,15 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'package:package_info_plus/package_info_plus.dart';
+
 import 'package:learn_py/Objects/GenericButton.dart';
 import 'package:learn_py/Objects/GuideSheet.dart';
 import 'package:learn_py/ThemeData.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-
 import '../main.dart';
 
 //TODO: Also manually change app version in pubspec.yaml
 
 class AboutScreen extends StatefulWidget {
+  const AboutScreen({super.key});
+
   @override
   State<AboutScreen> createState() => _AboutScreenState();
 }
@@ -44,15 +46,15 @@ class _AboutScreenState extends State<AboutScreen> {
               Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Image.asset('assets/Learn.py border T.png'),
-              ),
+              ), // LOGO
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    Divider(
+                    const Divider(
                       color: Colors.transparent,
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.black12,
                     ),
                     Row(
@@ -63,12 +65,12 @@ class _AboutScreenState extends State<AboutScreen> {
                           style: themeData().genericTextStyle,
                         ),
                         Text(
-                          '$version',
+                          version,
                           style: themeData().genericTextStyle,
                         ),
                       ],
-                    ),
-                    Divider(
+                    ), // APP VERSION
+                    const Divider(
                       color: Colors.black12,
                     ),
                     Row(
@@ -79,12 +81,12 @@ class _AboutScreenState extends State<AboutScreen> {
                           style: themeData().genericTextStyle,
                         ),
                         Text(
-                          '$buildNumber',
+                          buildNumber,
                           style: themeData().genericTextStyle,
                         ),
                       ],
-                    ),
-                    Divider(
+                    ), // BUILD NUMBER
+                    const Divider(
                       color: Colors.black12,
                     ),
                     GestureDetector(
@@ -94,16 +96,16 @@ class _AboutScreenState extends State<AboutScreen> {
                         'License and credits',
                         style: themeData().genericBigTextStyle,
                       ),
-                    ),
-                    Divider(
+                    ), // LICENSE AND CREDITS
+                    const Divider(
                       color: Colors.black12,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 80,
                     ),
                   ],
                 ),
-              ),
+              ), // SYSTEM INFORMATION
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -113,16 +115,15 @@ class _AboutScreenState extends State<AboutScreen> {
                       function: () =>
                           Navigator.of(context).pushNamed('/donate'),
                       type: GenericButtonType.semiProceed,
-                    ),
-                    //BackButton
+                    ), // DONATION BUTTON
                     GenericButton(
                       label: 'Back',
                       function: () => Navigator.pop(context),
                       type: GenericButtonType.generic, // Set your desired color
-                    ),
+                    ), // BACK BUTTON
                   ],
                 ),
-              ),
+              ), // BUTTONS
             ],
           ),
           GuideSheet(currentScreen: 'AboutScreen'),
